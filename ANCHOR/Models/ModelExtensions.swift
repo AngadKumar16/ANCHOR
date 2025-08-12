@@ -59,3 +59,24 @@ extension UserProfile {
     }
 }
 
+public struct JournalEntryModel: Identifiable {
+    public var id: UUID
+    public var date: Date
+    public var title: String?
+    public var body: String
+    public var sentiment: Int
+    public var tags: [String]
+}
+
+public extension JournalEntryEntity {
+    func toModel() -> JournalEntryModel {
+        return JournalEntryModel(
+            id: self.id,
+            date: self.date,
+            title: self.title,
+            body: self.decryptedBody(),
+            sentiment: Int(self.sentiment),
+            tags: self.tagsArray
+        )
+    }
+}

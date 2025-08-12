@@ -1,10 +1,8 @@
-
 import Foundation
 import Security
 
 final class KeychainHelper {
     static let shared = KeychainHelper()
-
     private init() {}
 
     func saveKeyData(_ data: Data, tag: String) {
@@ -14,7 +12,6 @@ final class KeychainHelper {
             kSecValueData as String: data,
             kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
         ]
-        // Remove if exists
         SecItemDelete([kSecClass as String: kSecClassKey, kSecAttrApplicationTag as String: tag] as CFDictionary)
         let status = SecItemAdd(query as CFDictionary, nil)
         if status != errSecSuccess {
@@ -36,10 +33,5 @@ final class KeychainHelper {
         } else {
             return nil
         }
-    }
-
-    func deleteKey(tag: String) {
-        let q: [String: Any] = [kSecClass as String: kSecClassKey, kSecAttrApplicationTag as String: tag]
-        SecItemDelete(q as CFDictionary)
     }
 }

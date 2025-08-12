@@ -7,63 +7,69 @@
 
 
 import Foundation
+import CoreData
 import Combine
 
+@MainActor
 final class JournalViewModel: ObservableObject {
-    @Published private(set) var entries: [JournalEntry] = []
-    private let storageKey = "anchor.journal.entries.v1"
-    private var cancellables = Set<AnyCancellable>()
+    @Published var entries: [JournalEntryModel] = []
+    private let ctx: NSManagedObjectContext
 
-    init() {
-        load()
+    init(context: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
+        self.ctx = context
+        Task { await load() }
     }
 
-    func load() {
-        // Basic local storage via UserDefaults for MVP. Replace with Core Data integration later.
-        if let data = UserDefaults.standard.data(forKey: storageKey) {
-            do {
-                let items = try JSONDecoder().decode([JournalEntry].self, from: data)
-                self.entries = items
-            } catch {
-                Logger.log("Journal decode error: \(error)")
-                self.entries = []
-            }
-        } else {
+    func load() async {
+        let req: NSFetchRequest<JournalEntryEntity> = JournalEntryEntity.fetchRequest()
+        req.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
+        do {
+            let results = try ctx.fetch(req)
+            self.entries = results.map { $0.toModel() }
+        } catch {
+            Logger.log("Journal load error: \(error)")
             self.entries = []
         }
     }
 
-    func saveToDisk() {
-        do {
-            let data = try JSONEncoder().encode(entries)
-            UserDefaults.standard.set(data, forKey: storageKey)
-        } catch {
-            Logger.log("Journal encode error: \(error)")
+    func add(title: String?, body: String, tags: [String]) async throws {
+        try Task.checkCancellation()
+        try ctx.performAndWait {
+            let csv = tags.joined(separator: ",")
+            let entity = try JournalEntryEntity.create(in: ctx, title: title, bodyPlain: body, tagsCSV: csv)
+            entity.sentiment = AIAnalysisService.shared.analyzeSentiment(text: body)
+            try ctx.save()
         }
+        await load()
     }
 
-    func add(entry: JournalEntry) {
-        var new = entry
-        new.sentiment = AIAnalysisService.shared.analyzeSentiment(text: new.body)
-        entries.append(new)
-        saveToDisk()
-    }
-
-    func update(entry: JournalEntry) {
-        if let idx = entries.firstIndex(where: { $0.id == entry.id }) {
-            entries[idx] = entry
-            entries[idx].sentiment = AIAnalysisService.shared.analyzeSentiment(text: entry.body)
-            saveToDisk()
+    func update(entryId: UUID, newTitle: String?, newBody: String, newTags: [String]) async throws {
+        try Task.checkCancellation()
+        try ctx.performAndWait {
+            let req: NSFetchRequest<JournalEntryEntity> = JournalEntryEntity.fetchRequest()
+            req.predicate = NSPredicate(format: "id == %@", entryId as CVarArg)
+            req.fetchLimit = 1
+            if let found = try ctx.fetch(req).first {
+                found.title = newTitle
+                found.updateBody(newBody)
+                found.tags = newTags.joined(separator: ",")
+                found.sentiment = AIAnalysisService.shared.analyzeSentiment(text: newBody)
+                try ctx.save()
+            }
         }
+        await load()
     }
 
-    func delete(at offsets: IndexSet) {
-        entries.remove(atOffsets: offsets)
-        saveToDisk()
-    }
-
-    // Used by export
-    func exportableEntries() -> [JournalEntry] {
-        return entries
+    func delete(at offsets: IndexSet) async {
+        try? await ctx.perform {
+            // map offsets to current entries
+            let ids = offsets.map { self.entries[$0].id }
+            let req: NSFetchRequest<JournalEntryEntity> = JournalEntryEntity.fetchRequest()
+            req.predicate = NSPredicate(format: "id IN %@", ids)
+            let results = try ctx.fetch(req)
+            for r in results { ctx.delete(r) }
+            try ctx.save()
+        }
+        await load()
     }
 }

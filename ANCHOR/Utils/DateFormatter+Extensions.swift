@@ -8,22 +8,12 @@
 import Foundation
 
 extension Date {
-    func shortDateString() -> String {
+    func friendlyString() -> String {
         let df = DateFormatter()
         df.dateStyle = .medium
-        df.timeStyle = .none
+        df.timeStyle = .short
         return df.string(from: self)
     }
 }
-extension DateFormatter {
-    static let shared: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .none
-        return formatter
-    }()
-    
-    func shortDateString(from date: Date) -> String {
-        return self.string(from: date)
-    }
+
 }

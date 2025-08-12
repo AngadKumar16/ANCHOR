@@ -1,39 +1,27 @@
-
 import Foundation
 import CoreML
 
 final class AIAnalysisService {
     static let shared = AIAnalysisService()
-
     private var model: MLModel?
 
     private init() {
-        // Attempt to load a local Core ML model named "risk_model_placeholder"
+        // try to load compiled model; optional for MVP
         if let url = Bundle.main.url(forResource: "risk_model_placeholder", withExtension: "mlmodelc") {
-            do {
-                model = try MLModel(contentsOf: url)
-            } catch {
-                model = nil
-            }
-        } else if Bundle.main.url(forResource: "risk_model_placeholder", withExtension: "mlmodel") != nil {
-            // If .mlmodel not compiled, it's okay — we'll fallback below
-            model = nil
+            model = try? MLModel(contentsOf: url)
         }
     }
 
-    // Returns -1 negative, 0 neutral, 1 positive
-    func analyzeSentiment(text: String) -> Int {
-        // If we have a model and it accepts text input, you'd run it here.
-        // For MVP fallback, use a simple word-list heuristic.
+    // simple fallback sentiment: -1,0,1
+    func analyzeSentiment(text: String) -> Int16 {
         let lower = text.lowercased()
-        let positiveWords = ["good","grateful","happy","sober","well","calm","relieved"]
-        let negativeWords = ["sad","alone","hopeless","urge","craving","relapse","anxious","angry","depressed"]
-
-        var score = 0
-        for w in positiveWords { if lower.contains(w) { score += 1 } }
-        for w in negativeWords { if lower.contains(w) { score -= 1 } }
-        if score > 0 { return 1 }
-        if score < 0 { return -1 }
+        let pos = ["good","grateful","happy","sober","calm","relieved"]
+        let neg = ["sad","alone","hopeless","urge","craving","relapse","anxious","depressed"]
+        var s = 0
+        for w in pos where lower.contains(w) { s += 1 }
+        for w in neg where lower.contains(w) { s -= 1 }
+        if s > 0 { return 1 }
+        if s < 0 { return -1 }
         return 0
     }
 }

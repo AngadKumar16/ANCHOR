@@ -1,59 +1,68 @@
-//
-//  UserProfileViewModel.swift
-//  ANCHOR
-//
-//  Created by Angad Kumar on 8/12/25.
-//
-
-
 import Foundation
+import CoreData
 import LocalAuthentication
-import SwiftUI
 
+@MainActor
 final class UserProfileViewModel: ObservableObject {
-    @Published var profile: UserProfile
+    @Published var displayName: String = ""
     @Published var biometricEnabled: Bool = false
-    @Published var profileDisplayName: String = ""
 
-    private let profileKey = "anchor.user.profile.v1"
-    private let journalVM = JournalViewModel()
+    private let ctx: NSManagedObjectContext
+    private var profileEntity: UserProfileEntity?
 
-    init() {
-        if let data = UserDefaults.standard.data(forKey: profileKey),
-           let p = try? JSONDecoder().decode(UserProfile.self, from: data) {
-            self.profile = p
-        } else {
-            self.profile = UserProfile()
+    init(context: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
+        self.ctx = context
+        load()
+    }
+
+    func load() {
+        let req: NSFetchRequest<UserProfileEntity> = UserProfileEntity.fetchRequest()
+        req.fetchLimit = 1
+        do {
+            let arr = try ctx.fetch(req)
+            if let first = arr.first {
+                profileEntity = first
+                displayName = first.displayName ?? ""
+            } else {
+                // create default
+                try ctx.performAndWait {
+                    let created = UserProfileEntity.createDefault(in: ctx)
+                    try ctx.save()
+                    self.profileEntity = created
+                    self.displayName = created.displayName ?? ""
+                }
+            }
+            biometricEnabled = UserDefaults.standard.bool(forKey: "anchor.biometricEnabled")
+        } catch {
+            Logger.log("UserProfile load error: \(error)")
         }
-        self.profileDisplayName = profile.displayName ?? ""
-        self.biometricEnabled = UserDefaults.standard.bool(forKey: "anchor.biometricEnabled")
     }
 
     func save() {
-        profile.displayName = profileDisplayName
-        if let data = try? JSONEncoder().encode(profile) {
-            UserDefaults.standard.set(data, forKey: profileKey)
+        guard let pe = profileEntity else { return }
+        pe.displayName = displayName
+        do {
+            try ctx.save()
+        } catch {
+            Logger.log("Profile save err: \(error)")
         }
-        UserDefaults.standard.set(biometricEnabled, forKey: "anchor.biometricEnabled")
     }
 
-    func toggleBiometric(_ enabled: Bool, completion: @escaping (Bool) -> Void) {
-        let ctx = LAContext()
+    func toggleBiometric(_ enable: Bool, completion: @escaping (Bool)->Void) {
+        let ctxLA = LAContext()
         var err: NSError?
-        if ctx.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &err) {
-            ctx.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: "Enable biometric unlock for Anchor") { success, _ in
+        if ctxLA.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &err) {
+            ctxLA.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: "Enable biometric unlock for ANCHOR") { success, _ in
                 DispatchQueue.main.async {
-                    self.biometricEnabled = success && enabled
-                    self.save()
-                    completion(self.biometricEnabled)
+                    if success {
+                        self.biometricEnabled = enable
+                        UserDefaults.standard.set(enable, forKey: "anchor.biometricEnabled")
+                    }
+                    completion(success)
                 }
             }
         } else {
             completion(false)
         }
-    }
-
-    func allJournalEntriesPacked() -> [JournalEntry] {
-        return journalVM.exportableEntries()
     }
 }

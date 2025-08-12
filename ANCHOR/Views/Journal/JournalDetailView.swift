@@ -1,40 +1,31 @@
-//
-//  JournalDetailView.swift
-//  ANCHOR
-//
-//  Created by Angad Kumar on 8/12/25.
-//
-
-
 import SwiftUI
 
 struct JournalDetailView: View {
-    @EnvironmentObject var viewModel: JournalViewModel
-    let entry: JournalEntry
+    let entry: JournalEntryModel
+    @ObservedObject var viewModel: JournalViewModel
     @State private var showingEdit = false
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
-                Text(entry.displayTitle).font(.title2).bold()
-                Text(entry.date, style: .date).font(.caption)
+                Text(entry.title ?? "Untitled").font(.title2).bold()
+                Text(entry.date.friendlyString()).font(.caption)
                 Divider()
                 Text(entry.body).padding(.vertical)
                 if !entry.tags.isEmpty {
-                    HStack {
-                        ForEach(entry.tags, id: \.self) { t in
-                            Text(t).font(.caption).padding(6).background(Color(UIColor.systemGray5)).cornerRadius(6)
-                        }
-                    }
+                    HStack { ForEach(entry.tags, id: \.self) { tag in
+                        Text(tag).font(.caption).padding(6).background(Color(UIColor.systemGray5)).cornerRadius(6)
+                    } }
                 }
-                Spacer()
             }.padding()
         }
         .navigationBarItems(trailing: Button("Edit") { showingEdit = true })
         .sheet(isPresented: $showingEdit) {
-            JournalEditorView(entry: entry) { edited in
-                viewModel.update(entry: edited)
-                showingEdit = false
+            JournalEditorView(entry: JournalEntry(id: entry.id, date: entry.date, title: entry.title, body: entry.body, sentiment: entry.sentiment, tags: entry.tags)) { edited in
+                Task {
+                    try? await viewModel.update(entryId: edited.id, newTitle: edited.title, newBody: edited.body, newTags: edited.tags)
+                    showingEdit = false
+                }
             }
         }
     }
