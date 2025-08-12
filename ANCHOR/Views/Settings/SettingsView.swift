@@ -16,7 +16,7 @@ struct SettingsView: View {
         NavigationView {
             Form {
                 Section(header: Text("Account")) {
-                    TextField("Display name", text: $userVM.profileDisplayName)
+                    TextField("Display name", text: $userVM.displayName)
                 }
                 Section(header: Text("Security & Privacy")) {
                     Toggle("Biometric lock", isOn: $userVM.biometricEnabled)

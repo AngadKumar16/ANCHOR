@@ -14,5 +14,3 @@ enum Logger {
         #endif
     }
 }
-
-}
