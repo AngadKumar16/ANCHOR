@@ -24,7 +24,7 @@ struct SettingsView: View {
                 }
                 Section(header: Text("Export")) {
                     Button("Export Data") {
-                        DataExportService.shared.export(entries: userVM.allJournalEntriesPacked())
+                        DataExportService.shared.exportAllJournalEntries(presenting: UIApplication.shared.windows.first?.rootViewController)
                     }
                 }
             }
