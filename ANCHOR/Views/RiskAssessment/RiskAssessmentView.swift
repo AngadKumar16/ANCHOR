@@ -12,7 +12,7 @@ struct RiskAssessmentView: View {
     @State private var showHistory = false
     @State private var showingNewAssessment = false
     
-    private let riskLevels: [Double: (String, Color)] = [
+    private let riskLevels: [ClosedRange<Double>: (String, Color)] = [
         0..<30: ("Low", .green),
         30..<70: ("Medium", .orange),
         70...100: ("High", .red)
