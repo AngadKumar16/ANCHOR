@@ -59,7 +59,7 @@ extension UserProfile {
     }
 }
 
-public struct JournalEntryModel: Identifiable {
+public struct JournalEntryModel: Identifiable, Codable {
     public var id: UUID
     public var date: Date
     public var title: String?

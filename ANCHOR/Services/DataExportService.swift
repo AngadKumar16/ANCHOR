@@ -15,7 +15,7 @@ final class DataExportService {
             let models = results.map { $0.toModel() }
             let data = try JSONEncoder().encode(models)
             let tmp = FileManager.default.temporaryDirectory.appendingPathComponent("anchor_journal_export.json")
-            try data.write(to: tmp, options: .atomic)
+            try data.write(to: tmp, options: .atomicWrite)
             DispatchQueue.main.async {
                 let av = UIActivityViewController(activityItems: [tmp], applicationActivities: nil)
                 (viewController ?? UIApplication.shared.windows.first?.rootViewController)?.present(av, animated: true)
