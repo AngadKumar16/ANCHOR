@@ -61,14 +61,14 @@ final class JournalViewModel: ObservableObject {
     }
 
     func delete(at offsets: IndexSet) async {
-        try? await ctx.perform {
+        try? await self.ctx.perform {
             // map offsets to current entries
             let ids = offsets.map { self.entries[$0].id }
             let req: NSFetchRequest<JournalEntryEntity> = JournalEntryEntity.fetchRequest()
             req.predicate = NSPredicate(format: "id IN %@", ids)
-            let results = try ctx.fetch(req)
-            for r in results { ctx.delete(r) }
-            try ctx.save()
+            let results = try self.ctx.fetch(req)
+            for r in results { self.ctx.delete(r) }
+            try self.ctx.save()
         }
         await load()
     }
