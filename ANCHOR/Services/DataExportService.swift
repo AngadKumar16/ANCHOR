@@ -18,7 +18,11 @@ final class DataExportService {
             try data.write(to: tmp, options: .atomicWrite)
             DispatchQueue.main.async {
                 let av = UIActivityViewController(activityItems: [tmp], applicationActivities: nil)
-                (viewController ?? UIApplication.shared.windows.first?.rootViewController)?.present(av, animated: true)
+                let presenter = viewController ?? UIApplication.shared.connectedScenes
+                    .compactMap { $0 as? UIWindowScene }
+                    .flatMap { $0.windows }
+                    .first { $0.isKeyWindow }?.rootViewController
+                presenter?.present(av, animated: true)
             }
         } catch {
             Logger.log("Export failed: \(error)")

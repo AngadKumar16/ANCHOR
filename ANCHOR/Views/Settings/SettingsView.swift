@@ -24,7 +24,11 @@ struct SettingsView: View {
                 }
                 Section(header: Text("Export")) {
                     Button("Export Data") {
-                        DataExportService.shared.exportAllJournalEntries(presenting: UIApplication.shared.windows.first?.rootViewController)
+                        let presenter = UIApplication.shared.connectedScenes
+                            .compactMap { $0 as? UIWindowScene }
+                            .flatMap { $0.windows }
+                            .first { $0.isKeyWindow }?.rootViewController
+                        DataExportService.shared.exportAllJournalEntries(presenting: presenter)
                     }
                 }
             }
