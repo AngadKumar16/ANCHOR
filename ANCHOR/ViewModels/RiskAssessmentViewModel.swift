@@ -22,9 +22,9 @@ final class RiskAssessmentViewModel: ObservableObject {
         score = min(max(score, 0.0), 100.0)
         let reason = "Craving: \(Int(craving)), Triggers: \(triggerCount), Mood: \(mood)"
         do {
-            try ctx.performAndWait {
-                let entity = RiskAssessmentEntity.create(in: ctx, score: score, reason: reason)
-                try ctx.save()
+            try self.ctx.performAndWait {
+                let entity = RiskAssessmentEntity.create(in: self.ctx, score: score, reason: reason)
+                try self.ctx.save()
                 self.latestResult = entity
             }
         } catch {
