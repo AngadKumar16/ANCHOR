@@ -10,32 +10,87 @@ import SwiftUI
 
 struct RiskQuestionView: View {
     @EnvironmentObject var viewModel: RiskAssessmentViewModel
+    
+    // Create local state bindings that sync with the view model
+    @State private var mood: Int
+    @State private var craving: Double
+    @State private var triggersText: String
+    
+    init() {
+        // Initialize with default values that will be updated when the view appears
+        _mood = State(initialValue: 1)
+        _craving = State(initialValue: 0)
+        _triggersText = State(initialValue: "")
+    }
 
     var body: some View {
         Form {
             Section("Mood") {
-                Picker("Mood", selection: $viewModel.mood) {
+                Picker("Mood", selection: $mood) {
                     Text("Low").tag(0)
                     Text("Neutral").tag(1)
                     Text("High").tag(2)
-                }.pickerStyle(.segmented)
+                }
+                .pickerStyle(.segmented)
             }
-            Section("Craving Level") {
-                Slider(value: $viewModel.craving, in: 0...10, step: 1)
-                Text("Craving: \(Int(viewModel.craving))")
+            
+            Section("Craving Level (0-10)") {
+                Slider(value: $craving, in: 0...10, step: 1)
+                Text("Craving: \(Int(craving))")
+                    .font(.headline)
+                    .foregroundColor(craving > 7 ? .red : .primary)
             }
-            Section("Recent triggers") {
-                TextField("Comma-separated", text: $viewModel.triggersText)
+            
+            Section("Recent Triggers") {
+                TextField("Comma-separated list", text: $triggersText)
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
             }
-            Button("Calculate Risk") {
-                viewModel.calculate()
+            
+            Section {
+                Button(action: calculateRisk) {
+                    HStack {
+                        Spacer()
+                        Text("Calculate Risk")
+                            .font(.headline)
+                        Spacer()
+                    }
+                }
+                .buttonStyle(.borderedProminent)
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
             }
         }
-        .navigationTitle("Questions")
-        .onReceive(viewModel.$latestResult) { res in
-            if res != nil {
-                // show results
-            }
+        .navigationTitle("Risk Assessment")
+        .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            // Sync with view model when view appears
+            mood = viewModel.mood
+            craving = viewModel.craving
+            triggersText = viewModel.triggersText
         }
+        .onChange(of: mood) { newValue in
+            viewModel.mood = newValue
+        }
+        .onChange(of: craving) { newValue in
+            viewModel.craving = newValue
+        }
+        .onChange(of: triggersText) { newValue in
+            viewModel.triggersText = newValue
+        }
+    }
+    
+    private func calculateRisk() {
+        viewModel.mood = mood
+        viewModel.craving = craving
+        viewModel.triggersText = triggersText
+        viewModel.calculateAndSave()
+    }
+}
+
+#Preview {
+    NavigationView {
+        RiskQuestionView()
+            .environmentObject(RiskAssessmentViewModel())
     }
 }
