@@ -295,9 +295,9 @@ struct DashboardView: View {
             VStack(spacing: 16) {
                 Text("\"\(todaysQuote.text)\"")
                     .font(.title3)
-                    .fontStyle(.italic)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.primary)
+                    .italic()
+                    .multilineTextAlignment(TextAlignment.center)
+                    .foregroundColor(Color.primary)
                 
                 HStack {
                     Text("— \(todaysQuote.author)")
@@ -513,8 +513,7 @@ struct DashboardView: View {
         default: return "😢"
         }
     }
-}
-
+    
     // MARK: - Helper Functions
     
     private func shareQuote() {
