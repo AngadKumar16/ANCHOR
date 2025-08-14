@@ -330,8 +330,8 @@ struct AdvancedGestureModifier: ViewModifier {
             .gesture(
                 DragGesture(minimumDistance: 50)
                     .onEnded { value in
-                        let horizontalAmount = value.translation.x
-                        let verticalAmount = value.translation.y
+                        let horizontalAmount = value.translation.width
+                        let verticalAmount = value.translation.height
                         
                         if abs(horizontalAmount) > abs(verticalAmount) {
                             if horizontalAmount < 0 {
@@ -525,34 +525,67 @@ struct ContextMenuAction {
 }
 
 // MARK: - Accessibility Enhancements
-struct AccessibilityEnhancer {
-    static func enhanceComponent(
-        _ view: some View,
+// MARK: - Accessibility Enhancements
+
+fileprivate struct AccessibilityEnhancementModifier: ViewModifier {
+    let label: String
+    let hint: String?
+    let value: String?
+    let traits: AccessibilityTraits
+    let actions: [AccessibilityAction]
+
+    func body(content: Content) -> some View {
+        // Apply the base modifiers first
+        let baseView = content
+            .accessibilityLabel(label)
+            .accessibilityAddTraits(traits)
+
+        // Conditionally apply hint and value
+        let optionalView = baseView
+            .modifier(OptionalAccessibility(hint: hint, value: value))
+
+        // Apply all custom actions using a reducer for a clean, chained modification
+        actions.reduce(AnyView(optionalView)) { view, action in
+            AnyView(view.accessibilityAction(named: action.name, action.handler))
+        }
+    }
+}
+
+fileprivate struct OptionalAccessibility: ViewModifier {
+    let hint: String?
+    let value: String?
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if let hint = hint, let value = value {
+            content
+                .accessibilityHint(hint)
+                .accessibilityValue(value)
+        } else if let hint = hint {
+            content.accessibilityHint(hint)
+        } else if let value = value {
+            content.accessibilityValue(value)
+        } else {
+            content
+        }
+    }
+}
+
+extension View {
+    func enhanceAccessibility(
         label: String,
         hint: String? = nil,
         value: String? = nil,
         traits: AccessibilityTraits = [],
         actions: [AccessibilityAction] = []
     ) -> some View {
-        var enhancedView = view
-            .accessibilityLabel(label)
-            .accessibilityAddTraits(traits)
-        
-        if let hint = hint {
-            enhancedView = enhancedView.accessibilityHint(hint)
-        }
-        
-        if let value = value {
-            enhancedView = enhancedView.accessibilityValue(value)
-        }
-        
-        for action in actions {
-            enhancedView = enhancedView.accessibilityAction(action.name) {
-                action.handler()
-            }
-        }
-        
-        return enhancedView
+        self.modifier(AccessibilityEnhancementModifier(
+            label: label,
+            hint: hint,
+            value: value,
+            traits: traits,
+            actions: actions
+        ))
     }
 }
 

@@ -206,31 +206,35 @@ struct RecoveryTipCard: View {
     // MARK: - Card Content
     @ViewBuilder
     private var cardContent: some View {
-        Group {
-            if let customBg = customBackground {
-                mainContent
-                    .background(customBg)
-            } else {
-                mainContent
-                    .padding(cardPadding)
-                    .background(cardBackground)
-                    .cornerRadius(cardCornerRadius)
-                    .shadow(
-                        color: cardShadow.color,
-                        radius: cardShadow.radius,
-                        x: cardShadow.x,
-                        y: cardShadow.y
-                    )
+        ZStack {
+            // Main content with background
+            Group {
+                if let customBg = customBackground {
+                    mainContent
+                        .background(customBg)
+                } else {
+                    mainContent
+                        .padding(cardPadding)
+                        .background(cardBackground)
+                        .cornerRadius(cardCornerRadius)
+                        .shadow(
+                            color: cardShadow.color,
+                            radius: cardShadow.radius,
+                            x: cardShadow.x,
+                            y: cardShadow.y
+                        )
+                }
             }
-        }
-        .overlay(alignment: .topTrailing) {
+
+            // Overlays
             if showBadge {
                 badgeView
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
             }
-        }
-        .overlay(alignment: .topLeading) {
+            
             if priority != .normal {
                 priorityIndicator
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             }
         }
     }
@@ -667,8 +671,8 @@ extension RecoveryTipCard {
                 title: "Sleep Hygiene",
                 description: "Maintain a consistent sleep schedule for better mental health and recovery.",
                 color: ANCHORDesign.Colors.accent,
+                style: .elevated,
                 layout: .vertical,
-                style: .outlined,
                 showCategory: true,
                 category: "Wellness"
             )

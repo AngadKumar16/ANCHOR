@@ -160,10 +160,6 @@ extension JournalEntryCard {
         }
     }
     
-    struct AccessibilityAction {
-        let name: String
-        let handler: () -> Void
-    }
 }
 
 // MARK: - Tag View Component

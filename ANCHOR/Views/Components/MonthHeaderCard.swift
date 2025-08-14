@@ -201,36 +201,40 @@ struct MonthHeaderCard: View {
     // MARK: - Header Content
     @ViewBuilder
     private var headerContent: some View {
-        Group {
-            if let customBg = customBackground {
-                mainContent
-                    .background(customBg)
-            } else {
-                mainContent
-                    .padding(headerPadding)
-                    .background(headerBackground)
-                    .cornerRadius(headerCornerRadius)
-                    .shadow(
-                        color: headerShadow.color,
-                        radius: headerShadow.radius,
-                        x: headerShadow.x,
-                        y: headerShadow.y
-                    )
+        ZStack {
+            // Main content with background
+            Group {
+                if let customBg = customBackground {
+                    mainContent
+                        .background(customBg)
+                } else {
+                    mainContent
+                        .padding(headerPadding)
+                        .background(headerBackground)
+                        .cornerRadius(headerCornerRadius)
+                        .shadow(
+                            color: headerShadow.color,
+                            radius: headerShadow.radius,
+                            x: headerShadow.x,
+                            y: headerShadow.y
+                        )
+                }
             }
-        }
-        .overlay(alignment: .topTrailing) {
+
+            // Overlays
             if showBadge {
                 badgeView
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
             }
-        }
-        .overlay(alignment: .bottom) {
-            if showDivider {
-                dividerView
-            }
-        }
-        .overlay(alignment: .bottom) {
-            if showProgress {
-                progressView
+            
+            VStack {
+                Spacer()
+                if showDivider {
+                    dividerView
+                }
+                if showProgress {
+                    progressView
+                }
             }
         }
     }
@@ -571,8 +575,8 @@ extension MonthHeaderCard {
             MonthHeaderCard(
                 monthYear: "October 2023",
                 entryCount: 8,
-                layout: .vertical,
                 style: .outlined,
+                layout: .vertical,
                 showIcon: true,
                 icon: "leaf.fill",
                 iconColor: ANCHORDesign.Colors.success
