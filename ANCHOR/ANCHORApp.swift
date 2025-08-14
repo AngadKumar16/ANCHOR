@@ -14,7 +14,7 @@ struct ANCHORApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AppRootView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
