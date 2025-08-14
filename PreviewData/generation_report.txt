@@ -1,0 +1,54 @@
+ANCHOR Preview Data Generation Report
+==================================================
+
+Generated: 2025-08-13T22:12:28.965303
+Version: 1.0
+
+Data Summary:
+--------------------
+Journal Entries: 15
+Risk Assessments: 8
+User Streak: 156 days
+
+Journal Entry Tags Distribution:
+-----------------------------------
+Forgiveness: 2
+Healing: 2
+Therapy: 2
+Growth: 2
+Anxious: 2
+Work: 2
+Coping: 2
+Community: 2
+Support: 2
+Family: 2
+Motivation: 2
+Reflection: 1
+Journey: 1
+Grateful: 1
+Positive: 1
+Mindfulness: 1
+Meditation: 1
+Setback: 1
+Self-Compassion: 1
+Cravings: 1
+Strength: 1
+
+Risk Assessment Distribution:
+------------------------------
+Low: 3
+Moderate: 3
+High: 2
+
+Files Generated:
+--------------------
+- anchor_preview_data.json (Complete data set)
+- PreviewData.swift (Swift integration code)
+- generation_report.txt (This report)
+
+Usage Instructions:
+--------------------
+1. Copy PreviewData.swift to your Xcode project
+2. Use PreviewData.sampleJournalEntries in SwiftUI previews
+3. Import JSON data for testing or demo purposes
+4. Modify data as needed for specific test scenarios

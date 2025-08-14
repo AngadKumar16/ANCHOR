@@ -1,0 +1,282 @@
+{
+  "metadata": {
+    "generatedAt": "2025-08-13T22:12:28.965303",
+    "version": "1.0",
+    "description": "Preview data for ANCHOR mental health app",
+    "totalEntries": 15,
+    "totalAssessments": 8
+  },
+  "userProfile": {
+    "id": "47d4038f-81c1-4fcc-8ec7-69f43a240632",
+    "displayName": "Demo User",
+    "sobrietyStartDate": "2025-03-10T22:12:28.965290",
+    "currentStreak": 156,
+    "longestStreak": 175,
+    "totalJournalEntries": 15,
+    "totalRiskAssessments": 8,
+    "createdAt": "2025-05-15T22:12:28.965300",
+    "updatedAt": "2025-08-13T22:12:28.965302",
+    "preferences": {
+      "dailyReminders": true,
+      "weeklyReports": true,
+      "shareAnalytics": false
+    }
+  },
+  "journalEntries": [
+    {
+      "id": "e787591a-0f95-4af1-a638-ebfa05bc802f",
+      "title": "Weekend Recovery",
+      "body": "Today I woke up feeling more optimistic than usual. I've been practicing the breathing exercises from my therapist and they really seem to help with my morning anxiety. I'm grateful for having tools to manage my mental health.",
+      "tags": [
+        "Forgiveness",
+        "Healing"
+      ],
+      "createdAt": "2025-08-18T22:12:28.965086",
+      "updatedAt": "2025-08-18T22:12:28.965086",
+      "sentiment": "positive",
+      "sentimentScore": 0.39
+    },
+    {
+      "id": "87680849-ddd8-4e41-b233-94c86f1ed11d",
+      "title": "Celebrating Small Wins",
+      "body": "Practiced mindfulness meditation for 15 minutes this morning. It's becoming easier to observe my thoughts without judgment. This practice is really helping me stay centered throughout the day.",
+      "tags": [
+        "Reflection",
+        "Journey"
+      ],
+      "createdAt": "2025-07-24T22:12:28.965086",
+      "updatedAt": "2025-07-24T22:12:28.965086",
+      "sentiment": "neutral",
+      "sentimentScore": 0.77
+    },
+    {
+      "id": "2479fdf3-5208-46e1-8e0e-d4175007d084",
+      "title": "Progress Check-in",
+      "body": "Had some cravings today but I used my coping strategies. Called a friend, went for a walk, and reminded myself of my goals. The craving passed and I feel stronger for having worked through it.",
+      "tags": [
+        "Therapy",
+        "Growth"
+      ],
+      "createdAt": "2025-07-24T22:12:28.965086",
+      "updatedAt": "2025-07-24T22:12:28.965086",
+      "sentiment": "positive",
+      "sentimentScore": 0.25
+    },
+    {
+      "id": "fed517e0-8b5c-498b-bfb6-96d9ab4a5f89",
+      "title": "Anxiety Management",
+      "body": "Practiced mindfulness meditation for 15 minutes this morning. It's becoming easier to observe my thoughts without judgment. This practice is really helping me stay centered throughout the day.",
+      "tags": [
+        "Therapy",
+        "Growth"
+      ],
+      "createdAt": "2025-07-20T22:12:28.965086",
+      "updatedAt": "2025-07-20T22:12:28.965086",
+      "sentiment": "positive",
+      "sentimentScore": 0.29
+    },
+    {
+      "id": "8adfabf1-21c2-4766-accb-f9675704139e",
+      "title": "Therapy Homework",
+      "body": "Feeling anxious about an upcoming presentation at work. Instead of catastrophizing, I'm trying to focus on what I can control: preparation, self-care, and using my coping skills.",
+      "tags": [
+        "Anxious",
+        "Work",
+        "Coping"
+      ],
+      "createdAt": "2025-07-12T22:12:28.965086",
+      "updatedAt": "2025-07-12T22:12:28.965086",
+      "sentiment": "negative",
+      "sentimentScore": 0.83
+    },
+    {
+      "id": "234cb36a-0f5c-4a34-855d-86c4b46529aa",
+      "title": "Feeling Grateful Today",
+      "body": "Feeling anxious about an upcoming presentation at work. Instead of catastrophizing, I'm trying to focus on what I can control: preparation, self-care, and using my coping skills.",
+      "tags": [
+        "Grateful",
+        "Positive"
+      ],
+      "createdAt": "2025-07-09T22:12:28.965086",
+      "updatedAt": "2025-07-09T22:12:28.965086",
+      "sentiment": "neutral",
+      "sentimentScore": 0.5
+    },
+    {
+      "id": "8ae34250-01b2-4394-97ad-5d6b37ff25a6",
+      "title": "Mindfulness Practice",
+      "body": "Had some cravings today but I used my coping strategies. Called a friend, went for a walk, and reminded myself of my goals. The craving passed and I feel stronger for having worked through it.",
+      "tags": [
+        "Community",
+        "Support"
+      ],
+      "createdAt": "2025-07-08T22:12:28.965086",
+      "updatedAt": "2025-07-08T22:12:28.965086",
+      "sentiment": "negative",
+      "sentimentScore": 0.32
+    },
+    {
+      "id": "dcdae67c-5096-420a-a9d4-1f6cf22be73c",
+      "title": "Celebrating Small Wins",
+      "body": "Therapy session went well today. We talked about identifying triggers and developing healthier response patterns. I'm learning that recovery is a process, not a destination.",
+      "tags": [
+        "Anxious",
+        "Work",
+        "Coping"
+      ],
+      "createdAt": "2025-07-06T22:12:28.965086",
+      "updatedAt": "2025-07-06T22:12:28.965086",
+      "sentiment": "negative",
+      "sentimentScore": 0.62
+    },
+    {
+      "id": "b2c84a41-e35a-4772-ac88-3729b8bea1ac",
+      "title": "Meditation Session",
+      "body": "Reflecting on my journey so far. There have been ups and downs, but overall I can see how much I've grown. I'm becoming the person I want to be, one day at a time.",
+      "tags": [
+        "Mindfulness",
+        "Meditation"
+      ],
+      "createdAt": "2025-06-30T22:12:28.965086",
+      "updatedAt": "2025-06-30T22:12:28.965086",
+      "sentiment": "negative",
+      "sentimentScore": 0.11
+    },
+    {
+      "id": "13c9b865-06be-4186-b903-7315b1c134de",
+      "title": "Celebrating Small Wins",
+      "body": "Had a really challenging day at work today. My manager was being particularly demanding and I felt overwhelmed. But instead of reaching for unhealthy coping mechanisms, I took a 10-minute walk and did some deep breathing. Small victories count.",
+      "tags": [
+        "Family",
+        "Motivation"
+      ],
+      "createdAt": "2025-06-29T22:12:28.965086",
+      "updatedAt": "2025-06-29T22:12:28.965086",
+      "sentiment": "neutral",
+      "sentimentScore": 0.25
+    },
+    {
+      "id": "ada491d9-2339-4fcf-b2e9-8d48021e35b6",
+      "title": "Anxiety Management",
+      "body": "Working on forgiveness - both for others and for myself. It's one of the hardest parts of recovery, but I know it's essential for my healing and growth.",
+      "tags": [
+        "Forgiveness",
+        "Healing"
+      ],
+      "createdAt": "2025-06-21T22:12:28.965086",
+      "updatedAt": "2025-06-21T22:12:28.965086",
+      "sentiment": "negative",
+      "sentimentScore": 0.86
+    },
+    {
+      "id": "ae1006d9-49c8-46ee-a16f-34a78e7cd6a5",
+      "title": "Therapy Homework",
+      "body": "Had a really challenging day at work today. My manager was being particularly demanding and I felt overwhelmed. But instead of reaching for unhealthy coping mechanisms, I took a 10-minute walk and did some deep breathing. Small victories count.",
+      "tags": [
+        "Community",
+        "Support"
+      ],
+      "createdAt": "2025-06-20T22:12:28.965086",
+      "updatedAt": "2025-06-20T22:12:28.965086",
+      "sentiment": "positive",
+      "sentimentScore": 0.2
+    },
+    {
+      "id": "dc4664f9-4001-4358-925f-cca8cd48828d",
+      "title": "Difficult Conversation",
+      "body": "Working on forgiveness - both for others and for myself. It's one of the hardest parts of recovery, but I know it's essential for my healing and growth.",
+      "tags": [
+        "Setback",
+        "Self-Compassion"
+      ],
+      "createdAt": "2025-06-20T22:12:28.965086",
+      "updatedAt": "2025-06-20T22:12:28.965086",
+      "sentiment": "neutral",
+      "sentimentScore": 0.1
+    },
+    {
+      "id": "1cbe95d2-a66b-45fb-9d4f-f88fe36fb3ab",
+      "title": "Meeting with Therapist",
+      "body": "Spent quality time with my family today. It reminded me why I'm working so hard on my recovery. My kids deserve the best version of me, and I'm committed to being present for them.",
+      "tags": [
+        "Family",
+        "Motivation"
+      ],
+      "createdAt": "2025-06-19T22:12:28.965086",
+      "updatedAt": "2025-06-19T22:12:28.965086",
+      "sentiment": "neutral",
+      "sentimentScore": 0.42
+    },
+    {
+      "id": "d06b62be-76a8-4743-b237-011faac5d390",
+      "title": "Meeting with Therapist",
+      "body": "Had some cravings today but I used my coping strategies. Called a friend, went for a walk, and reminded myself of my goals. The craving passed and I feel stronger for having worked through it.",
+      "tags": [
+        "Cravings",
+        "Strength"
+      ],
+      "createdAt": "2025-06-14T22:12:28.965086",
+      "updatedAt": "2025-06-14T22:12:28.965086",
+      "sentiment": "negative",
+      "sentimentScore": 0.48
+    }
+  ],
+  "riskAssessments": [
+    {
+      "id": "f46cd042-36ea-4b1e-b39f-5a088d4543ae",
+      "score": 5,
+      "reason": "Having trouble sleeping and feeling emotionally unstable",
+      "createdAt": "2025-08-31T22:12:28.965223",
+      "riskLevel": "moderate"
+    },
+    {
+      "id": "2c3c862a-ccb9-45a8-81e9-856eb049d5e8",
+      "score": 5,
+      "reason": "Feeling overwhelmed with work stress and family responsibilities",
+      "createdAt": "2025-08-18T22:12:28.965223",
+      "riskLevel": "moderate"
+    },
+    {
+      "id": "7dd2fb16-c642-4b1e-bc48-88135506cae8",
+      "score": 2,
+      "reason": "Having trouble sleeping and feeling emotionally unstable",
+      "createdAt": "2025-07-31T22:12:28.965223",
+      "riskLevel": "low"
+    },
+    {
+      "id": "e571898f-65d0-415a-9238-0aa81dbeb633",
+      "score": 2,
+      "reason": "Having trouble sleeping and feeling emotionally unstable",
+      "createdAt": "2025-07-29T22:12:28.965223",
+      "riskLevel": "low"
+    },
+    {
+      "id": "2b16fd7b-1281-4930-9c53-7aa97ef19ebe",
+      "score": 6,
+      "reason": "Experiencing physical symptoms of anxiety and panic",
+      "createdAt": "2025-07-17T22:12:28.965223",
+      "riskLevel": "moderate"
+    },
+    {
+      "id": "efa211d2-862a-438d-a3cf-e82409dd0421",
+      "score": 9,
+      "reason": "Struggling with negative thought patterns and self-doubt",
+      "createdAt": "2025-07-14T22:12:28.965223",
+      "riskLevel": "high"
+    },
+    {
+      "id": "9122c41b-3602-4a50-943b-faa560b0f7c3",
+      "score": 7,
+      "reason": "Feeling depressed and having difficulty with daily activities",
+      "createdAt": "2025-07-09T22:12:28.965223",
+      "riskLevel": "high"
+    },
+    {
+      "id": "ee3de56c-ef62-4591-bf6a-aeff104e6636",
+      "score": 3,
+      "reason": "Experiencing strong cravings after seeing old friends",
+      "createdAt": "2025-06-29T22:12:28.965223",
+      "riskLevel": "low"
+    }
+  ]
+}
