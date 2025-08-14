@@ -9,518 +9,323 @@ import SwiftUI
 
 struct DashboardView: View {
     @EnvironmentObject var journalVM: JournalViewModel
-    @EnvironmentObject var riskVM: RiskAssessmentViewModel
     @StateObject private var sobrietyTracker = SobrietyTracker()
-    @StateObject private var quoteService = DailyQuoteService.shared
-    @State private var showCheckIn = false
-    @State private var showNewJournal = false
-    @State private var showRiskAssessment = false
-    @State private var showSettings = false
-    @State private var showBreathing = false
+    @State private var showingJournalEntry = false
+    @State private var showingBreathingExercise = false
+    @State private var showingCheckIn = false
+    @State private var showingRiskAssessment = false
     
-    private var greeting: String {
-        let hour = Calendar.current.component(.hour, from: Date())
-        switch hour {
-        case 5..<12: return "Good morning"
-        case 12..<17: return "Good afternoon"
-        case 17..<22: return "Good evening"
-        default: return "Good night"
-        }
-    }
-    
-    private var recentEntries: [JournalEntryModel] {
-        Array(journalVM.entries.prefix(3))
-    }
-    
-    private var latestRiskScore: Double? {
-        riskVM.fetchRecent(limit: 1).first?.score
-    }
-
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: 24) {
-                    // Sobriety Counter - Most Prominent
-                    sobrietyCounterSection()
+                LazyVStack(spacing: ANCHORDesign.Spacing.lg) {
+                    // Welcome Header
+                    welcomeHeader
                     
-                    // Streak Progress Ring
-                    streakProgressSection()
+                    // Sobriety Progress Section
+                    sobrietyProgressSection
                     
-                    // Quick Action Buttons
-                    quickActionsSection()
+                    // Quick Actions Grid
+                    quickActionsSection
                     
-                    // Last Journal Preview
-                    lastJournalPreviewSection()
+                    // Recent Journal Preview
+                    recentJournalSection
                     
-                    // Daily Quote Banner
-                    dailyQuoteBanner()
+                    // Daily Motivation
+                    dailyMotivationSection
                     
-                    // Upcoming Events / Tips
-                    upcomingTipsSection()
+                    // Recovery Tips
+                    recoveryTipsSection
                 }
-                .padding(.horizontal)
-                .padding(.bottom, 20)
+                .padding(.horizontal, ANCHORDesign.Spacing.md)
+                .padding(.bottom, ANCHORDesign.Spacing.xxl)
             }
-            .navigationTitle("Dashboard")
-            .navigationBarTitleDisplayMode(.large)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: { showSettings = true }) {
-                        Image(systemName: "person.circle")
-                            .font(.title2)
-                    }
-                }
-            }
-            .sheet(isPresented: $showCheckIn) {
-                NavigationView {
-                    CheckInView()
-                        .environmentObject(journalVM)
-                        .navigationTitle("Daily Check-in")
-                        .navigationBarTitleDisplayMode(.inline)
-                }
-            }
-            .sheet(isPresented: $showNewJournal) {
-                NavigationView {
-                    JournalEntryView()
-                        .environmentObject(journalVM)
-                        .navigationTitle("New Entry")
-                        .navigationBarTitleDisplayMode(.inline)
-                }
-            }
-            .sheet(isPresented: $showRiskAssessment) {
-                NavigationView {
-                    RiskQuestionView()
-                        .environmentObject(riskVM)
-                        .navigationTitle("Risk Assessment")
-                        .navigationBarTitleDisplayMode(.inline)
-                }
-            }
-            .sheet(isPresented: $showSettings) {
-                NavigationView {
-                    SettingsView()
-                        .navigationTitle("Settings")
-                        .navigationBarTitleDisplayMode(.inline)
-                }
-            }
-            .sheet(isPresented: $showBreathing) {
-                NavigationView {
-                    BreathingExerciseView()
-                        .navigationTitle("Breathing Exercise")
-                        .navigationBarTitleDisplayMode(.inline)
-                }
-            }
+            .anchorGradientBackground()
+            .navigationBarHidden(true)
+        }
+        .sheet(isPresented: $showingJournalEntry) {
+            JournalEntryView()
+        }
+        .sheet(isPresented: $showingBreathingExercise) {
+            BreathingExerciseView()
+        }
+        .sheet(isPresented: $showingCheckIn) {
+            // TODO: Implement CheckInView
+            Text("Check-in coming soon!")
+        }
+        .sheet(isPresented: $showingRiskAssessment) {
+            RiskAssessmentView()
         }
     }
     
-    // MARK: - View Components
+    // MARK: - Welcome Header
     
-    private func sobrietyCounterSection() -> some View {
-        VStack(spacing: 16) {
-            VStack(spacing: 8) {
-                Text(sobrietyTracker.formattedSobrietyTime)
-                    .font(.system(size: 48, weight: .bold, design: .rounded))
-                    .foregroundColor(.primary)
-                
-                Text(sobrietyTracker.sobrietyStartDateFormatted)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-            }
-            .padding(.vertical, 20)
-            .frame(maxWidth: .infinity)
-            .background(
-                LinearGradient(
-                    gradient: Gradient(colors: [Color.blue.opacity(0.1), Color.green.opacity(0.1)]),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-            )
-            .cornerRadius(16)
-            .overlay(
-                RoundedRectangle(cornerRadius: 16)
-                    .stroke(Color.blue.opacity(0.3), lineWidth: 1)
-            )
-        }
-        .padding(.top, 10)
-    }
-    
-    private func streakProgressSection() -> some View {
-        VStack(spacing: 16) {
-            Text("Progress to \(sobrietyTracker.nextMilestone.description)")
-                .font(.headline)
-                .foregroundColor(.secondary)
-            
-            ZStack {
-                Circle()
-                    .stroke(lineWidth: 12)
-                    .opacity(0.3)
-                    .foregroundColor(.blue)
-                
-                Circle()
-                    .trim(from: 0.0, to: sobrietyTracker.progressToNextMilestone)
-                    .stroke(style: StrokeStyle(lineWidth: 12, lineCap: .round, lineJoin: .round))
-                    .foregroundColor(.blue)
-                    .rotationEffect(Angle(degrees: -90))
-                    .animation(.easeInOut(duration: 1.0), value: sobrietyTracker.progressToNextMilestone)
-                
-                VStack(spacing: 4) {
-                    Text("\(sobrietyTracker.nextMilestone.days - sobrietyTracker.daysSober)")
-                        .font(.system(size: 32, weight: .bold, design: .rounded))
-                        .foregroundColor(.blue)
-                    
-                    Text("days to go")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-            }
-            .frame(width: 150, height: 150)
-        }
-        .padding(.vertical, 20)
-        .frame(maxWidth: .infinity)
-        .background(Color(.secondarySystemBackground))
-        .cornerRadius(16)
-    }
-    
-    private func quickActionsSection() -> some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Quick Actions")
-                .font(.headline)
-            
-            VStack(spacing: 12) {
-                HStack(spacing: 12) {
-                    QuickActionButton(
-                        title: "New Journal Entry",
-                        icon: "pencil.circle.fill",
-                        color: .blue,
-                        action: { showNewJournal = true }
-                    )
-                    
-                    QuickActionButton(
-                        title: "Start Breathing",
-                        icon: "wind.circle.fill",
-                        color: .green,
-                        action: { showBreathing = true }
-                    )
-                }
-                
-                HStack(spacing: 12) {
-                    QuickActionButton(
-                        title: "Daily Check-in",
-                        icon: "heart.circle.fill",
-                        color: .pink,
-                        action: { showCheckIn = true }
-                    )
-                    
-                    QuickActionButton(
-                        title: "Risk Assessment",
-                        icon: "shield.checkerboard",
-                        color: .orange,
-                        action: { showRiskAssessment = true }
-                    )
-                }
-            }
-        }
-    }
-    
-    private func lastJournalPreviewSection() -> some View {
-        VStack(alignment: .leading, spacing: 16) {
+    private var welcomeHeader: some View {
+        ANCHORCard(padding: ANCHORDesign.Spacing.lg) {
             HStack {
-                Text("Last Journal Entry")
-                    .font(.headline)
+                VStack(alignment: .leading, spacing: ANCHORDesign.Spacing.sm) {
+                    Text("Welcome back!")
+                        .anchorTextStyle(.title1)
+                    
+                    Text("How are you feeling today?")
+                        .anchorTextStyle(.callout)
+                }
                 
                 Spacer()
                 
-                NavigationLink("View All") {
-                    JournalListView()
-                        .environmentObject(journalVM)
+                // Profile/Settings Button
+                Button(action: {
+                    // TODO: Navigate to settings
+                }) {
+                    ZStack {
+                        Circle()
+                            .fill(ANCHORDesign.Colors.primary.opacity(0.1))
+                            .frame(width: 44, height: 44)
+                        
+                        Image(systemName: "person.circle.fill")
+                            .font(.title2)
+                            .foregroundColor(ANCHORDesign.Colors.primary)
+                    }
                 }
-                .font(.subheadline)
-                .foregroundColor(.blue)
             }
+        }
+        .padding(.top, ANCHORDesign.Spacing.md)
+    }
+    
+    // MARK: - Sobriety Progress Section
+    
+    private var sobrietyProgressSection: some View {
+        SobrietyProgressCard(
+            daysSober: sobrietyTracker.daysSober,
+            progressToNextMilestone: sobrietyTracker.progressToNextMilestone,
+            nextMilestone: sobrietyTracker.nextMilestone.description,
+            daysToNextMilestone: sobrietyTracker.daysToNextMilestone
+        )
+    }
+    
+    // MARK: - Quick Actions Section
+    
+    private var quickActionsSection: some View {
+        VStack(alignment: .leading, spacing: ANCHORDesign.Spacing.md) {
+            Text("Quick Actions")
+                .anchorTextStyle(.title2)
+                .padding(.horizontal, ANCHORDesign.Spacing.xs)
             
-            if let lastEntry = journalVM.entries.first {
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack {
-                        Text(lastEntry.title ?? "Untitled Entry")
-                            .font(.headline)
-                            .lineLimit(1)
-                        
-                        Spacer()
-                        
-                        Text(lastEntry.date.formatted(date: .abbreviated, time: .shortened))
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                    
-                    Text(lastEntry.body)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                        .lineLimit(3)
-                        .multilineTextAlignment(.leading)
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: ANCHORDesign.Spacing.md), count: 2), spacing: ANCHORDesign.Spacing.md) {
+                
+                QuickActionCard(
+                    title: "New Journal",
+                    subtitle: "Write your thoughts",
+                    icon: "book.fill",
+                    gradient: [ANCHORDesign.Colors.primary, ANCHORDesign.Colors.primaryLight]
+                ) {
+                    showingJournalEntry = true
                 }
-                .padding()
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color(.secondarySystemBackground))
-                .cornerRadius(12)
-            } else {
-                VStack(spacing: 12) {
-                    Image(systemName: "book.closed")
-                        .font(.system(size: 32))
-                        .foregroundColor(.secondary)
-                    
-                    Text("No journal entries yet")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                    
-                    Button("Write your first entry") {
-                        showNewJournal = true
-                    }
-                    .font(.subheadline)
-                    .foregroundColor(.blue)
+                
+                QuickActionCard(
+                    title: "Breathing",
+                    subtitle: "Calm your mind",
+                    icon: "wind",
+                    gradient: [ANCHORDesign.Colors.accent, ANCHORDesign.Colors.accentLight]
+                ) {
+                    showingBreathingExercise = true
                 }
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(Color(.secondarySystemBackground))
-                .cornerRadius(12)
+                
+                QuickActionCard(
+                    title: "Check-In",
+                    subtitle: "How are you?",
+                    icon: "heart.fill",
+                    gradient: [ANCHORDesign.Colors.moodHappy, ANCHORDesign.Colors.moodVeryHappy]
+                ) {
+                    showingCheckIn = true
+                }
+                
+                QuickActionCard(
+                    title: "Risk Check",
+                    subtitle: "Assess your state",
+                    icon: "shield.fill",
+                    gradient: [ANCHORDesign.Colors.warning, ANCHORDesign.Colors.moodNeutral]
+                ) {
+                    showingRiskAssessment = true
+                }
             }
         }
     }
     
-    private func dailyQuoteBanner() -> some View {
-        let todaysQuote = quoteService.getTodaysQuote()
-        
-        return VStack(alignment: .leading, spacing: 16) {
-            Text("Daily Inspiration")
-                .font(.headline)
-            
-            VStack(spacing: 16) {
-                Text("\"\(todaysQuote.text)\"")
-                    .font(.title3)
-                    .italic()
-                    .multilineTextAlignment(TextAlignment.center)
-                    .foregroundColor(Color.primary)
+    // MARK: - Recent Journal Section
+    
+    private var recentJournalSection: some View {
+        VStack(alignment: .leading, spacing: ANCHORDesign.Spacing.md) {
+            HStack {
+                Text("Recent Reflections")
+                    .anchorTextStyle(.title2)
                 
+                Spacer()
+                
+                NavigationLink(destination: JournalListView()) {
+                    Text("View All")
+                        .anchorTextStyle(.callout)
+                        .foregroundColor(ANCHORDesign.Colors.primary)
+                }
+            }
+            .padding(.horizontal, ANCHORDesign.Spacing.xs)
+            
+            if let recentEntry = journalVM.entries.first {
+                ANCHORCard {
+                    VStack(alignment: .leading, spacing: ANCHORDesign.Spacing.sm) {
+                        HStack {
+                            ANCHORMoodIcon(mood: moodFromSentiment(recentEntry.sentiment), size: 24)
+                            
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(recentEntry.title ?? "Journal Entry")
+                                    .anchorTextStyle(.bodyBold)
+                                    .lineLimit(1)
+                                
+                                Text(recentEntry.date, style: .date)
+                                    .anchorTextStyle(.caption1)
+                            }
+                            
+                            Spacer()
+                            
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .foregroundColor(ANCHORDesign.Colors.textTertiary)
+                        }
+                        
+                        Text(recentEntry.body)
+                            .anchorTextStyle(.callout)
+                            .lineLimit(3)
+                            .multilineTextAlignment(.leading)
+                        
+                        if !recentEntry.tags.isEmpty {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: ANCHORDesign.Spacing.xs) {
+                                    ForEach(recentEntry.tags.prefix(3), id: \.self) { tag in
+                                        Text(tag)
+                                            .font(.system(size: 11, weight: .medium))
+                                            .padding(.horizontal, 8)
+                                            .padding(.vertical, 4)
+                                            .background(ANCHORDesign.Colors.primary.opacity(0.1))
+                                            .foregroundColor(ANCHORDesign.Colors.primary)
+                                            .cornerRadius(ANCHORDesign.CornerRadius.small)
+                                    }
+                                }
+                                .padding(.horizontal, 1)
+                            }
+                        }
+                    }
+                }
+            } else {
+                ANCHORCard {
+                    VStack(spacing: ANCHORDesign.Spacing.md) {
+                        Image(systemName: "book.closed")
+                            .font(.system(size: 40))
+                            .foregroundColor(ANCHORDesign.Colors.textTertiary)
+                        
+                        VStack(spacing: ANCHORDesign.Spacing.xs) {
+                            Text("Start Your Journey")
+                                .anchorTextStyle(.bodyBold)
+                            
+                            Text("Write your first journal entry to begin tracking your thoughts and progress.")
+                                .anchorTextStyle(.callout)
+                                .multilineTextAlignment(.center)
+                        }
+                        
+                        ANCHORButton(title: "Write First Entry", style: .primary, size: .medium) {
+                            showingJournalEntry = true
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+            }
+        }
+    }
+    
+    // MARK: - Daily Motivation Section
+    
+    private var dailyMotivationSection: some View {
+        ANCHORCard(
+            padding: ANCHORDesign.Spacing.lg,
+            shadowStyle: ANCHORDesign.Shadow.large
+        ) {
+            VStack(spacing: ANCHORDesign.Spacing.md) {
                 HStack {
-                    Text("— \(todaysQuote.author)")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                    Image(systemName: "quote.bubble.fill")
+                        .font(.title2)
+                        .foregroundColor(ANCHORDesign.Colors.accent)
+                    
+                    Text("Daily Inspiration")
+                        .anchorTextStyle(.title3)
                     
                     Spacer()
                     
                     Button(action: shareQuote) {
                         Image(systemName: "square.and.arrow.up")
-                            .font(.caption)
-                            .foregroundColor(.blue)
+                            .font(.title3)
+                            .foregroundColor(ANCHORDesign.Colors.primary)
                     }
                 }
+                
+                Text(DailyQuoteService.shared.getTodaysQuote())
+                    .anchorTextStyle(.body)
+                    .multilineTextAlignment(.center)
+                    .italic()
+                    .padding(.vertical, ANCHORDesign.Spacing.sm)
             }
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(
-                LinearGradient(
-                    gradient: Gradient(colors: [Color.purple.opacity(0.1), Color.blue.opacity(0.1)]),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-            )
-            .cornerRadius(12)
-            .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(Color.purple.opacity(0.3), lineWidth: 1)
-            )
         }
     }
     
-    private func upcomingTipsSection() -> some View {
-        VStack(alignment: .leading, spacing: 16) {
+    // MARK: - Recovery Tips Section
+    
+    private var recoveryTipsSection: some View {
+        VStack(alignment: .leading, spacing: ANCHORDesign.Spacing.md) {
             Text("Recovery Tips")
-                .font(.headline)
+                .anchorTextStyle(.title2)
+                .padding(.horizontal, ANCHORDesign.Spacing.xs)
             
-            VStack(spacing: 12) {
-                if sobrietyTracker.daysSober == 7 {
-                    TipCard(
-                        icon: "party.popper.fill",
-                        title: "One Week Milestone!",
-                        description: "Celebrate this achievement with something you enjoy. You've made it through the first week!",
-                        color: .green
-                    )
-                } else if sobrietyTracker.daysSober == 30 {
-                    TipCard(
-                        icon: "star.fill",
-                        title: "One Month Strong!",
-                        description: "You've built incredible momentum. Consider sharing your success with someone you trust.",
-                        color: .orange
-                    )
-                } else if sobrietyTracker.daysSober < 7 {
-                    TipCard(
-                        icon: "heart.fill",
-                        title: "Take it One Day at a Time",
-                        description: "Focus on today. Each day is a victory and brings you closer to your goals.",
-                        color: .pink
-                    )
-                } else {
-                    TipCard(
-                        icon: "leaf.fill",
-                        title: "Stay Mindful",
-                        description: "Practice mindfulness today. Take a few minutes to breathe and center yourself.",
-                        color: .green
-                    )
-                }
+            VStack(spacing: ANCHORDesign.Spacing.sm) {
+                RecoveryTipCard(
+                    icon: "heart.fill",
+                    title: "Practice Self-Compassion",
+                    description: "Be kind to yourself. Recovery is a journey, not a destination.",
+                    color: ANCHORDesign.Colors.moodHappy
+                )
                 
-                TipCard(
+                RecoveryTipCard(
                     icon: "person.2.fill",
-                    title: "Connect with Support",
-                    description: "Reach out to your support network. Connection is a powerful tool in recovery.",
-                    color: .blue
+                    title: "Stay Connected",
+                    description: "Reach out to your support network when you need help.",
+                    color: ANCHORDesign.Colors.accent
+                )
+                
+                RecoveryTipCard(
+                    icon: "moon.fill",
+                    title: "Prioritize Sleep",
+                    description: "Good sleep is essential for mental health and recovery.",
+                    color: ANCHORDesign.Colors.primary
                 )
             }
         }
     }
     
-    private func todaysSnapshotSection() -> some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Today's Snapshot")
-                .font(.headline)
-            
-            VStack(spacing: 16) {
-                HStack(spacing: 16) {
-                    SnapshotCard(
-                        title: "Journal Entries",
-                        value: "\(journalVM.entries.filter { Calendar.current.isDateInToday($0.date) }.count)",
-                        icon: "book.fill",
-                        color: .blue
-                    )
-                    
-                    SnapshotCard(
-                        title: "Risk Level",
-                        value: latestRiskScore != nil ? "\(Int(latestRiskScore!))%" : "--",
-                        icon: "shield.fill",
-                        color: riskColor(for: latestRiskScore ?? 0)
-                    )
-                }
-                
-                HStack(spacing: 16) {
-                    SnapshotCard(
-                        title: "Streak",
-                        value: "\(calculateStreak()) days",
-                        icon: "flame.fill",
-                        color: .orange
-                    )
-                    
-                    SnapshotCard(
-                        title: "Mood",
-                        value: averageMoodEmoji(),
-                        icon: "face.smiling.fill",
-                        color: .yellow
-                    )
-                }
-            }
-        }
-    }
-    
-    private func recentJournalSection() -> some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                Text("Recent Entries")
-                    .font(.headline)
-                
-                Spacer()
-                
-                NavigationLink("View All") {
-                    JournalListView()
-                        .environmentObject(journalVM)
-                }
-                .font(.subheadline)
-                .foregroundColor(.blue)
-            }
-            
-            if recentEntries.isEmpty {
-                VStack(spacing: 12) {
-                    Image(systemName: "book.closed")
-                        .font(.system(size: 40))
-                        .foregroundColor(.secondary)
-                    
-                    Text("No entries yet")
-                        .font(.headline)
-                        .foregroundColor(.secondary)
-                    
-                    Text("Start your wellness journey by writing your first journal entry.")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                }
-                .padding(.vertical, 20)
-            } else {
-                ForEach(recentEntries) { entry in
-                    JournalEntryCard(entry: entry)
-                }
-            }
-        }
-    }
-    
-    private func wellnessTipsSection() -> some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Wellness Tips")
-                .font(.headline)
-            
-            WellnessTipCard(
-                tip: "Take a moment to breathe deeply and center yourself.",
-                icon: "wind"
-            )
-        }
-    }
-    
     // MARK: - Helper Functions
     
-    private func riskColor(for score: Double) -> Color {
-        switch score {
-        case 0..<30: return .green
-        case 30..<70: return .orange
-        case 70...100: return .red
-        default: return .gray
+    private func moodFromSentiment(_ sentiment: Int) -> ANCHORMoodIcon.MoodType {
+        switch sentiment {
+        case 2: return .veryHappy
+        case 1: return .happy
+        case 0: return .neutral
+        case -1: return .sad
+        case -2: return .verySad
+        default: return .neutral
         }
     }
-    
-    private func calculateStreak() -> Int {
-        // Simple streak calculation based on consecutive days with entries
-        let calendar = Calendar.current
-        var streak = 0
-        var currentDate = Date()
-        
-        while true {
-            let hasEntry = journalVM.entries.contains { calendar.isDate($0.date, inSameDayAs: currentDate) }
-            if hasEntry {
-                streak += 1
-                currentDate = calendar.date(byAdding: .day, value: -1, to: currentDate) ?? currentDate
-            } else {
-                break
-            }
-        }
-        
-        return streak
-    }
-    
-    private func averageMoodEmoji() -> String {
-        let recentMoods = journalVM.entries.prefix(7).compactMap { $0.sentiment }
-        guard !recentMoods.isEmpty else { return "😐" }
-        
-        let average = Double(recentMoods.reduce(0, +)) / Double(recentMoods.count)
-        
-        switch average {
-        case 0.5...1.0: return "😊"
-        case 0.1..<0.5: return "🙂"
-        case -0.1...0.1: return "😐"
-        case -0.5..<(-0.1): return "😔"
-        default: return "😢"
-        }
-    }
-    
-    // MARK: - Helper Functions
     
     private func shareQuote() {
-        let quote = quoteService.getTodaysQuote()
-        let shareText = "\"\(quote.text)\" — \(quote.author)"
+        let quote = DailyQuoteService.shared.getTodaysQuote()
+        let content = "\(quote)\n\n- Shared from ANCHOR"
         
-        let activityVC = UIActivityViewController(activityItems: [shareText], applicationActivities: nil)
+        let activityVC = UIActivityViewController(activityItems: [content], applicationActivities: nil)
         
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
            let window = windowScene.windows.first {
@@ -531,149 +336,7 @@ struct DashboardView: View {
 
 // MARK: - Supporting Views
 
-private struct QuickActionButton: View {
-    let title: String
-    let icon: String
-    let color: Color
-    let action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            HStack(spacing: 12) {
-                Image(systemName: icon)
-                    .font(.title2)
-                    .foregroundColor(color)
-                
-                Text(title)
-                    .font(.headline)
-                    .fontWeight(.medium)
-                    .foregroundColor(.primary)
-                
-                Spacer()
-            }
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(Color(.secondarySystemBackground))
-            .cornerRadius(12)
-        }
-    }
-}
-
-private struct TipCard: View {
-    let icon: String
-    let title: String
-    let description: String
-    let color: Color
-    
-    var body: some View {
-        HStack(alignment: .top, spacing: 12) {
-            Image(systemName: icon)
-                .font(.title2)
-                .foregroundColor(color)
-                .frame(width: 32)
-            
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title)
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                
-                Text(description)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            
-            Spacer()
-        }
-        .padding()
-        .background(Color(.secondarySystemBackground))
-        .cornerRadius(12)
-    }
-}
-
-private struct SnapshotCard: View {
-    let title: String
-    let value: String
-    let icon: String
-    let color: Color
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Image(systemName: icon)
-                    .font(.title3)
-                    .foregroundColor(color)
-                
-                Spacer()
-            }
-            
-            Text(value)
-                .font(.title2)
-                .fontWeight(.bold)
-            
-            Text(title)
-                .font(.caption)
-                .foregroundColor(.secondary)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(Color(.secondarySystemBackground))
-        .cornerRadius(12)
-    }
-}
-
-private struct JournalEntryCard: View {
-    let entry: JournalEntryModel
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text(entry.title ?? "Untitled")
-                    .font(.headline)
-                    .lineLimit(1)
-                
-                Spacer()
-                
-                Text(entry.date.formatted(date: .abbreviated, time: .omitted))
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            
-            Text(entry.body)
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-                .lineLimit(2)
-        }
-        .padding()
-        .background(Color(.secondarySystemBackground))
-        .cornerRadius(12)
-    }
-}
-
-private struct WellnessTipCard: View {
-    let tip: String
-    let icon: String
-    
-    var body: some View {
-        HStack(spacing: 12) {
-            Image(systemName: icon)
-                .font(.title2)
-                .foregroundColor(.blue)
-            
-            Text(tip)
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-            
-            Spacer()
-        }
-        .padding()
-        .background(Color(.secondarySystemBackground))
-        .cornerRadius(12)
-    }
-}
-
 #Preview {
     DashboardView()
         .environmentObject(JournalViewModel())
-        .environmentObject(RiskAssessmentViewModel())
 }

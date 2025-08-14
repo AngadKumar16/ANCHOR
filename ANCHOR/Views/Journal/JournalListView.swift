@@ -1,43 +1,420 @@
 import SwiftUI
 
 struct JournalListView: View {
-    @StateObject private var vm = JournalViewModel()
-
+    @EnvironmentObject var journalVM: JournalViewModel
+    @State private var showingNewEntry = false
+    @State private var searchText = ""
+    @State private var selectedMoodFilter: MoodFilter = .all
+    @State private var showingDeleteAlert = false
+    @State private var entryToDelete: JournalEntryModel?
+    
+    enum MoodFilter: String, CaseIterable {
+        case all = "All"
+        case positive = "Positive"
+        case neutral = "Neutral"
+        case negative = "Negative"
+        
+        var icon: String {
+            switch self {
+            case .all: return "list.bullet"
+            case .positive: return "face.smiling"
+            case .neutral: return "face.dashed"
+            case .negative: return "face.dashed.fill"
+            }
+        }
+        
+        var color: Color {
+            switch self {
+            case .all: return ANCHORDesign.Colors.primary
+            case .positive: return ANCHORDesign.Colors.moodHappy
+            case .neutral: return ANCHORDesign.Colors.moodNeutral
+            case .negative: return ANCHORDesign.Colors.moodSad
+            }
+        }
+    }
+    
+    var filteredEntries: [JournalEntryModel] {
+        var entries = journalVM.entries
+        
+        // Apply search filter
+        if !searchText.isEmpty {
+            entries = entries.filter { entry in
+                let titleMatch = entry.title?.localizedCaseInsensitiveContains(searchText) ?? false
+                let bodyMatch = entry.body.localizedCaseInsensitiveContains(searchText)
+                let tagsMatch = entry.tags.joined(separator: " ").localizedCaseInsensitiveContains(searchText)
+                return titleMatch || bodyMatch || tagsMatch
+            }
+        }
+        
+        // Apply mood filter
+        if selectedMoodFilter != .all {
+            entries = entries.filter { entry in
+                switch selectedMoodFilter {
+                case .positive: return entry.sentiment > 0
+                case .neutral: return entry.sentiment == 0
+                case .negative: return entry.sentiment < 0
+                case .all: return true
+                }
+            }
+        }
+        
+        return entries
+    }
+    
+    var groupedEntries: [(String, [JournalEntryModel])] {
+        let grouped = Dictionary(grouping: filteredEntries) { entry in
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MMMM yyyy"
+            return formatter.string(from: entry.date)
+        }
+        
+        return grouped.sorted { first, second in
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MMMM yyyy"
+            let firstDate = formatter.date(from: first.key) ?? Date.distantPast
+            let secondDate = formatter.date(from: second.key) ?? Date.distantPast
+            return firstDate > secondDate
+        }.map { (key, value) in
+            (key, value.sorted { $0.date > $1.date })
+        }
+    }
+    
     var body: some View {
-        NavigationView {
-            List {
-                if vm.entries.isEmpty {
-                    Text("No entries yet — tap + to add one").foregroundColor(.secondary)
-                } else {
-                    ForEach(vm.entries) { e in
-                        NavigationLink(destination: JournalDetailView(entry: e, viewModel: vm)) {
-                            VStack(alignment: .leading) {
-                                Text(e.title ?? e.body.prefix(40).trimmingCharacters(in: .whitespacesAndNewlines) + (e.body.count > 40 ? "…" : ""))
-                                Text(e.date, style: .date).font(.caption).foregroundColor(.secondary)
-                            }
-                        }
-                    }
-                    .onDelete { idx in
-                        Task { await vm.delete(at: idx) }
+        NavigationStack {
+            ZStack {
+                // Background
+                ANCHORGradientBackground()
+                
+                VStack(spacing: 0) {
+                    // Header with Search and Filters
+                    headerSection
+                    
+                    // Journal Entries List
+                    if filteredEntries.isEmpty {
+                        emptyStateView
+                    } else {
+                        journalEntriesList
                     }
                 }
             }
             .navigationTitle("Journal")
+            .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button { showingNew = true } label: { Image(systemName: "plus") }
-                }
-            }
-            .sheet(isPresented: $showingNew) {
-                JournalEditorView { new in
-                    Task {
-                        try? await vm.add(title: new.title, body: new.body, tags: new.tags)
-                        showingNew = false
+                    HStack(spacing: ANCHORDesign.Spacing.md) {
+                        // Privacy indicator
+                        privacyIndicator
+                        
+                        // Add button
+                        addButton
                     }
                 }
             }
+            .sheet(isPresented: $showingNewEntry) {
+                JournalEntryView()
+            }
+            .alert("Delete Entry", isPresented: $showingDeleteAlert) {
+                Button("Cancel", role: .cancel) { }
+                Button("Delete", role: .destructive) {
+                    if let entry = entryToDelete {
+                        deleteEntry(entry)
+                    }
+                }
+            } message: {
+                Text("Are you sure you want to delete this journal entry? This action cannot be undone.")
+            }
+        }
+        .searchable(text: $searchText, prompt: "Search journal entries")
+    }
+    
+    // MARK: - Header Section
+    
+    private var headerSection: some View {
+        VStack(spacing: ANCHORDesign.Spacing.md) {
+            // Search Bar
+            searchBar
+            
+            // Mood Filter Pills
+            moodFilterPills
+            
+            // Stats Summary
+            if !journalVM.entries.isEmpty {
+                statsSection
+            }
+        }
+        .padding(.horizontal, ANCHORDesign.Spacing.md)
+        .padding(.top, ANCHORDesign.Spacing.sm)
+        .padding(.bottom, ANCHORDesign.Spacing.md)
+        .background(
+            ANCHORDesign.Colors.backgroundCard
+                .shadow(
+                    color: ANCHORDesign.Shadow.small.color,
+                    radius: ANCHORDesign.Shadow.small.radius,
+                    x: ANCHORDesign.Shadow.small.x,
+                    y: ANCHORDesign.Shadow.small.y
+                )
+        )
+    }
+    
+    private var searchBar: some View {
+        HStack(spacing: ANCHORDesign.Spacing.sm) {
+            Image(systemName: "magnifyingglass")
+                .foregroundColor(ANCHORDesign.Colors.textSecondary)
+                .font(.title3)
+            
+            TextField("Search entries...", text: $searchText)
+                .textFieldStyle(.plain)
+                .font(ANCHORDesign.Typography.body)
+            
+            if !searchText.isEmpty {
+                Button("Clear") {
+                    searchText = ""
+                }
+                .font(ANCHORDesign.Typography.caption1)
+                .foregroundColor(ANCHORDesign.Colors.primary)
+            }
+        }
+        .padding(.horizontal, ANCHORDesign.Spacing.md)
+        .padding(.vertical, ANCHORDesign.Spacing.sm)
+        .background(ANCHORDesign.Colors.backgroundSecondary)
+        .cornerRadius(ANCHORDesign.CornerRadius.medium)
+    }
+    
+    private var moodFilterPills: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: ANCHORDesign.Spacing.sm) {
+                ForEach(MoodFilter.allCases, id: \.self) { filter in
+                    MoodFilterPill(
+                        title: filter.rawValue,
+                        icon: filter.icon,
+                        color: filter.color,
+                        isSelected: selectedMoodFilter == filter
+                    ) {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            selectedMoodFilter = filter
+                        }
+                    }
+                }
+            }
+            .padding(.horizontal, ANCHORDesign.Spacing.md)
         }
     }
+    
+    private var statsSection: some View {
+        HStack(spacing: ANCHORDesign.Spacing.lg) {
+            StatCard(
+                title: "Total Entries",
+                value: "\(journalVM.entries.count)",
+                icon: "book.fill",
+                color: ANCHORDesign.Colors.primary
+            )
+            
+            StatCard(
+                title: "This Month",
+                value: "\(entriesThisMonth)",
+                icon: "calendar",
+                color: ANCHORDesign.Colors.accent
+            )
+            
+            StatCard(
+                title: "Writing Streak",
+                value: "\(writingStreak) days",
+                icon: "flame.fill",
+                color: ANCHORDesign.Colors.warning
+            )
+        }
+    }
+    
+    // MARK: - Privacy Indicator
+    
+    private var privacyIndicator: some View {
+        HStack(spacing: ANCHORDesign.Spacing.xs) {
+            Image(systemName: "lock.fill")
+                .font(.caption)
+                .foregroundColor(ANCHORDesign.Colors.success)
+            
+            Text("Private")
+                .font(ANCHORDesign.Typography.caption2)
+                .foregroundColor(ANCHORDesign.Colors.success)
+        }
+        .padding(.horizontal, ANCHORDesign.Spacing.sm)
+        .padding(.vertical, ANCHORDesign.Spacing.xs)
+        .background(ANCHORDesign.Colors.success.opacity(0.1))
+        .cornerRadius(ANCHORDesign.CornerRadius.small)
+    }
+    
+    // MARK: - Add Button
+    
+    private var addButton: some View {
+        Button(action: {
+            showingNewEntry = true
+        }) {
+            ZStack {
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            colors: [ANCHORDesign.Colors.primary, ANCHORDesign.Colors.primaryLight],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: 44, height: 44)
+                    .shadow(
+                        color: ANCHORDesign.Shadow.medium.color,
+                        radius: ANCHORDesign.Shadow.medium.radius,
+                        x: ANCHORDesign.Shadow.medium.x,
+                        y: ANCHORDesign.Shadow.medium.y
+                    )
+                
+                Image(systemName: "plus")
+                    .font(.title3)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+            }
+        }
+        .scaleEffect(1.0)
+        .animation(.easeInOut(duration: 0.1), value: false)
+    }
+    
+    // MARK: - Journal Entries List
+    
+    private var journalEntriesList: some View {
+        ScrollView {
+            LazyVStack(spacing: ANCHORDesign.Spacing.md) {
+                ForEach(groupedEntries, id: \.0) { monthYear, entries in
+                    VStack(spacing: ANCHORDesign.Spacing.sm) {
+                        // Month Header
+                        MonthHeaderCard(monthYear: monthYear, count: entries.count)
+                        
+                        // Entries for this month
+                        ForEach(entries) { entry in
+                            NavigationLink(destination: JournalEntryView(entry: entry)) {
+                                JournalEntryCard(entry: entry)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                            .contextMenu {
+                                contextMenuForEntry(entry)
+                            }
+                        }
+                    }
+                }
+            }
+            .padding(.horizontal, ANCHORDesign.Spacing.md)
+            .padding(.bottom, ANCHORDesign.Spacing.xxl)
+        }
+    }
+    
+    // MARK: - Empty State
+    
+    private var emptyStateView: some View {
+        VStack(spacing: ANCHORDesign.Spacing.lg) {
+            Spacer()
+            
+            // Illustration
+            ZStack {
+                Circle()
+                    .fill(ANCHORDesign.Colors.primary.opacity(0.1))
+                    .frame(width: 120, height: 120)
+                
+                Image(systemName: journalVM.entries.isEmpty ? "book.closed" : "magnifyingglass")
+                    .font(.system(size: 50))
+                    .foregroundColor(ANCHORDesign.Colors.primary)
+            }
+            
+            VStack(spacing: ANCHORDesign.Spacing.sm) {
+                Text(journalVM.entries.isEmpty ? "Start Your Journey" : "No Results Found")
+                    .anchorTextStyle(.title1)
+                
+                Text(journalVM.entries.isEmpty 
+                     ? "Write your first journal entry to begin tracking your thoughts and progress."
+                     : "Try adjusting your search or filter criteria to find what you're looking for.")
+                    .anchorTextStyle(.callout)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, ANCHORDesign.Spacing.lg)
+            }
+            
+            if journalVM.entries.isEmpty {
+                ANCHORButton(title: "Write First Entry", style: .primary, size: .large) {
+                    showingNewEntry = true
+                }
+            }
+            
+            Spacer()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    
+    // MARK: - Context Menu
+    
+    private func contextMenuForEntry(_ entry: JournalEntryModel) -> some View {
+        Group {
+            Button(action: {
+                shareEntry(entry)
+            }) {
+                Label("Share", systemImage: "square.and.arrow.up")
+            }
+            
+            Button(role: .destructive, action: {
+                entryToDelete = entry
+                showingDeleteAlert = true
+            }) {
+                Label("Delete", systemImage: "trash")
+            }
+        }
+    }
+    
+    // MARK: - Helper Functions
+    
+    private var entriesThisMonth: Int {
+        let calendar = Calendar.current
+        return journalVM.entries.filter { calendar.isDate($0.date, equalTo: Date(), toGranularity: .month) }.count
+    }
+    
+    private var writingStreak: Int {
+        let calendar = Calendar.current
+        var streak = 0
+        var currentDate = Date()
+        
+        while true {
+            let hasEntry = journalVM.entries.contains { calendar.isDate($0.date, inSameDayAs: currentDate) }
+            if hasEntry {
+                streak += 1
+                currentDate = calendar.date(byAdding: .day, value: -1, to: currentDate) ?? currentDate
+            } else {
+                break
+            }
+        }
+        
+        return streak
+    }
+    
+    private func deleteEntry(_ entry: JournalEntryModel) {
+        if let index = journalVM.entries.firstIndex(where: { $0.id == entry.id }) {
+            Task {
+                await journalVM.delete(at: IndexSet([index]))
+            }
+        }
+    }
+    
+    private func shareEntry(_ entry: JournalEntryModel) {
+        let title = entry.title ?? "Journal Entry"
+        let date = DateFormatter.localizedString(from: entry.date, dateStyle: .medium, timeStyle: .none)
+        let content = "\(title)\n\(date)\n\n\(entry.body)"
+        
+        let activityVC = UIActivityViewController(activityItems: [content], applicationActivities: nil)
+        
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let window = windowScene.windows.first {
+            window.rootViewController?.present(activityVC, animated: true)
+        }
+    }
+}
 
-    @State private var showingNew = false
+// MARK: - Supporting Views
+
+#Preview {
+    NavigationStack {
+        JournalListView()
+            .environmentObject(JournalViewModel())
+    }
 }
