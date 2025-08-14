@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import ANCHORDesign
 
 struct SobrietyProgressCard: View {
     let daysSober: Int

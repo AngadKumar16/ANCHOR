@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import ANCHORDesign
 
 struct DashboardView: View {
     @EnvironmentObject var journalVM: JournalViewModel

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import PhotosUI
+import ANCHORDesign
 
 struct JournalEntryView: View {
     @EnvironmentObject var journalVM: JournalViewModel

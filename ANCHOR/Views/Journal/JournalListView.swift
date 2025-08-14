@@ -1,4 +1,5 @@
 import SwiftUI
+import ANCHORDesign
 
 struct JournalListView: View {
     @EnvironmentObject var journalVM: JournalViewModel
