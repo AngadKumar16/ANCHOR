@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 
 @objc(RiskAssessmentEntity)
-public class RiskAssessmentEntity: NSManagedObject {
+public class RiskAssessmentEntity: NSManagedObject, Identifiable {
     @nonobjc public class func fetchRequest() -> NSFetchRequest<RiskAssessmentEntity> {
         return NSFetchRequest<RiskAssessmentEntity>(entityName: "RiskAssessmentEntity")
     }

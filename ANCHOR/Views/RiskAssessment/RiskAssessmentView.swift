@@ -13,8 +13,8 @@ struct RiskAssessmentView: View {
     @State private var showingNewAssessment = false
     
     private let riskLevels: [ClosedRange<Double>: (String, Color)] = [
-        0..<30: ("Low", .green),
-        30..<70: ("Medium", .orange),
+        0...30: ("Low", .green),
+        30...70: ("Medium", .orange),
         70...100: ("High", .red)
     ]
     
@@ -26,102 +26,9 @@ struct RiskAssessmentView: View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 24) {
-                    // Risk Summary Card
-                    VStack(spacing: 16) {
-                        Text("Current Risk Level")
-                            .font(.headline)
-                            .foregroundColor(.secondary)
-                        
-                        if let latest = recentAssessments.first {
-                            RiskGauge(score: latest.score)
-                            
-                            VStack(spacing: 8) {
-                                Text("\(Int(latest.score))%")
-                                    .font(.system(size: 48, weight: .bold, design: .rounded))
-                                
-                                Text(riskLevel(for: latest.score).0 + " Risk")
-                                    .font(.title3)
-                                    .foregroundColor(riskLevel(for: latest.score).1)
-                                    .padding(.horizontal, 16)
-                                    .padding(.vertical, 8)
-                                    .background(riskLevel(for: latest.score).1.opacity(0.2))
-                                    .cornerRadius(20)
-                                
-                                if let date = latest.date {
-                                    Text("Last assessed: \(date.formatted(date: .abbreviated, time: .shortened))")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                }
-                            }
-                        } else {
-                            Text("No assessments yet")
-                                .foregroundColor(.secondary)
-                        }
-                        
-                        Button(action: { showingNewAssessment = true }) {
-                            Label("New Assessment", systemImage: "plus.circle.fill")
-                                .frame(maxWidth: .infinity)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .padding(.top, 8)
-                    }
-                    .padding()
-                    .background(Color(.secondarySystemBackground))
-                    .cornerRadius(16)
-                    .padding(.horizontal)
-                    
-                    // Recent Assessments
-                    VStack(alignment: .leading, spacing: 12) {
-                        HStack {
-                            Text("Recent Assessments")
-                                .font(.headline)
-                            Spacer()
-                            Button("See All") { showHistory = true }
-                                .font(.subheadline)
-                        }
-                        .padding(.horizontal)
-                        
-                        if recentAssessments.isEmpty {
-                            Text("No assessments yet. Complete your first assessment to see your history.")
-                                .foregroundColor(.secondary)
-                                .multilineTextAlignment(.center)
-                                .padding()
-                        } else {
-                            ForEach(recentAssessments.prefix(3)) { assessment in
-                                RiskHistoryRow(assessment: assessment)
-                            }
-                        }
-                    }
-                    .padding(.top, 8)
-                    
-                    // Quick Tips
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Quick Tips")
-                            .font(.headline)
-                            .padding(.horizontal)
-                        
-                        VStack(spacing: 12) {
-                            TipCard(
-                                icon: "exclamationmark.triangle.fill",
-                                title: "High Risk?",
-                                description: "Reach out to your support network or healthcare provider if you're feeling at risk."
-                            )
-                            
-                            TipCard(
-                                icon: "hand.raised.fill",
-                                title: "Triggers",
-                                description: "Identify and avoid triggers that may lead to substance use."
-                            )
-                            
-                            TipCard(
-                                icon: "heart.fill",
-                                title: "Self Care",
-                                description: "Practice self-care activities to manage stress and cravings."
-                            )
-                        }
-                        .padding(.horizontal)
-                    }
-                    .padding(.top, 8)
+                    riskSummaryCard()
+                    recentAssessmentsSection()
+                    quickTipsSection()
                 }
                 .padding(.vertical)
             }
@@ -159,6 +66,107 @@ struct RiskAssessmentView: View {
             }
         }
         return ("Unknown", .gray)
+    }
+    
+    // MARK: - View Components
+    
+    private func riskSummaryCard() -> some View {
+        VStack(spacing: 16) {
+            Text("Current Risk Level")
+                .font(.headline)
+                .foregroundColor(.secondary)
+            
+            if let latest = recentAssessments.first {
+                RiskGauge(score: latest.score)
+                
+                VStack(spacing: 8) {
+                    Text("\(Int(latest.score))%")
+                        .font(.system(size: 48, weight: .bold, design: .rounded))
+                    
+                    let level = riskLevel(for: latest.score)
+                    Text(level.0 + " Risk")
+                        .font(.title3)
+                        .foregroundColor(level.1)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(level.1.opacity(0.2))
+                        .cornerRadius(20)
+                    
+                    Text("Last assessed: \(latest.date.formatted(date: .abbreviated, time: .shortened))")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            } else {
+                Text("No assessments yet")
+                    .foregroundColor(.secondary)
+            }
+            
+            Button(action: { showingNewAssessment = true }) {
+                Label("New Assessment", systemImage: "plus.circle.fill")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
+            .padding(.top, 8)
+        }
+        .padding()
+        .background(Color(.secondarySystemBackground))
+        .cornerRadius(16)
+        .padding(.horizontal)
+    }
+    
+    private func recentAssessmentsSection() -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("Recent Assessments")
+                    .font(.headline)
+                Spacer()
+                Button("See All") { showHistory = true }
+                    .font(.subheadline)
+            }
+            .padding(.horizontal)
+            
+            if recentAssessments.isEmpty {
+                Text("No assessments yet. Complete your first assessment to see your history.")
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding()
+            } else {
+                ForEach(recentAssessments.prefix(3)) { assessment in
+                    RiskHistoryRow(assessment: assessment)
+                }
+            }
+        }
+        .padding(.top, 8)
+    }
+    
+    private func quickTipsSection() -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Quick Tips")
+                .font(.headline)
+                .padding(.horizontal)
+            
+            VStack(spacing: 12) {
+                TipCard(
+                    icon: "exclamationmark.triangle.fill",
+                    title: "High Risk?",
+                    description: "Reach out to your support network or healthcare provider if you're feeling at risk."
+                )
+                
+                TipCard(
+                    icon: "hand.raised.fill",
+                    title: "Triggers",
+                    description: "Identify and avoid triggers that may lead to substance use."
+                )
+                
+                TipCard(
+                    icon: "heart.fill",
+                    title: "Self Care",
+                    description: "Practice self-care activities to manage stress and cravings."
+                )
+            }
+            .padding(.horizontal)
+        }
+        .padding(.top, 8)
     }
 }
 
@@ -199,11 +207,9 @@ private struct RiskHistoryRow: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
-                if let date = assessment.date {
-                    Text(date.formatted(date: .abbreviated, time: .shortened))
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                }
+                Text(assessment.date.formatted(date: .abbreviated, time: .shortened))
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
                 
                 if let reason = assessment.reason {
                     Text(reason)
