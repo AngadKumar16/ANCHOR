@@ -55,6 +55,6 @@ struct ANCHORProgressRing_Previews: PreviewProvider {
             ANCHORProgressRing(progress: 1.0, foregroundColor: .green)
         }
         .padding()
-        .background(ANCHORDesign.Colors.background)
+        .background(ANCHORDesign.Colors.backgroundCard)
     }
 }

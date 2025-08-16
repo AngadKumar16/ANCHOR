@@ -585,17 +585,17 @@ extension MonthHeaderCard {
             MonthHeaderCard(
                 monthYear: "September 2023",
                 entryCount: 0,
-                layout: .compact,
                 style: .glassmorphism,
-                size: .large
+                size: .large,
+                layout: .compact,
             )
             
             MonthHeaderCard(
                 monthYear: "August 2023",
                 entryCount: 42,
-                layout: .centered,
                 style: .minimal,
                 size: .extraLarge,
+                layout: .centered,
                 showIcon: true,
                 icon: "star.fill",
                 iconColor: ANCHORDesign.Colors.warning

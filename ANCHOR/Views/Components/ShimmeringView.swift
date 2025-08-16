@@ -87,9 +87,11 @@ extension ShimmeringView {
         }
         
         /// A default configuration with a standard shimmer effect.
-        public static let `default` = Configuration(
-            gradient: Gradient(colors: [.white.opacity(0.5), .white, .white.opacity(0.5)])
-        )
+        public static var `default`: Configuration {
+            return Configuration(
+                gradient: Gradient(colors: [.white.opacity(0.5), .white, .white.opacity(0.5)])
+            )
+        }
     }
 }
 

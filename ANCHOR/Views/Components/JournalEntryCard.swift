@@ -29,7 +29,7 @@ struct JournalEntryCard: View {
     let interactionStyle: InteractionStyle
     let customPadding: EdgeInsets?
     let customCornerRadius: CGFloat?
-    let customShadow: Shadow?
+    let customShadow: ANCHORDesign.Shadow?
     let customBackground: AnyView?
     let onTap: (() -> Void)?
     let onLongPress: (() -> Void)?
@@ -40,6 +40,23 @@ struct JournalEntryCard: View {
     let hoverEffect: Bool
     let scaleOnPress: Bool
     let hapticFeedback: Bool
+    
+    // MARK: - Feature Flags
+    let enableAnalytics: Bool
+    let enableCache: Bool
+    let enableKeyboardNavigation: Bool
+    let enableAdvancedGestures: Bool
+    let enableParticleEffects: Bool
+    
+    // MARK: - State Management
+    let loadingStateBinding: Binding<ComponentLoadingState>?
+    
+    // MARK: - Advanced Gesture Handlers
+    let onDoubleTap: (() -> Void)?
+    let onSwipeLeft: (() -> Void)?
+    let onSwipeRight: (() -> Void)?
+    let onSwipeUp: (() -> Void)?
+    let onSwipeDown: (() -> Void)?
     
     // MARK: - Accessibility Properties
     let accessibilityLabel: String?
@@ -144,6 +161,17 @@ struct JournalEntryCard: View {
     }
     
     // MARK: - Computed Properties
+    private var moodColor: Color {
+        switch entry.sentiment {
+        case 2: return ANCHORDesign.Colors.moodHappy
+        case 1: return ANCHORDesign.Colors.moodHappy
+        case 0: return ANCHORDesign.Colors.moodNeutral
+        case -1: return ANCHORDesign.Colors.moodSad
+        case -2: return ANCHORDesign.Colors.moodAngry
+        default: return ANCHORDesign.Colors.moodNeutral
+        }
+    }
+    
     private var moodIcon: ANCHORMoodIcon.MoodType {
         switch entry.sentiment {
         case 2: return .veryHappy
@@ -181,7 +209,7 @@ struct JournalEntryCard: View {
         customCornerRadius ?? size.cornerRadius
     }
     
-    private var cardShadow: Shadow {
+    private var cardShadow: ANCHORDesign.Shadow {
         customShadow ?? style.shadow
     }
     
@@ -286,7 +314,7 @@ struct JournalEntryCard: View {
     
     @ViewBuilder
     private var headerSection: some View {
-        HStack(spacing: Spacing.sm) {
+        HStack(spacing: ANCHORDesign.Spacing.sm) {
             // Mood Icon
             if showMoodIcon {
                 ANCHORMoodIcon(mood: moodIcon, size: moodIconSize)
@@ -318,7 +346,7 @@ struct JournalEntryCard: View {
             Spacer()
             
             // Metadata indicators
-            HStack(spacing: Spacing.xs) {
+            HStack(spacing: ANCHORDesign.Spacing.xs) {
                 if showWordCount {
                     HStack(spacing: 2) {
                         Image(systemName: "textformat.abc")
@@ -326,19 +354,19 @@ struct JournalEntryCard: View {
                         Text("\(wordCount)")
                             .font(.caption2)
                     }
-                    .foregroundColor(Colors.textTertiary)
+                    .foregroundColor(ANCHORDesign.Colors.textTertiary)
                 }
                 
                 if showAttachmentIndicator && !entry.tags.isEmpty { // Using tags as proxy for attachments
                     Image(systemName: "paperclip")
                         .font(.caption)
-                        .foregroundColor(Colors.accent)
+                        .foregroundColor(ANCHORDesign.Colors.accent)
                 }
                 
                 if showChevron {
                     Image(systemName: interactionStyle.chevronIcon)
                         .font(.caption)
-                        .foregroundColor(Colors.textTertiary)
+                        .foregroundColor(ANCHORDesign.Colors.textTertiary)
                         .animation(.easeInOut(duration: 0.2), value: isPressed)
                 }
             }
@@ -369,7 +397,7 @@ struct JournalEntryCard: View {
     @ViewBuilder
     private var tagsSection: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: Spacing.xs) {
+            HStack(spacing: ANCHORDesign.Spacing.xs) {
                 ForEach(entry.tags.prefix(maxTagsVisible), id: \.self) { tag in
                     TagView(
                         text: tag,
@@ -383,9 +411,9 @@ struct JournalEntryCard: View {
                         .font(.system(size: size.tagSize.fontSize, weight: .medium))
                         .padding(.horizontal, 6)
                         .padding(.vertical, 2)
-                        .background(Colors.textTertiary.opacity(0.1))
-                        .foregroundColor(Colors.textTertiary)
-                        .cornerRadius(CornerRadius.small)
+                        .background(ANCHORDesign.Colors.textTertiary.opacity(0.1))
+                        .foregroundColor(ANCHORDesign.Colors.textTertiary)
+                        .cornerRadius(ANCHORDesign.CornerRadius.small)
                 }
             }
             .padding(.horizontal, 1)
@@ -403,7 +431,7 @@ struct JournalEntryCard: View {
                     Text("\(max(1, wordCount / 200)) min read")
                         .font(.caption2)
                 }
-                .foregroundColor(Colors.textTertiary)
+                .foregroundColor(ANCHORDesign.Colors.textTertiary)
                 
                 Spacer()
                 
@@ -412,11 +440,11 @@ struct JournalEntryCard: View {
                     HStack(spacing: 4) {
                         Image(systemName: entry.sentiment > 0 ? "arrow.up.circle.fill" : "arrow.down.circle.fill")
                             .font(.caption)
-                            .foregroundColor(entry.sentiment > 0 ? Colors.success : Colors.error)
+                            .foregroundColor(entry.sentiment > 0 ? ANCHORDesign.Colors.success : ANCHORDesign.Colors.error)
                         
                         Text(entry.sentiment > 0 ? "Positive" : "Negative")
                             .font(.caption2)
-                            .foregroundColor(Colors.textTertiary)
+                            .foregroundColor(ANCHORDesign.Colors.textTertiary)
                     }
                 }
             }
@@ -427,31 +455,31 @@ struct JournalEntryCard: View {
     @ViewBuilder
     private var loadingView: some View {
         ShimmeringView(
-            config: ShimmeringView.Configuration(gradient: Gradient(colors: [Colors.background, Colors.backgroundSecondary, Colors.background]), initialLocation: (start: .leading, end: .leading))
+            config: ShimmeringView.Configuration(gradient: Gradient(colors: [ANCHORDesign.Colors.backgroundPrimary, ANCHORDesign.Colors.backgroundSecondary, ANCHORDesign.Colors.backgroundPrimary]), initialLocation: (start: .leading, end: .leading))
         ) {
             VStack(alignment: .leading, spacing: size.contentSpacing) {
                 RoundedRectangle(cornerRadius: 4)
-                    .fill(Colors.backgroundSecondary)
+                    .fill(ANCHORDesign.Colors.backgroundSecondary)
                     .frame(height: 20)
                     .frame(maxWidth: .infinity)
                 
                 RoundedRectangle(cornerRadius: 8)
-                    .fill(Colors.backgroundSecondary)
+                    .fill(ANCHORDesign.Colors.backgroundSecondary)
                     .frame(height: 60)
                 
                 HStack {
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Colors.backgroundSecondary)
+                        .fill(ANCHORDesign.Colors.backgroundSecondary)
                         .frame(width: 60, height: 16)
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Colors.backgroundSecondary)
+                        .fill(ANCHORDesign.Colors.backgroundSecondary)
                         .frame(width: 80, height: 16)
                     Spacer()
                 }
             }
         }
         .padding(cardPadding)
-        .background(Colors.backgroundCard)
+        .background(ANCHORDesign.Colors.backgroundCard)
         .cornerRadius(cardCornerRadius)
         .shadow(color: cardShadow.color, radius: cardShadow.radius, x: cardShadow.x, y: cardShadow.y)
     }

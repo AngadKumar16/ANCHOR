@@ -15,10 +15,13 @@ struct ANCHORDesign {
     struct Colors {
         // Primary Colors
         static let primary = Color.anchorPrimary
+        static let primaryLight = Color.anchorPrimary.opacity(0.7)
         static let accent = Color.anchorAccent
+        static let accentLight = Color.anchorAccent.opacity(0.7)
         static let secondary = Color.blue
         
         // Background Colors
+        static let background = Color(UIColor.systemBackground)
         static let backgroundPrimary = Color(UIColor.systemBackground)
         static let backgroundSecondary = Color(UIColor.secondarySystemBackground)
         static let backgroundTertiary = Color(UIColor.tertiarySystemBackground)
@@ -36,7 +39,8 @@ struct ANCHORDesign {
         static let info = Color.blue
         
         // Mood Colors
-        static let moodHappy = Color.yellow
+        static let moodVeryHappy = Color.yellow
+        static let moodHappy = Color.yellow.opacity(0.8)
         static let moodCalm = Color.blue
         static let moodSad = Color.indigo
         static let moodAnxious = Color.orange

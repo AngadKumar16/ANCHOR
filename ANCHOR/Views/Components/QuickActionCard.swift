@@ -52,6 +52,7 @@ struct QuickActionCard: View {
     let enableParticleEffects: Bool
     let loadingStateBinding: Binding<ComponentLoadingState>?
     let contextMenuActions: [ContextMenuAction]
+    let onTap: (() -> Void)?
     let onDoubleTap: (() -> Void)?
     let onSwipeLeft: (() -> Void)?
     let onSwipeRight: (() -> Void)?
@@ -101,7 +102,8 @@ struct QuickActionCard: View {
         onTap: (() -> Void)? = nil,
         onDoubleTap: (() -> Void)? = nil,
         onSwipeLeft: (() -> Void)? = nil,
-        onSwipeRight: (() -> Void)? = nil
+        onSwipeRight: (() -> Void)? = nil,
+        action: @escaping () -> Void = {}
     ) {
         self.title = title
         self.subtitle = subtitle
@@ -246,7 +248,7 @@ struct QuickActionCard: View {
         }
         .overlay {
             if enableParticleEffects && showParticleEffect {
-                ParticleEffect(particleCount: 15, colors: [color, color.opacity(0.7)])
+                ParticleEffect(particleCount: 15, colors: [gradientColors.first ?? ANCHORDesign.Colors.primary, (gradientColors.first ?? ANCHORDesign.Colors.primary).opacity(0.7)])
                     .allowsHitTesting(false)
             }
         }
@@ -406,7 +408,7 @@ struct QuickActionCard: View {
     @ViewBuilder
     private var progressView: some View {
         ProgressView(value: progressValue)
-            .progressViewStyle(LinearProgressViewStyle(tint: gradientColors.first))
+            .progressViewStyle(LinearProgressViewStyle(tint: gradientColors.first ?? ANCHORDesign.Colors.primary))
             .scaleEffect(x: 1, y: 0.5)
             .padding(.horizontal, 4)
     }
@@ -673,7 +675,7 @@ extension QuickActionCard {
                 title: "New Journal",
                 subtitle: "Write your thoughts",
                 icon: "book.fill",
-                customGradient: [ANCHORDesign.Colors.primary, ANCHORDesign.Colors.primaryLight]
+                customGradient: [ANCHORDesign.Colors.primary, ANCHORDesign.Colors.primary.opacity(0.7)]
             ) {
                 print("New Journal tapped")
             }
@@ -682,7 +684,7 @@ extension QuickActionCard {
                 title: "Breathing",
                 subtitle: "Calm your mind",
                 icon: "wind",
-                customGradient: [ANCHORDesign.Colors.accent, ANCHORDesign.Colors.accentLight]
+                customGradient: [ANCHORDesign.Colors.accent, ANCHORDesign.Colors.accent.opacity(0.7)]
             ) {
                 print("Breathing tapped")
             }
@@ -717,8 +719,8 @@ extension QuickActionCard {
                 icon: "gear",
                 style: .solid,
                 size: .small,
+                iconStyle: .minimal,
                 layout: .compact,
-                iconStyle: .minimal
             ) {
                 print("Settings tapped")
             }
@@ -730,8 +732,8 @@ extension QuickActionCard {
                 size: .large,
                 showBadge: true,
                 badgeColor: ANCHORDesign.Colors.error,
+                customGradient: [ANCHORDesign.Colors.error, Color.red],
                 pulseEffect: true,
-                customGradient: [ANCHORDesign.Colors.error, Color.red]
             ) {
                 print("Emergency tapped")
             }

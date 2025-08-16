@@ -163,17 +163,8 @@ struct RecoveryTipCard: View {
     
     var body: some View {
         Group {
-            if onTap != nil || onLongPress != nil {
-                Button(action: handleTap) {
-                    cardContent
-                }
-                .buttonStyle(PlainButtonStyle())
-                .simultaneousGesture(
-                    LongPressGesture(minimumDuration: 0.5)
-                        .onEnded { _ in
-                            handleLongPress()
-                        }
-                )
+            if hasTapAction {
+                tapableCard
             } else {
                 cardContent
             }
@@ -183,15 +174,7 @@ struct RecoveryTipCard: View {
         .animation(.spring(response: 0.4, dampingFraction: 0.8), value: isPressed)
         .animation(.easeOut(duration: 0.6), value: hasAppeared)
         .animation(.easeInOut(duration: 0.2), value: isHovered)
-        .onAppear {
-            if animateOnAppear {
-                withAnimation(.easeOut(duration: 0.6).delay(Double.random(in: 0...0.3))) {
-                    hasAppeared = true
-                }
-            } else {
-                hasAppeared = true
-            }
-        }
+        .onAppear(perform: handleAppear)
         .onHover { hovering in
             if hoverEffect {
                 isHovered = hovering
@@ -203,30 +186,92 @@ struct RecoveryTipCard: View {
         .accessibilityAddTraits(onTap != nil ? .isButton : .isStaticText)
     }
     
-    // MARK: - Card Content
+    // MARK: - Helper Properties
+    
+    private var hasTapAction: Bool {
+        onTap != nil || onLongPress != nil
+    }
+    
+    // MARK: - View Builders
+    
+    @ViewBuilder
+    private var tapableCard: some View {
+        Button(action: handleTap) {
+            cardContent
+        }
+        .buttonStyle(PlainButtonStyle())
+        .simultaneousGesture(
+            LongPressGesture(minimumDuration: 0.5)
+                .onEnded { _ in
+                    handleLongPress()
+                }
+        )
+    }
+    
+    private func handleAppear() {
+        if animateOnAppear {
+            withAnimation(.easeOut(duration: 0.6).delay(Double.random(in: 0...0.3))) {
+                hasAppeared = true
+            }
+        } else {
+            hasAppeared = true
+        }
+    }
+    
+    // MARK: - Card Content Components
+    
     @ViewBuilder
     private var cardContent: some View {
         ZStack {
-            // Main content with background
-            Group {
-                if let customBg = customBackground {
-                    mainContent
-                        .background(customBg)
-                } else {
-                    mainContent
-                        .padding(cardPadding)
-                        .background(cardBackground)
-                        .cornerRadius(cardCornerRadius)
-                        .shadow(
-                            color: cardShadow.color,
-                            radius: cardShadow.radius,
-                            x: cardShadow.x,
-                            y: cardShadow.y
-                        )
-                }
+            // Background layer (simplified)
+            if customBackground != nil {
+                Color.clear // Custom background will be applied to main content
+            } else {
+                Color.clear // Default background will be applied to main content
             }
-
-            // Overlays
+            
+            // Main content with appropriate background (simplified)
+            if customBackground != nil {
+                mainContentWithCustomBackground
+            } else {
+                mainContentWithDefaultBackground
+            }
+            
+            // Overlay views
+            overlayViews
+        }
+    }
+    
+    @ViewBuilder
+    private var mainContentWithCustomBackground: some View {
+        mainContent
+            .padding(cardPadding)
+            .background(customBackground)
+    }
+    
+    @ViewBuilder
+    private var mainContentWithDefaultBackground: some View {
+        mainContent
+            .padding(cardPadding)
+            .background(cardBackground)
+            .cornerRadius(cardCornerRadius)
+            .shadow(
+                color: cardShadow.color,
+                radius: cardShadow.radius,
+                x: cardShadow.x,
+                y: cardShadow.y
+            )
+    }
+    
+@ViewBuilder
+    private var backgroundContent: some View {
+        // Background layer is now handled directly in cardContent
+        EmptyView()
+    }
+    
+    @ViewBuilder
+    private var overlayViews: some View {
+        Group {
             if showBadge {
                 badgeView
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
@@ -673,8 +718,8 @@ extension RecoveryTipCard {
                 color: ANCHORDesign.Colors.accent,
                 style: .elevated,
                 layout: .vertical,
-                showCategory: true,
-                category: "Wellness"
+                category: "Wellness",
+                showCategory: true
             )
             
             RecoveryTipCard(
@@ -682,8 +727,8 @@ extension RecoveryTipCard {
                 title: "Connect with Support",
                 description: "Reach out to friends, family, or support groups when you need help.",
                 color: ANCHORDesign.Colors.moodCalm,
-                layout: .featured,
                 style: .glassmorphism,
+                layout: .featured,
                 priority: .urgent,
                 maxDescriptionLines: 3
             )
@@ -694,8 +739,8 @@ extension RecoveryTipCard {
                 title: "Read Recovery Literature",
                 description: "Daily reading can provide inspiration and guidance.",
                 color: ANCHORDesign.Colors.textSecondary,
-                layout: .compact,
                 size: .small,
+                layout: .compact,
                 showChevron: true
             )
         }

@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct DashboardView: View {
     @EnvironmentObject var journalVM: JournalViewModel
     @StateObject private var sobrietyTracker = SobrietyTracker()
+    @StateObject private var dailyQuoteService = DailyQuoteService()
     @State private var showingJournalEntry = false
     @State private var showingBreathingExercise = false
     @State private var showingCheckIn = false
@@ -40,21 +42,53 @@ struct DashboardView: View {
                 .padding(.horizontal, ANCHORDesign.Spacing.md)
                 .padding(.bottom, ANCHORDesign.Spacing.xxl)
             }
-            .anchorGradientBackground()
+            .background(ANCHORDesign.Colors.background)
             .navigationBarHidden(true)
         }
         .sheet(isPresented: $showingJournalEntry) {
-            JournalEntryView()
+            NavigationView {
+                JournalEntryView(entry: nil)
+                    .environmentObject(journalVM)
+            }
         }
         .sheet(isPresented: $showingBreathingExercise) {
-            BreathingExerciseView()
+            NavigationView {
+                BreathingExerciseView()
+            }
         }
         .sheet(isPresented: $showingCheckIn) {
-            // TODO: Implement CheckInView
-            Text("Check-in coming soon!")
+            NavigationView {
+                VStack(spacing: 20) {
+                    Image(systemName: "calendar.badge.plus")
+                        .font(.system(size: 60))
+                        .foregroundColor(ANCHORDesign.Colors.primary)
+                    
+                    Text("Check-In Feature")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                    
+                    Text("The check-in feature will be available in the next update. Stay tuned!")
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(ANCHORDesign.Colors.textSecondary)
+                        .padding(.horizontal)
+                }
+                .padding()
+                .navigationTitle("Check-In")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Done") {
+                            showingCheckIn = false
+                        }
+                    }
+                }
+            }
         }
         .sheet(isPresented: $showingRiskAssessment) {
-            RiskAssessmentView()
+            NavigationView {
+                RiskAssessmentView()
+                    .environmentObject(RiskAssessmentViewModel(context: PersistenceController.shared.container.viewContext))
+            }
         }
     }
     
@@ -117,37 +151,45 @@ struct DashboardView: View {
                     title: "New Journal",
                     subtitle: "Write your thoughts",
                     icon: "book.fill",
-                    gradient: [ANCHORDesign.Colors.primary, ANCHORDesign.Colors.primaryLight]
-                ) {
-                    showingJournalEntry = true
-                }
+                    style: .gradient,
+                    customGradient: [ANCHORDesign.Colors.primary, ANCHORDesign.Colors.primaryLight],
+                    action: {
+                        showingJournalEntry = true
+                    }
+                )
                 
                 QuickActionCard(
                     title: "Breathing",
                     subtitle: "Calm your mind",
                     icon: "wind",
-                    gradient: [ANCHORDesign.Colors.accent, ANCHORDesign.Colors.accentLight]
-                ) {
-                    showingBreathingExercise = true
-                }
+                    style: .gradient,
+                    customGradient: [ANCHORDesign.Colors.accent, ANCHORDesign.Colors.accentLight],
+                    action: {
+                        showingBreathingExercise = true
+                    }
+                )
                 
                 QuickActionCard(
                     title: "Check-In",
                     subtitle: "How are you?",
                     icon: "heart.fill",
-                    gradient: [ANCHORDesign.Colors.moodHappy, ANCHORDesign.Colors.moodVeryHappy]
-                ) {
-                    showingCheckIn = true
-                }
+                    style: .gradient,
+                    customGradient: [ANCHORDesign.Colors.moodHappy, ANCHORDesign.Colors.moodHappy],
+                    action: {
+                        showingCheckIn = true
+                    }
+                )
                 
                 QuickActionCard(
                     title: "Risk Check",
                     subtitle: "Assess your state",
                     icon: "shield.fill",
-                    gradient: [ANCHORDesign.Colors.warning, ANCHORDesign.Colors.moodNeutral]
-                ) {
-                    showingRiskAssessment = true
-                }
+                    style: .gradient,
+                    customGradient: [ANCHORDesign.Colors.warning, ANCHORDesign.Colors.moodNeutral],
+                    action: {
+                        showingRiskAssessment = true
+                    }
+                )
             }
         }
     }
@@ -162,7 +204,7 @@ struct DashboardView: View {
                 
                 Spacer()
                 
-                NavigationLink(destination: JournalListView()) {
+                NavigationLink(destination: JournalListView().environmentObject(journalVM)) {
                     Text("View All")
                         .anchorTextStyle(.callout)
                         .foregroundColor(ANCHORDesign.Colors.primary)
@@ -231,8 +273,14 @@ struct DashboardView: View {
                                 .multilineTextAlignment(.center)
                         }
                         
-                        ANCHORButton(title: "Write First Entry", style: .primary, size: .medium) {
-                            showingJournalEntry = true
+                        Button(action: { showingJournalEntry = true }) {
+                            Text("Write First Entry")
+                                .font(.subheadline.bold())
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 24)
+                                .padding(.vertical, 12)
+                                .background(ANCHORDesign.Colors.primary)
+                                .cornerRadius(8)
                         }
                     }
                     .frame(maxWidth: .infinity)
@@ -266,7 +314,7 @@ struct DashboardView: View {
                     }
                 }
                 
-                Text(DailyQuoteService.shared.getTodaysQuote())
+                Text(dailyQuoteService.getTodaysQuote().text)
                     .anchorTextStyle(.body)
                     .multilineTextAlignment(.center)
                     .italic()
@@ -322,7 +370,7 @@ struct DashboardView: View {
     }
     
     private func shareQuote() {
-        let quote = DailyQuoteService.shared.getTodaysQuote()
+        let quote = dailyQuoteService.getTodaysQuote().text
         let content = "\(quote)\n\n- Shared from ANCHOR"
         
         let activityVC = UIActivityViewController(activityItems: [content], applicationActivities: nil)

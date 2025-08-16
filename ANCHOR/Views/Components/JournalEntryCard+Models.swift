@@ -19,21 +19,21 @@ extension JournalEntryCard {
         
         var backgroundColor: Color {
             switch self {
-            case .minimal: return Colors.backgroundCard.opacity(0.5)
-            case .standard: return Colors.backgroundCard
-            case .detailed: return Colors.backgroundCard
-            case .compact: return Colors.backgroundSecondary
-            case .featured: return Colors.backgroundCard
+            case .minimal: return ANCHORDesign.Colors.backgroundCard.opacity(0.5)
+            case .standard: return ANCHORDesign.Colors.backgroundCard
+            case .detailed: return ANCHORDesign.Colors.backgroundCard
+            case .compact: return ANCHORDesign.Colors.backgroundSecondary
+            case .featured: return ANCHORDesign.Colors.backgroundCard
             }
         }
         
-        var shadow: Shadow {
+        var shadow: ANCHORDesign.Shadow {
             switch self {
-            case .minimal: return .none
-            case .standard: return .medium
-            case .detailed: return .large
-            case .compact: return .small
-            case .featured: return .large
+            case .minimal: return ANCHORDesign.Shadow.none
+            case .standard: return ANCHORDesign.Shadow.medium
+            case .detailed: return ANCHORDesign.Shadow.large
+            case .compact: return ANCHORDesign.Shadow.small
+            case .featured: return ANCHORDesign.Shadow.large
             }
         }
         
@@ -55,57 +55,57 @@ extension JournalEntryCard {
         
         var padding: CGFloat {
             switch self {
-            case .small: return Spacing.sm
-            case .medium: return Spacing.md
-            case .large: return Spacing.lg
+            case .small: return ANCHORDesign.Spacing.sm
+            case .medium: return ANCHORDesign.Spacing.md
+            case .large: return ANCHORDesign.Spacing.lg
             }
         }
         
         var cornerRadius: CGFloat {
             switch self {
-            case .small: return CornerRadius.medium
-            case .medium: return CornerRadius.large
-            case .large: return CornerRadius.extraLarge
+            case .small: return ANCHORDesign.CornerRadius.medium
+            case .medium: return ANCHORDesign.CornerRadius.large
+            case .large: return ANCHORDesign.CornerRadius.extraLarge
             }
         }
         
         var contentSpacing: CGFloat {
             switch self {
-            case .small: return Spacing.xs
-            case .medium: return Spacing.sm
-            case .large: return Spacing.md
+            case .small: return ANCHORDesign.Spacing.xs
+            case .medium: return ANCHORDesign.Spacing.sm
+            case .large: return ANCHORDesign.Spacing.md
             }
         }
         
-        var titleStyle: Typography.Style {
+        var titleStyle: ANCHORDesign.Typography.Style {
             switch self {
-            case .small: return .callout
-            case .medium: return .bodyBold
-            case .large: return .title3
+            case .small: return ANCHORDesign.Typography.Style.callout
+            case .medium: return ANCHORDesign.Typography.Style.bodyBold
+            case .large: return ANCHORDesign.Typography.Style.title3
             }
         }
         
-        var bodyStyle: Typography.Style {
+        var bodyStyle: ANCHORDesign.Typography.Style {
             switch self {
-            case .small: return .caption1
-            case .medium: return .callout
-            case .large: return .body
+            case .small: return ANCHORDesign.Typography.Style.caption1
+            case .medium: return ANCHORDesign.Typography.Style.callout
+            case .large: return ANCHORDesign.Typography.Style.body
             }
         }
         
-        var dateStyle: Typography.Style {
+        var dateStyle: ANCHORDesign.Typography.Style {
             switch self {
-            case .small: return .caption2
-            case .medium: return .caption1
-            case .large: return .callout
+            case .small: return ANCHORDesign.Typography.Style.caption2
+            case .medium: return ANCHORDesign.Typography.Style.caption1
+            case .large: return ANCHORDesign.Typography.Style.callout
             }
         }
         
-        var timeStyle: Typography.Style {
+        var timeStyle: ANCHORDesign.Typography.Style {
             switch self {
-            case .small: return .caption2
-            case .medium: return .caption2
-            case .large: return .caption1
+            case .small: return ANCHORDesign.Typography.Style.caption2
+            case .medium: return ANCHORDesign.Typography.Style.caption2
+            case .large: return ANCHORDesign.Typography.Style.caption1
             }
         }
         
@@ -148,10 +148,14 @@ extension JournalEntryCard {
         let handler: () -> Void
         
         init(title: String, icon: String, isEnabled: Bool = true, handler: @escaping () -> Void) {
+            self.init(title: title, icon: icon, isEnabled: isEnabled, isDivider: false, handler: handler)
+        }
+
+        private init(title: String, icon: String, isEnabled: Bool, isDivider: Bool, handler: @escaping () -> Void) {
             self.title = title
             self.icon = icon
             self.isEnabled = isEnabled
-            self.isDivider = false
+            self.isDivider = isDivider
             self.handler = handler
         }
         
@@ -186,13 +190,13 @@ struct TagView: View {
         var background: AnyView {
             switch self {
             case .minimal:
-                return AnyView(Colors.textTertiary.opacity(0.1))
+                return AnyView(ANCHORDesign.Colors.textTertiary.opacity(0.1))
             case .standard:
-                return AnyView(Colors.primary.opacity(0.1))
+                return AnyView(ANCHORDesign.Colors.primary.opacity(0.1))
             case .gradient:
                 return AnyView(
                     LinearGradient(
-                        colors: [Colors.primary.opacity(0.1), Colors.accent.opacity(0.1)],
+                        colors: [ANCHORDesign.Colors.primary.opacity(0.1), ANCHORDesign.Colors.accent.opacity(0.1)],
                         startPoint: .leading,
                         endPoint: .trailing
                     )
@@ -202,9 +206,9 @@ struct TagView: View {
         
         var foregroundColor: Color {
             switch self {
-            case .minimal: return Colors.textTertiary
-            case .standard: return Colors.primary
-            case .gradient: return Colors.primary
+            case .minimal: return ANCHORDesign.Colors.textTertiary
+            case .standard: return ANCHORDesign.Colors.primary
+            case .gradient: return ANCHORDesign.Colors.primary
             }
         }
     }
@@ -248,9 +252,9 @@ struct TagView: View {
         
         var cornerRadius: CGFloat {
             switch self {
-            case .small: return CornerRadius.small
-            case .medium: return CornerRadius.small
-            case .large: return CornerRadius.medium
+            case .small: return ANCHORDesign.CornerRadius.small
+            case .medium: return ANCHORDesign.CornerRadius.small
+            case .large: return ANCHORDesign.CornerRadius.medium
             }
         }
     }
