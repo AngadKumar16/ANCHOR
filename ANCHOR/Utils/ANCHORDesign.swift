@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+// MARK: - Type Aliases
+
+/// Typealias for backward compatibility with existing code
+/// Use `GradientBackground` directly in new code
+typealias ANCHORGradientBackground = GradientBackground
+
 /// ANCHOR Design System
 /// Centralized design tokens for consistent UI across the app
 struct ANCHORDesign {

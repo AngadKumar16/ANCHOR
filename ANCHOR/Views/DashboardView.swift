@@ -11,7 +11,7 @@ import UIKit
 struct DashboardView: View {
     @EnvironmentObject var journalVM: JournalViewModel
     @StateObject private var sobrietyTracker = SobrietyTracker()
-    @StateObject private var dailyQuoteService = DailyQuoteService()
+    @ObservedObject private var dailyQuoteService = DailyQuoteService.shared
     @State private var showingJournalEntry = false
     @State private var showingBreathingExercise = false
     @State private var showingCheckIn = false
@@ -133,7 +133,7 @@ struct DashboardView: View {
             daysSober: sobrietyTracker.daysSober,
             progressToNextMilestone: sobrietyTracker.progressToNextMilestone,
             nextMilestone: sobrietyTracker.nextMilestone.description,
-            daysToNextMilestone: sobrietyTracker.daysToNextMilestone
+            daysToNextMilestone: sobrietyTracker.nextMilestone.days - sobrietyTracker.daysSober
         )
     }
     

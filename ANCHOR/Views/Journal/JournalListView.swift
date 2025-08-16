@@ -1,4 +1,5 @@
 import SwiftUI
+//import ANCHORDesign
 
 struct JournalListView: View {
     @EnvironmentObject var journalVM: JournalViewModel
@@ -164,13 +165,13 @@ struct JournalListView: View {
             
             TextField("Search entries...", text: $searchText)
                 .textFieldStyle(.plain)
-                .font(ANCHORDesign.Typography.body)
+                .anchorTextStyle(.body)
             
             if !searchText.isEmpty {
                 Button("Clear") {
                     searchText = ""
                 }
-                .font(ANCHORDesign.Typography.caption1)
+                .anchorTextStyle(.caption1)
                 .foregroundColor(ANCHORDesign.Colors.primary)
             }
         }
@@ -234,7 +235,7 @@ struct JournalListView: View {
                 .foregroundColor(ANCHORDesign.Colors.success)
             
             Text("Private")
-                .font(ANCHORDesign.Typography.caption2)
+                .anchorTextStyle(.caption2)
                 .foregroundColor(ANCHORDesign.Colors.success)
         }
         .padding(.horizontal, ANCHORDesign.Spacing.sm)
@@ -284,7 +285,7 @@ struct JournalListView: View {
                 ForEach(groupedEntries, id: \.0) { monthYear, entries in
                     VStack(spacing: ANCHORDesign.Spacing.sm) {
                         // Month Header
-                        MonthHeaderCard(monthYear: monthYear, count: entries.count)
+                        MonthHeaderCard(monthYear: monthYear, entryCount: entries.count)
                         
                         // Entries for this month
                         ForEach(entries) { entry in

@@ -272,7 +272,12 @@ struct JournalEntryCard: View {
                 isHovered = hovering
             }
         }
-        .modifier(accessibilityModifier)
+        .enhanceAccessibility(
+            label: accessibilityLabelText,
+            hint: accessibilityHintText,
+            value: accessibilityValueText,
+            actions: accessibilityActions ?? []
+        )
         .modifier(keyboardNavigationModifier)
         .contextMenu {
             if !contextMenuActions.isEmpty {
@@ -337,7 +342,7 @@ struct JournalEntryCard: View {
                         Text(entry.date, style: .time)
                             .anchorTextStyle(size.timeStyle)
                     case .relative:
-                        Text(entry.date, style: .relative(presentation: .named))
+                        Text(entry.date, style: .relative)
                             .anchorTextStyle(size.dateStyle)
                     }
                 }
@@ -494,20 +499,88 @@ struct JournalEntryCard: View {
         .cornerRadius(cardCornerRadius)
     }
     
-    // MARK: - Modifiers
-    private var accessibilityModifier: some ViewModifier {
-        AccessibilityModifier(
-            label: accessibilityLabel ?? "Journal entry from \(formattedDate)",
-            hint: accessibilityHint ?? "Double tap to view full entry",
-            value: accessibilityValue ?? entry.body,
-            actions: accessibilityActions ?? []
-        )
+    // MARK: - Date Formatting
+    private var formattedDate: String {
+        let formatter = DateFormatter()
+        
+        switch dateFormat {
+        case .dateOnly:
+            formatter.dateStyle = .medium
+            formatter.timeStyle = .none
+        case .timeOnly:
+            formatter.dateStyle = .none
+            formatter.timeStyle = .short
+        case .dateAndTime:
+            formatter.dateStyle = .medium
+            formatter.timeStyle = .short
+        case .relative:
+            let now = Date()
+            let calendar = Calendar.current
+            
+            if calendar.isDateInToday(entry.date) {
+                formatter.timeStyle = .short
+                formatter.dateStyle = .none
+                return "Today at \(formatter.string(from: entry.date))"
+            } else if calendar.isDateInYesterday(entry.date) {
+                formatter.timeStyle = .short
+                formatter.dateStyle = .none
+                return "Yesterday at \(formatter.string(from: entry.date))"
+            } else if calendar.isDate(entry.date, equalTo: now, toGranularity: .weekOfYear) {
+                formatter.dateFormat = "EEEE 'at' h:mm a"
+                return formatter.string(from: entry.date)
+            } else if calendar.isDate(entry.date, equalTo: now, toGranularity: .year) {
+                formatter.dateFormat = "MMM d 'at' h:mm a"
+                return formatter.string(from: entry.date)
+            } else {
+                formatter.dateStyle = .medium
+                formatter.timeStyle = .short
+            }
+        }
+        
+        return formatter.string(from: entry.date)
+    }
+    
+    // MARK: - Layout
+    private var layout: String {
+        switch (style, size) {
+        case (.minimal, _):
+            return "minimal"
+        case (.standard, .small):
+            return "compact"
+        case (.standard, .medium):
+            return "standard"
+        case (.standard, .large):
+            return "expanded"
+        case (.detailed, _):
+            return "detailed"
+        case (_, .small):
+            return "compact"
+        case (_, .medium):
+            return "standard"
+        case (_, .large):
+            return "expanded"
+        }
+    }
+    
+    // MARK: - Accessibility
+    private var accessibilityLabelText: String {
+        accessibilityLabel ?? "Journal entry from \(formattedDate)"
+    }
+    
+    private var accessibilityHintText: String {
+        accessibilityHint ?? "Double tap to view full entry"
+    }
+    
+    private var accessibilityValueText: String {
+        accessibilityValue ?? entry.body
     }
     
     private var keyboardNavigationModifier: some ViewModifier {
         KeyboardNavigationModifier(
             onUpArrow: enableKeyboardNavigation ? { /* Navigate up */ } : nil,
             onDownArrow: enableKeyboardNavigation ? { /* Navigate down */ } : nil,
+            onLeftArrow: enableKeyboardNavigation ? { /* Navigate left */ } : nil,
+            onRightArrow: enableKeyboardNavigation ? { /* Navigate right */ } : nil,
             onEnter: enableKeyboardNavigation ? handleTap : nil,
             onEscape: nil
         )

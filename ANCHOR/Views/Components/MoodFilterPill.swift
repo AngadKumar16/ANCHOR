@@ -7,6 +7,69 @@
 
 import SwiftUI
 
+// MARK: - Supporting Types
+
+enum PillStyle {
+    case filled
+    case outlined
+    case ghost
+    case minimal
+}
+
+enum PillSize {
+    case small
+    case medium
+    case large
+    case extraLarge
+    
+    var horizontalPadding: CGFloat {
+        switch self {
+        case .small: return 8
+        case .medium: return ANCHORDesign.Spacing.sm
+        case .large: return ANCHORDesign.Spacing.md
+        case .extraLarge: return ANCHORDesign.Spacing.lg
+        }
+    }
+    
+    var verticalPadding: CGFloat {
+        switch self {
+        case .small: return 4
+        case .medium: return ANCHORDesign.Spacing.xs
+        case .large: return ANCHORDesign.Spacing.sm
+        case .extraLarge: return ANCHORDesign.Spacing.sm
+        }
+    }
+    
+    var iconSpacing: CGFloat {
+        switch self {
+        case .small: return 4
+        case .medium: return ANCHORDesign.Spacing.xs
+        case .large: return ANCHORDesign.Spacing.xs
+        case .extraLarge: return ANCHORDesign.Spacing.sm
+        }
+    }
+    
+    var font: Font {
+        switch self {
+        case .small: return .caption2
+        case .medium: return ANCHORDesign.Typography.Style.caption1.font
+        case .large: return ANCHORDesign.Typography.Style.callout.font
+        case .extraLarge: return ANCHORDesign.Typography.Style.body.font
+        }
+    }
+}
+
+enum PillShape {
+    case capsule
+    case roundedRectangle(CGFloat)
+    case circle
+}
+
+enum IconPosition {
+    case leading
+    case trailing
+}
+
 struct MoodFilterPill: View {
     // MARK: - Core Properties
     let title: String
@@ -192,15 +255,15 @@ struct MoodFilterPill: View {
         Group {
             if let customBg = customBackground {
                 mainContent
-                    .background(customBg)
+                    .background(AnyView(customBg))
             } else {
                 mainContent
                     .padding(pillPadding)
                     .background(pillBackground)
                     .clipShape(pillShape)
-                    .overlay(pillBorder)
             }
         }
+        .overlay(pillBorder)
         .overlay(alignment: .topTrailing) {
             if showBadge {
                 badgeView
@@ -295,45 +358,76 @@ struct MoodFilterPill: View {
     }
     
     @ViewBuilder
+    // MARK: - Shape Helpers
+    
+    private var pillShape: some Shape {
+        switch shape {
+        case .capsule:
+            return AnyShape(Capsule())
+        case .roundedRectangle(let cornerRadius):
+            return AnyShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+        case .circle:
+            return AnyShape(Circle())
+        }
+    }
+    
     private var pillBorder: some View {
         Group {
             if let customBorder = customBorder {
-                pillShape
-                    .stroke(customBorder.color, lineWidth: customBorder.width)
+                switch shape {
+                case .capsule:
+                    Capsule().stroke(customBorder.color, lineWidth: customBorder.width)
+                case .roundedRectangle(let radius):
+                    RoundedRectangle(cornerRadius: radius)
+                        .stroke(customBorder.color, lineWidth: customBorder.width)
+                case .circle:
+                    Circle().stroke(customBorder.color, lineWidth: customBorder.width)
+                }
             } else {
                 switch style {
                 case .filled:
                     if !isSelected {
-                        pillShape
-                            .stroke(color.opacity(0.3), lineWidth: 1)
+                        switch shape {
+                        case .capsule:
+                            Capsule().stroke(color.opacity(0.3), lineWidth: 1)
+                        case .roundedRectangle(let radius):
+                            RoundedRectangle(cornerRadius: radius)
+                                .stroke(color.opacity(0.3), lineWidth: 1)
+                        case .circle:
+                            Circle().stroke(color.opacity(0.3), lineWidth: 1)
+                        }
+                    } else {
+                        EmptyView()
                     }
                     
                 case .outlined:
-                    pillShape
-                        .stroke(color, lineWidth: isSelected ? 2 : 1)
+                    switch shape {
+                    case .capsule:
+                        Capsule().stroke(color, lineWidth: isSelected ? 2 : 1)
+                    case .roundedRectangle(let radius):
+                        RoundedRectangle(cornerRadius: radius)
+                            .stroke(color, lineWidth: isSelected ? 2 : 1)
+                    case .circle:
+                        Circle().stroke(color, lineWidth: isSelected ? 2 : 1)
+                    }
                     
                 case .ghost:
                     if isSelected {
-                        pillShape
-                            .stroke(color.opacity(0.5), lineWidth: 1)
+                        switch shape {
+                        case .capsule:
+                            Capsule().stroke(color.opacity(0.5), lineWidth: 1)
+                        case .roundedRectangle(let radius):
+                            RoundedRectangle(cornerRadius: radius)
+                                .stroke(color.opacity(0.5), lineWidth: 1)
+                        case .circle:
+                            Circle().stroke(color.opacity(0.5), lineWidth: 1)
+                        }
                     }
                     
                 case .minimal:
                     EmptyView()
                 }
             }
-        }
-    }
-    
-    @ViewBuilder
-    private var pillShape: some Shape {
-        switch shape {
-        case .capsule:
-            Capsule()
-        case .roundedRectangle(let radius):
-            RoundedRectangle(cornerRadius: radius)
-        case .circle:
-            Circle()
         }
     }
     
@@ -370,15 +464,15 @@ struct MoodFilterPill: View {
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 withAnimation(.easeInOut(duration: 0.1)) {
-                    isPressed = false
+                    self.isPressed = false
                 }
             }
         }
         
         if showRipple {
             showRippleEffect = true
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-                showRippleEffect = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [weak self] in
+                self?.showRippleEffect = false
             }
         }
         
@@ -386,214 +480,152 @@ struct MoodFilterPill: View {
     }
 }
 
-// MARK: - Supporting Types
-extension MoodFilterPill {
-    enum PillStyle {
-        case filled
-        case outlined
-        case ghost
-        case minimal
-    }
-    
-    enum PillSize {
-        case small
-        case medium
-        case large
-        case extraLarge
-        
-        var horizontalPadding: CGFloat {
-            switch self {
-            case .small: return 8
-            case .medium: return ANCHORDesign.Spacing.sm
-            case .large: return ANCHORDesign.Spacing.md
-            case .extraLarge: return ANCHORDesign.Spacing.lg
-            }
-        }
-        
-        var verticalPadding: CGFloat {
-            switch self {
-            case .small: return 4
-            case .medium: return ANCHORDesign.Spacing.xs
-            case .large: return ANCHORDesign.Spacing.sm
-            case .extraLarge: return ANCHORDesign.Spacing.sm
-            }
-        }
-        
-        var iconSpacing: CGFloat {
-            switch self {
-            case .small: return 4
-            case .medium: return ANCHORDesign.Spacing.xs
-            case .large: return ANCHORDesign.Spacing.xs
-            case .extraLarge: return ANCHORDesign.Spacing.sm
-            }
-        }
-        
-        var font: Font {
-            switch self {
-            case .small: return .caption2
-            case .medium: return ANCHORDesign.Typography.caption1
-            case .large: return ANCHORDesign.Typography.callout
-            case .extraLarge: return ANCHORDesign.Typography.body
-            }
-        }
-    }
-    
-    enum PillShape {
-        case capsule
-        case roundedRectangle(CGFloat)
-        case circle
-    }
-    
-    enum IconPosition {
-        case leading
-        case trailing
-    }
-}
+// MARK: - Preview Provider
 
 #Preview("Mood Filter Pills") {
-    ScrollView {
-        LazyVStack(spacing: 24) {
-            // Standard pills
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Standard Style")
-                    .font(.headline)
-                
-                HStack(spacing: 8) {
-                    MoodFilterPill(
-                        title: "Happy",
-                        icon: "face.smiling.fill",
-                        color: ANCHORDesign.Colors.moodHappy,
-                        isSelected: true,
-                        onTap: {}
-                    )
+        ScrollView {
+            LazyVStack(spacing: 24) {
+                // Standard pills
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Standard Style")
+                        .font(.headline)
                     
-                    MoodFilterPill(
-                        title: "Calm",
-                        icon: "leaf.fill",
-                        color: ANCHORDesign.Colors.moodCalm,
-                        isSelected: false,
-                        onTap: {}
-                    )
-                    
-                    MoodFilterPill(
-                        title: "Anxious",
-                        icon: "cloud.rain.fill",
-                        color: ANCHORDesign.Colors.moodAnxious,
-                        isSelected: false,
-                        onTap: {},
-                        showBadge: true,
-                        badgeCount: 3
-                    )
-                }
-            }
-            
-            // Different styles
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Different Styles")
-                    .font(.headline)
-                
-                VStack(spacing: 8) {
                     HStack(spacing: 8) {
                         MoodFilterPill(
-                            title: "Outlined",
-                            icon: "heart.fill",
-                            color: ANCHORDesign.Colors.error,
+                            title: "Happy",
+                            icon: "face.smiling.fill",
+                            color: ANCHORDesign.Colors.moodHappy,
                             isSelected: true,
-                            onTap: {},
-                            style: .outlined
+                            onTap: {}
                         )
                         
                         MoodFilterPill(
-                            title: "Ghost",
-                            icon: "star.fill",
-                            color: ANCHORDesign.Colors.warning,
+                            title: "Calm",
+                            icon: "leaf.fill",
+                            color: ANCHORDesign.Colors.moodCalm,
+                            isSelected: false,
+                            onTap: {}
+                        )
+                        
+                        MoodFilterPill(
+                            title: "Anxious",
+                            icon: "cloud.rain.fill",
+                            color: ANCHORDesign.Colors.moodAnxious,
                             isSelected: false,
                             onTap: {},
-                            style: .ghost
+                            showBadge: true,
+                            badgeCount: 3
+                        )
+                    }
+                }
+                
+                // Different styles
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Different Styles")
+                        .font(.headline)
+                    
+                    VStack(spacing: 8) {
+                        HStack(spacing: 8) {
+                            MoodFilterPill(
+                                title: "Outlined",
+                                icon: "heart.fill",
+                                color: ANCHORDesign.Colors.error,
+                                isSelected: true,
+                                onTap: {},
+                                style: .outlined
+                            )
+                            
+                            MoodFilterPill(
+                                title: "Ghost",
+                                icon: "star.fill",
+                                color: ANCHORDesign.Colors.warning,
+                                isSelected: false,
+                                onTap: {},
+                                style: .ghost
+                            )
+                            
+                            MoodFilterPill(
+                                title: "Minimal",
+                                color: ANCHORDesign.Colors.primary,
+                                isSelected: true,
+                                onTap: {},
+                                style: .minimal,
+                                showIcon: false
+                            )
+                        }
+                    }
+                }
+                
+                // Different sizes
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Different Sizes")
+                        .font(.headline)
+                    
+                    VStack(spacing: 8) {
+                        MoodFilterPill(
+                            title: "Small",
+                            icon: "circle.fill",
+                            color: ANCHORDesign.Colors.accent,
+                            isSelected: true,
+                            onTap: {},
+                            size: .small
                         )
                         
                         MoodFilterPill(
-                            title: "Minimal",
-                            color: ANCHORDesign.Colors.primary,
+                            title: "Medium",
+                            icon: "circle.fill",
+                            color: ANCHORDesign.Colors.accent,
+                            isSelected: false,
+                            onTap: {},
+                            size: .medium
+                        )
+                        
+                        MoodFilterPill(
+                            title: "Large",
+                            icon: "circle.fill",
+                            color: ANCHORDesign.Colors.accent,
+                            isSelected: false,
+                            onTap: {},
+                            size: .large
+                        )
+                        
+                        MoodFilterPill(
+                            title: "Extra Large",
+                            icon: "circle.fill",
+                            color: ANCHORDesign.Colors.accent,
+                            isSelected: false,
+                            onTap: {},
+                            size: .extraLarge
+                        )
+                    }
+                }
+                
+                // Different shapes
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Different Shapes")
+                        .font(.headline)
+                    
+                    HStack(spacing: 8) {
+                        MoodFilterPill(
+                            title: "Capsule",
+                            color: ANCHORDesign.Colors.success,
                             isSelected: true,
                             onTap: {},
-                            style: .minimal,
+                            shape: .capsule,
+                            showIcon: false
+                        )
+                        
+                        MoodFilterPill(
+                            title: "Rounded",
+                            color: ANCHORDesign.Colors.success,
+                            isSelected: false,
+                            onTap: {},
+                            shape: .roundedRectangle(8),
                             showIcon: false
                         )
                     }
                 }
             }
-            
-            // Different sizes
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Different Sizes")
-                    .font(.headline)
-                
-                VStack(spacing: 8) {
-                    MoodFilterPill(
-                        title: "Small",
-                        icon: "circle.fill",
-                        color: ANCHORDesign.Colors.accent,
-                        isSelected: true,
-                        onTap: {},
-                        size: .small
-                    )
-                    
-                    MoodFilterPill(
-                        title: "Medium",
-                        icon: "circle.fill",
-                        color: ANCHORDesign.Colors.accent,
-                        isSelected: false,
-                        onTap: {},
-                        size: .medium
-                    )
-                    
-                    MoodFilterPill(
-                        title: "Large",
-                        icon: "circle.fill",
-                        color: ANCHORDesign.Colors.accent,
-                        isSelected: false,
-                        onTap: {},
-                        size: .large
-                    )
-                    
-                    MoodFilterPill(
-                        title: "Extra Large",
-                        icon: "circle.fill",
-                        color: ANCHORDesign.Colors.accent,
-                        isSelected: false,
-                        onTap: {},
-                        size: .extraLarge
-                    )
-                }
-            }
-            
-            // Different shapes
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Different Shapes")
-                    .font(.headline)
-                
-                HStack(spacing: 8) {
-                    MoodFilterPill(
-                        title: "Capsule",
-                        color: ANCHORDesign.Colors.success,
-                        isSelected: true,
-                        onTap: {},
-                        shape: .capsule,
-                        showIcon: false
-                    )
-                    
-                    MoodFilterPill(
-                        title: "Rounded",
-                        color: ANCHORDesign.Colors.success,
-                        isSelected: false,
-                        onTap: {},
-                        shape: .roundedRectangle(8),
-                        showIcon: false
-                    )
-                }
-            }
+            .padding()
         }
-        .padding()
     }
-}
