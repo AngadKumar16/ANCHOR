@@ -471,8 +471,8 @@ struct MoodFilterPill: View {
         
         if showRipple {
             showRippleEffect = true
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [weak self] in
-                self?.showRippleEffect = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                self.showRippleEffect = false
             }
         }
         

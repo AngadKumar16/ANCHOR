@@ -154,7 +154,21 @@ struct StatCard: View {
         Double(value.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()) ?? 0
     }
     
-    var body: some View {
+    private var scale: CGFloat {
+        if isPressed {
+            return 0.98
+        } else if hasAppeared || !animateOnAppear {
+            return 1.0
+        } else {
+            return 0.9
+        }
+    }
+    
+    private var opacity: Double {
+        hasAppeared || !animateOnAppear ? 1.0 : 0.0
+    }
+    
+    private var content: some View {
         Group {
             if let onTap = onTap {
                 Button(action: handleTap) {
@@ -165,29 +179,35 @@ struct StatCard: View {
                 cardContent
             }
         }
-        .scaleEffect(isPressed ? 0.98 : (hasAppeared || !animateOnAppear ? 1.0 : 0.9))
-        .opacity(hasAppeared || !animateOnAppear ? 1.0 : 0.0)
-        .animation(.spring(response: 0.4, dampingFraction: 0.8), value: isPressed)
-        .animation(.easeOut(duration: 0.6), value: hasAppeared)
-        .onAppear {
-            if animateOnAppear {
-                withAnimation(.easeOut(duration: 0.6).delay(Double.random(in: 0...0.2))) {
-                    hasAppeared = true
-                }
-            } else {
+    }
+    
+    private func setupAppearAnimation() {
+        if animateOnAppear {
+            withAnimation(.easeOut(duration: 0.6).delay(Double.random(in: 0...0.2))) {
                 hasAppeared = true
             }
-            
-            if animateValue {
-                withAnimation(.easeOut(duration: countUpDuration).delay(0.3)) {
-                    animatedValue = numericValue
-                }
+        } else {
+            hasAppeared = true
+        }
+        
+        if animateValue {
+            withAnimation(.easeOut(duration: countUpDuration).delay(0.3)) {
+                animatedValue = numericValue
             }
         }
-        .accessibilityLabel(accessibilityLabel ?? "\(title): \(value)")
-        .accessibilityHint(accessibilityHint)
-        .accessibilityValue(accessibilityValue ?? value)
-        .accessibilityAddTraits(onTap != nil ? .isButton : .isStaticText)
+    }
+    
+    var body: some View {
+        content
+            .scaleEffect(scale)
+            .opacity(opacity)
+            .animation(.spring(response: 0.4, dampingFraction: 0.8), value: isPressed)
+            .animation(.easeOut(duration: 0.6), value: hasAppeared)
+            .onAppear(perform: setupAppearAnimation)
+            .accessibilityLabel(accessibilityLabel ?? "\(title): \(value)")
+            .accessibilityHint(accessibilityHint ?? "")
+            .accessibilityValue(accessibilityValue ?? value)
+            .accessibilityAddTraits(onTap != nil ? .isButton : .isStaticText)
     }
     
     // MARK: - Card Content

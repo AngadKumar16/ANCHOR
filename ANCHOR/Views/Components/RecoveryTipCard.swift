@@ -161,29 +161,52 @@ struct RecoveryTipCard: View {
         }
     }
     
+    // MARK: - Computed Properties for View Configuration
+    
+    private var computedOpacity: Double {
+        hasAppeared || !animateOnAppear ? 1.0 : 0.0
+    }
+    
+    private var computedAccessibilityLabel: String {
+        accessibilityLabel ?? "\(title). \(description)"
+    }
+    
+    private var computedAccessibilityHint: String? {
+        accessibilityHint ?? (onTap != nil ? "Double tap to view tip details" : nil)
+    }
+    
+    private var computedAccessibilityTraits: AccessibilityTraits {
+        onTap != nil ? .isButton : .isStaticText
+    }
+    
+    // MARK: - Main Body
+    
     var body: some View {
-        Group {
-            if hasTapAction {
-                tapableCard
-            } else {
-                cardContent
+        mainContentWrapper
+            .scaleEffect(getScaleEffect())
+            .opacity(computedOpacity)
+            .animation(.spring(response: 0.4, dampingFraction: 0.8), value: isPressed)
+            .animation(.easeOut(duration: 0.6), value: hasAppeared)
+            .animation(.easeInOut(duration: 0.2), value: isHovered)
+            .onAppear(perform: handleAppear)
+            .onHover { hovering in
+                if hoverEffect {
+                    isHovered = hovering
+                }
             }
+            .accessibilityLabel(computedAccessibilityLabel)
+            .accessibilityHint(computedAccessibilityHint ?? "")
+            .accessibilityValue(accessibilityValue)
+            .accessibilityAddTraits(computedAccessibilityTraits)
+    }
+    
+    @ViewBuilder
+    private var mainContentWrapper: some View {
+        if hasTapAction {
+            tapableCard
+        } else {
+            cardContent
         }
-        .scaleEffect(getScaleEffect())
-        .opacity(hasAppeared || !animateOnAppear ? 1.0 : 0.0)
-        .animation(.spring(response: 0.4, dampingFraction: 0.8), value: isPressed)
-        .animation(.easeOut(duration: 0.6), value: hasAppeared)
-        .animation(.easeInOut(duration: 0.2), value: isHovered)
-        .onAppear(perform: handleAppear)
-        .onHover { hovering in
-            if hoverEffect {
-                isHovered = hovering
-            }
-        }
-        .accessibilityLabel(accessibilityLabel ?? "\(title). \(description)")
-        .accessibilityHint(accessibilityHint ?? (onTap != nil ? "Double tap to view tip details" : nil))
-        .accessibilityValue(accessibilityValue)
-        .accessibilityAddTraits(onTap != nil ? .isButton : .isStaticText)
     }
     
     // MARK: - Helper Properties
@@ -220,24 +243,29 @@ struct RecoveryTipCard: View {
     
     // MARK: - Card Content Components
     
+    // MARK: - Background Layer
+    @ViewBuilder
+    private var backgroundLayer: some View {
+        // Background layer is intentionally empty as backgrounds are handled by main content views
+        Color.clear
+    }
+    
+    // MARK: - Main Content Wrapper
+    @ViewBuilder
+    private var mainContentWrapper: some View {
+        if customBackground != nil {
+            mainContentWithCustomBackground
+        } else {
+            mainContentWithDefaultBackground
+        }
+    }
+    
+    // MARK: - Card Content
     @ViewBuilder
     private var cardContent: some View {
         ZStack {
-            // Background layer (simplified)
-            if customBackground != nil {
-                Color.clear // Custom background will be applied to main content
-            } else {
-                Color.clear // Default background will be applied to main content
-            }
-            
-            // Main content with appropriate background (simplified)
-            if customBackground != nil {
-                mainContentWithCustomBackground
-            } else {
-                mainContentWithDefaultBackground
-            }
-            
-            // Overlay views
+            backgroundLayer
+            mainContentWrapper
             overlayViews
         }
     }
