@@ -83,12 +83,15 @@ struct SobrietyProgressCard: View {
     }
 }
 
-#Preview {
-    SobrietyProgressCard(
-        daysSober: 45,
-        progressToNextMilestone: 0.75,
-        nextMilestone: "60 Days",
-        daysToNextMilestone: 15
-    )
-    .padding()
+// MARK: - Previews
+struct SobrietyProgressCard_Previews: PreviewProvider {
+    static var previews: some View {
+        SobrietyProgressCard(
+            daysSober: 45,
+            progressToNextMilestone: 0.75,
+            nextMilestone: "60 Days",
+            daysToNextMilestone: 15
+        )
+        .padding()
+    }
 }

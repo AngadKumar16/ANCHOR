@@ -646,68 +646,72 @@ extension StatCard {
     }
 }
 
-#Preview("Stat Cards") {
-    ScrollView {
-        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 16), count: 2), spacing: 16) {
-            // Standard cards
-            StatCard(
-                title: "Total Entries",
-                value: "142",
-                icon: "book.fill",
-                color: ANCHORDesign.Colors.primary,
-                animateValue: true
-            )
-            
-            StatCard(
-                title: "This Month",
-                value: "23",
-                icon: "calendar",
-                color: ANCHORDesign.Colors.accent,
-                showTrend: true,
-                trendDirection: .up,
-                trendValue: "+15%"
-            )
-            
-            StatCard(
-                title: "Writing Streak",
-                value: "7",
-                icon: "flame.fill",
-                color: ANCHORDesign.Colors.warning,
-                style: .elevated,
-                showProgress: true,
-                progressValue: 0.7
-            )
-            
-            StatCard(
-                title: "Average Mood",
-                value: "8.2",
-                icon: "face.smiling.fill",
-                color: ANCHORDesign.Colors.moodHappy,
-                style: .gradient,
-                layout: .featured
-            )
-            
-            // Different styles
-            StatCard(
-                title: "Recovery Days",
-                value: "365",
-                icon: "shield.fill",
-                color: ANCHORDesign.Colors.success,
-                style: .outlined,
-                size: .large,
-                valueFormatter: .abbreviated
-            )
-            
-            StatCard(
-                title: "Completion Rate",
-                value: "87.5",
-                icon: "checkmark.circle.fill",
-                color: ANCHORDesign.Colors.primary,
-                style: .glassmorphism,
-                layout: .horizontal,
-                valueFormatter: .percentage
-            )
+// MARK: - Previews
+struct StatCard_Previews: PreviewProvider {
+    static var previews: some View {
+        ScrollView {
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 16), count: 2), spacing: 16) {
+                // Standard cards
+                StatCard(
+                    title: "Total Entries",
+                    value: "142",
+                    icon: "book.fill",
+                    color: ANCHORDesign.Colors.primary,
+                    animateValue: true
+                )
+                
+                StatCard(
+                    title: "This Month",
+                    value: "23",
+                    icon: "calendar",
+                    color: ANCHORDesign.Colors.accent,
+                    showTrend: true,
+                    trendDirection: .up,
+                    trendValue: "+15%"
+                )
+                
+                StatCard(
+                    title: "Writing Streak",
+                    value: "7",
+                    icon: "flame.fill",
+                    color: ANCHORDesign.Colors.warning,
+                    style: .elevated,
+                    showProgress: true,
+                    progressValue: 0.7
+                )
+                
+                StatCard(
+                    title: "Average Mood",
+                    value: "8.2",
+                    icon: "face.smiling.fill",
+                    color: ANCHORDesign.Colors.moodHappy,
+                    style: .gradient,
+                    layout: .featured
+                )
+                
+                // Different styles
+                StatCard(
+                    title: "Recovery Days",
+                    value: "365",
+                    icon: "shield.fill",
+                    color: ANCHORDesign.Colors.success,
+                    style: .outlined,
+                    size: .large,
+                    valueFormatter: .abbreviated
+                )
+                
+                StatCard(
+                    title: "Completion Rate",
+                    value: "87.5",
+                    icon: "checkmark.circle.fill",
+                    color: ANCHORDesign.Colors.primary,
+                    style: .glassmorphism,
+                    layout: .horizontal,
+                    valueFormatter: .percentage
+                )
+            }
+            .padding()
         }
-        .padding()
+        .previewDisplayName("Stat Cards")
     }
 }

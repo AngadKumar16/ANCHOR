@@ -626,35 +626,39 @@ struct JournalEntryCard: View {
 
 
 
-#Preview("Standard Card") {
-    let sampleEntry = JournalEntryModel(
-        id: UUID(),
-        date: Date(),
-        title: "A Great Day",
-        body: "Today was an amazing day filled with positive thoughts and great experiences. I felt really good about my progress and the steps I'm taking towards recovery.",
-        sentiment: 1,
-        tags: ["positive", "recovery", "progress", "grateful"]
-    )
-    
-    VStack(spacing: 20) {
-        JournalEntryCard(entry: sampleEntry)
-        
-        JournalEntryCard(
-            entry: sampleEntry,
-            style: .detailed,
-            size: .large,
-            showWordCount: true,
-            showAttachmentIndicator: true,
-            animateOnAppear: true
+// MARK: - Previews
+struct JournalEntryCard_Previews: PreviewProvider {
+    static var previews: some View {
+        let sampleEntry = JournalEntryModel(
+            id: UUID(),
+            date: Date(),
+            title: "A Great Day",
+            body: "Today was an amazing day filled with positive thoughts and great experiences. I felt really good about my progress and the steps I'm taking towards recovery.",
+            sentiment: 1,
+            tags: ["positive", "recovery", "progress", "grateful"]
         )
         
-        JournalEntryCard(
-            entry: sampleEntry,
-            style: .minimal,
-            size: .small,
-            showChevron: false,
-            maxTagsVisible: 2
-        )
+        VStack(spacing: 20) {
+            JournalEntryCard(entry: sampleEntry)
+            
+            JournalEntryCard(
+                entry: sampleEntry,
+                style: .detailed,
+                size: .large,
+                showWordCount: true,
+                showAttachmentIndicator: true,
+                animateOnAppear: true
+            )
+            
+            JournalEntryCard(
+                entry: sampleEntry,
+                style: .minimal,
+                size: .small,
+                showChevron: false,
+                maxTagsVisible: 2
+            )
+        }
+        .padding()
+        .previewDisplayName("Standard Card")
     }
-    .padding()
 }

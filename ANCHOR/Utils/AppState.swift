@@ -11,11 +11,7 @@ import HealthKit
 
 @MainActor
 class AppState: ObservableObject {
-    @Published var hasCompletedOnboarding: Bool {
-        didSet {
-            UserDefaults.standard.set(hasCompletedOnboarding, forKey: "hasCompletedOnboarding")
-        }
-    }
+    @AppStorage("hasCompletedOnboarding") var hasCompletedOnboarding: Bool = false
     
     @Published var notificationPermissionGranted = false
     @Published var healthKitPermissionGranted = false
@@ -23,7 +19,6 @@ class AppState: ObservableObject {
     private let healthStore = HKHealthStore()
     
     init() {
-        self.hasCompletedOnboarding = UserDefaults.standard.bool(forKey: "hasCompletedOnboarding")
         checkPermissions()
     }
     
