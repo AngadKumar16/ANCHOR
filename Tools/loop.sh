@@ -13,7 +13,7 @@ PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 TOOL_DIR="$PROJECT_DIR/Tools"
 LOG="$TOOL_DIR/build.log"
 MAX_RETRIES="${MAX_RETRIES:-0}"   # 0 = infinite
-SLEEP_BETWEEN="${SLEEP_BETWEEN:-4}"
+SLEEP_BETWEEN="${SLEEP_BETWEEN:-1}"
 ATTEMPT=1
 PREFERRED_SIM="${PREFERRED_SIM:-iPhone 16}"
 
