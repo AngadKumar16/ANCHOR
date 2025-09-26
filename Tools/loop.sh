@@ -166,7 +166,10 @@ while : ; do
         # launch and stream console into log (backgrounded for capture)
         # use `simctl launch --console` if available, otherwise run spawn
         if xcrun simctl launch --help 2>&1 | grep -q -- '--console'; then
-          xcrun simctl launch --console "$SIM_UDID" "$BUNDLE_ID" >> "$LOG" 2>&1 || true
+          xcrun simctl launch --console "$SIM_UDID" "$BUNDLE_ID" >> "$LOG" 2>&1 &
+          LAUNCH_PID=$!
+          sleep 5
+          kill ${LAUNCH_PID} >/dev/null 2>&1 || true
         else
           # fallback: spawn and capture syslog for a brief window
           xcrun simctl spawn "$SIM_UDID" log stream --style compact --predicate 'processImagePath CONTAINS "'"$BUNDLE_ID"'"' >> "$LOG" 2>&1 &

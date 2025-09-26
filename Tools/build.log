@@ -1,8 +1,1181 @@
 Command line invocation:
-    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -scheme Anchor -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 16" build
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -project Anchor.xcodeproj -scheme ANCHOR -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 16" build
 
 Build settings from command line:
     SDKROOT = iphonesimulator18.4
 
-2025-09-25 21:54:02.060 xcodebuild[15553:3291730] Writing error result bundle to /var/folders/hm/gd68b5j14yq0c1ljts5gp1x40000gn/T/ResultBundle_2025-25-09_21-54-0002.xcresult
-xcodebuild: error: The project named "ANCHOR" does not contain a scheme named "Anchor". The "-list" option can be used to find the names of the schemes in the project.
+--- xcodebuild: WARNING: Using the first of multiple matching destinations:
+{ platform:iOS Simulator, arch:arm64, id:E081CE49-21F7-4B0F-82FD-8CAF85655EC6, OS:18.4, name:iPhone 16 }
+{ platform:iOS Simulator, arch:x86_64, id:E081CE49-21F7-4B0F-82FD-8CAF85655EC6, OS:18.4, name:iPhone 16 }
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (1 target)
+    Target 'ANCHOR' in project 'ANCHOR' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.4.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/momc --dry-run --action generate --swift-version 5.0 --sdkroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.4.sdk --iphonesimulator-deployment-target 18.4 --module ANCHOR /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ANCHOR.xcdatamodeld /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --print-asset-tag-combinations --output-format xml1 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Assets.xcassets
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: 7094cf4082c11c72a03314e07fd42503
+Build description path: /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/XCBuildData/7094cf4082c11c72a03314e07fd42503.xcbuilddata
+CreateBuildDirectory /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products
+    cd /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR.xcodeproj
+    builtin-create-build-directory /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products
+
+CreateBuildDirectory /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex
+    cd /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR.xcodeproj
+    builtin-create-build-directory /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex
+
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.4.sdk /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator18.4-22E235-71825a6d136aa4733edcbe86ece5525b.sdkstatcache
+    cd /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.4.sdk -o /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator18.4-22E235-71825a6d136aa4733edcbe86ece5525b.sdkstatcache
+
+CreateBuildDirectory /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator
+    cd /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR.xcodeproj
+    builtin-create-build-directory /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator
+
+CreateBuildDirectory /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator
+    cd /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR.xcodeproj
+    builtin-create-build-directory /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR-d44a0c1dc6086036a228d7932b70556a-VFS-iphonesimulator/all-product-headers.yaml
+    cd /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR.xcodeproj
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR-d44a0c1dc6086036a228d7932b70556a-VFS-iphonesimulator/all-product-headers.yaml
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.DependencyMetadataFileList (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.DependencyMetadataFileList
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.DependencyStaticMetadataFileList (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.DependencyStaticMetadataFileList
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-project-headers.hmap (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-project-headers.hmap
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/empty-ANCHOR.plist (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/empty-ANCHOR.plist
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.hmap (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.hmap
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/Entitlements-Simulated.plist (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/Entitlements-Simulated.plist
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR-OutputFileMap.json (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR-OutputFileMap.json
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.LinkFileList (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.LinkFileList
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR_const_extract_protocols.json (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR_const_extract_protocols.json
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.SwiftConstValuesFileList (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.SwiftConstValuesFileList
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.SwiftFileList (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.SwiftFileList
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-own-target-headers.hmap (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-own-target-headers.hmap
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-generated-files.hmap (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-generated-files.hmap
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-all-target-headers.hmap (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-all-target-headers.hmap
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-all-non-framework-target-headers.hmap (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-all-non-framework-target-headers.hmap
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-DebugDylibPath-normal-arm64.txt (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-DebugDylibPath-normal-arm64.txt
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-DebugDylibInstallName-normal-arm64.txt (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-DebugDylibInstallName-normal-arm64.txt
+
+MkDir /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    /bin/mkdir -p /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+ProcessProductPackaging "" /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.app-Simulated.xcent (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+    Entitlements:
+    
+    {
+    "application-identifier" = "5XTU3ZWHX9.com.AngadKumar16.ANCHOR";
+}
+    
+    builtin-productPackagingUtility -entitlements -format xml -o /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.app-Simulated.xcent
+
+ProcessProductPackagingDER /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.app-Simulated.xcent /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.app-Simulated.xcent.der (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    /usr/bin/derq query -f xml -i /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.app-Simulated.xcent -o /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.app-Simulated.xcent.der --raw
+
+GenerateAssetSymbols /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Assets.xcassets (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    /Applications/Xcode.app/Contents/Developer/usr/bin/actool /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Assets.xcassets --compile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app --output-format human-readable-text --notices --warnings --export-dependency-info /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_dependencies --output-partial-info-plist /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_generated_info.plist --app-icon AppIcon --accent-color AccentColor --compress-pngs --enable-on-demand-resources YES --development-region en --target-device iphone --target-device ipad --minimum-deployment-target 18.4 --platform iphonesimulator --bundle-identifier com.AngadKumar16.ANCHOR --generate-swift-asset-symbols /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/GeneratedAssetSymbols.swift --generate-objc-asset-symbols /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/GeneratedAssetSymbols.h --generate-asset-symbol-index /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/GeneratedAssetSymbols-Index.plist
+/* com.apple.actool.compilation-results */
+/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/GeneratedAssetSymbols-Index.plist
+/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/GeneratedAssetSymbols.h
+/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/GeneratedAssetSymbols.swift
+
+
+DataModelCompile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/ /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ANCHOR.xcdatamodeld (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    /Applications/Xcode.app/Contents/Developer/usr/bin/momc --sdkroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.4.sdk --iphonesimulator-deployment-target 18.4 --module ANCHOR /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ANCHOR.xcdatamodeld /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/
+ANCHOR.xcdatamodel: note: Model ANCHOR version checksum: zUb7C/nfAVns1tg8g1s0SeoMa5J72uGlQYnCd4ggd8Q=
+
+MkDir /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_output/thinned (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    /bin/mkdir -p /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_output/thinned
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.fixed /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.fixed (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.fixed /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+MkDir /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_output/unthinned (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    /bin/mkdir -p /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_output/unthinned
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755737131193 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755737131193 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755737131193 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755737123771 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755737123771 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755737123771 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755737138452 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755737138452 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755737138452 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755737116458 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755737116458 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755737116458 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755737109439 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755737109439 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755737109439 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+DataModelCodegen /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ANCHOR.xcdatamodeld (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    /Applications/Xcode.app/Contents/Developer/usr/bin/momc --action generate --swift-version 5.0 --sdkroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.4.sdk --iphonesimulator-deployment-target 18.4 --module ANCHOR /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ANCHOR.xcdatamodeld /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR
+
+Ld /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/__preview.dylib normal (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios18.4-simulator -dynamiclib -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.4.sdk -O0 -L/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator -F/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator -install_name @rpath/ANCHOR.debug.dylib -dead_strip -rdynamic -Xlinker -no_deduplicate -Xlinker -objc_abi_version -Xlinker 2 -Xlinker -debug_variant -Xlinker -dependency_info -Xlinker /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR_dependency_info.dat -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __entitlements -Xlinker /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.app-Simulated.xcent -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __ents_der -Xlinker /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.app-Simulated.xcent.der -Xlinker -no_adhoc_codesign -o /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/__preview.dylib
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755737102081 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755737102081 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755737102081 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755737093968 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755737093968 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755737093968 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755737085987 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755737085987 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755737085987 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663386949 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663386949 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663386949 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663380355 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663380355 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663380355 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663373679 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663373679 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663373679 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663367131 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663367131 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663367131 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663360409 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663360409 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663360409 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663353553 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663353553 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663353553 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663346817 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663346817 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663346817 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663339880 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663339880 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663339880 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663333142 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663333142 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663333142 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663326342 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663326342 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663326342 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663319525 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663319525 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663319525 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663312266 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663312266 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663312266 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663305470 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663305470 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663305470 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663298741 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663298741 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663298741 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663292000 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663292000 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663292000 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663285258 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663285258 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663285258 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663278422 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663278422 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663278422 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663271699 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663271699 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663271699 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663264438 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663264438 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663264438 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663257601 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663257601 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663257601 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663250771 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663250771 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663250771 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663243971 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663243971 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663243971 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663237095 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663237095 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663237095 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663230252 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663230252 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663230252 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663223418 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663223418 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663223418 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663216611 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663216611 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663216611 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663209672 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663209672 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663209672 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663202759 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663202759 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663202759 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663195802 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663195802 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663195802 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663187606 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663187606 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663187606 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663180626 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663180626 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663180626 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663173760 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663173760 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663173760 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663167004 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663167004 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663167004 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663160317 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663160317 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663160317 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663153477 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663153477 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663153477 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663146551 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663146551 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663146551 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663139959 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663139959 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663139959 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663133187 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663133187 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663133187 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663126347 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663126347 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663126347 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663119211 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663119211 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663119211 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663112287 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663112287 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663112287 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663105489 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663105489 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663105489 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663098603 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663098603 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663098603 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663091724 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663091724 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663091724 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663084682 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663084682 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663084682 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663076940 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663076940 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663076940 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663070036 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663070036 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663070036 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663063295 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663063295 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663063295 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663056396 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663056396 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663056396 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663049364 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663049364 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663049364 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663042600 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663042600 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663042600 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663035785 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663035785 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663035785 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663029004 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663029004 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663029004 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663022106 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663022106 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663022106 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663015387 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663015387 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663015387 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663008697 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663008697 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663008697 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755663001923 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663001923 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755663001923 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755662994979 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755662994979 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755662994979 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755662987761 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755662987761 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755662987761 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755662980888 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755662980888 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755662980888 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755662973828 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755662973828 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755662973828 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755662966952 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755662966952 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755662966952 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755662953692 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755662953692 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755662953692 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755662960351 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755662960351 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755662960351 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755662946870 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755662946870 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755662946870 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755662939894 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755662939894 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755662939894 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755662933029 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755662933029 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755662933029 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755662926306 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755662926306 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755662926306 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755662919535 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755662919535 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755662919535 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/RecoveryTipCard.swift.bak.1755662912550 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755662912550 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift.bak.1755662912550 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.fixed /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.fixed (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.fixed /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755737138486 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755737138486 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755737138486 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755737131318 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755737131318 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755737131318 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755737123803 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755737123803 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755737123803 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755737116491 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755737116491 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755737116491 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755737109559 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755737109559 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755737109559 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755737102200 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755737102200 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755737102200 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755737094089 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755737094089 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755737094089 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755737086397 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755737086397 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755737086397 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663386976 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663386976 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663386976 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663380383 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663380383 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663380383 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663373707 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663373707 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663373707 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663367160 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663367160 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663367160 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663360437 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663360437 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663360437 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663353581 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663353581 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663353581 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663339909 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663339909 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663339909 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663346845 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663346845 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663346845 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663333171 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663333171 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663333171 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663326371 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663326371 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663326371 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663319553 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663319553 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663319553 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663312294 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663312294 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663312294 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663305497 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663305497 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663305497 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663298770 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663298770 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663298770 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663292028 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663292028 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663292028 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663285285 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663285285 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663285285 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663278451 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663278451 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663278451 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663271729 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663271729 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663271729 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663264466 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663264466 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663264466 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663257629 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663257629 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663257629 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663250801 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663250801 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663250801 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663237123 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663237123 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663237123 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663243999 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663243999 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663243999 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663230280 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663230280 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663230280 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663223448 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663223448 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663223448 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663216639 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663216639 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663216639 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663209700 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663209700 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663209700 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663202787 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663202787 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663202787 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663195830 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663195830 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663195830 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663187635 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663187635 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663187635 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663180654 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663180654 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663180654 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663173787 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663173787 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663173787 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663167031 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663167031 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663167031 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663160345 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663160345 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663160345 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663153505 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663153505 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663153505 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663146578 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663146578 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663146578 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663139987 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663139987 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663139987 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663133215 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663133215 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663133215 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663126375 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663126375 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663126375 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663119239 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663119239 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663119239 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663112316 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663112316 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663112316 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663105517 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663105517 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663105517 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663098631 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663098631 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663098631 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663091755 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663091755 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663091755 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663084709 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663084709 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663084709 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663076968 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663076968 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663076968 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663070066 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663070066 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663070066 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663063324 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663063324 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663063324 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663056433 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663056433 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663056433 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663049393 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663049393 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663049393 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663042627 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663042627 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663042627 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663035814 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663035814 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663035814 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663029033 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663029033 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663029033 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663022136 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663022136 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663022136 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663015416 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663015416 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663015416 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663008725 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663008725 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663008725 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755663001951 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663001951 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755663001951 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755662995006 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755662995006 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755662995006 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755662987790 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755662987790 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755662987790 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755662980919 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755662980919 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755662980919 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755662973857 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755662973857 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755662973857 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755662966980 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755662966980 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755662966980 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755662960383 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755662960383 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755662960383 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755662953723 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755662953723 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755662953723 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755662946900 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755662946900 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755662946900 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755662939924 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755662939924 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755662939924 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755662933059 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755662933059 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755662933059 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755662926336 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755662926336 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755662926336 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755662919564 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755662919564 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755662919564 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/QuickActionCard.swift.bak.1755662912669 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755662912669 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift.bak.1755662912669 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CompileAssetCatalogVariant thinned /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Assets.xcassets (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    /Applications/Xcode.app/Contents/Developer/usr/bin/actool /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Assets.xcassets --compile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_output/thinned --output-format human-readable-text --notices --warnings --export-dependency-info /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_dependencies_thinned --output-partial-info-plist /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_generated_info.plist_thinned --app-icon AppIcon --accent-color AccentColor --compress-pngs --enable-on-demand-resources YES --filter-for-thinning-device-configuration iPhone17,3 --filter-for-device-os-version 18.4 --development-region en --target-device iphone --target-device ipad --minimum-deployment-target 18.4 --platform iphonesimulator
+/* com.apple.actool.compilation-results */
+/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_generated_info.plist_thinned
+
+
+LinkAssetCatalog /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Assets.xcassets (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-linkAssetCatalog --thinned /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_output/thinned --thinned-dependencies /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_dependencies_thinned --thinned-info-plist-content /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_generated_info.plist_thinned --unthinned /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_output/unthinned --unthinned-dependencies /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_dependencies_unthinned --unthinned-info-plist-content /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_generated_info.plist_unthinned --output /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app --plist-output /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_generated_info.plist
+
+ProcessInfoPlistFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/Info.plist /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/empty-ANCHOR.plist (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-infoPlistUtility /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/empty-ANCHOR.plist -producttype com.apple.product-type.application -genpkginfo /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/PkgInfo -expandbuildsettings -format binary -platform iphonesimulator -additionalcontentfile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_generated_info.plist -o /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/Info.plist
+
+SwiftDriver ANCHOR normal arm64 com.apple.xcode.tools.swift.compiler (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name ANCHOR -Onone -enforce-exclusivity\=checked @/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.SwiftFileList -DDEBUG -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.4.sdk -target arm64-apple-ios18.4-simulator -g -module-cache-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -index-store-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Index.noindex/DataStore -swift-version 5 -I /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator -F /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator -emit-localized-strings -emit-localized-strings-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64 -c -j12 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator18.4-22E235-71825a6d136aa4733edcbe86ece5525b.sdkstatcache -output-file-map /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR_const_extract_protocols.json -Xcc -iquote -Xcc /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-generated-files.hmap -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-own-target-headers.hmap -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-all-target-headers.hmap -Xcc -iquote -Xcc /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-project-headers.hmap -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources-normal/arm64 -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/arm64 -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR-Swift.h -working-directory /Users/angadkumar16ak/Projects/ANCHOR -experimental-emit-module-separately -disable-cmo
+
+SwiftCompile normal arm64 Compiling\ AppState.swift,\ OnboardingView.swift,\ UserProfileEntity.swift,\ BreathingExerciseView.swift,\ ShimmeringView.swift,\ ComponentUtilities.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/AppState.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfileEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/BreathingExerciseView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ShimmeringView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ComponentUtilities.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/AppState.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfileEntity.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/BreathingExerciseView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ShimmeringView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ComponentUtilities.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 Compiling\ JournalListView.swift,\ RiskAssessment.swift,\ RiskQuestionView.swift,\ FinishSetupView.swift,\ SobrietyTracker.swift,\ ANCHORButton.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalListView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessment.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskQuestionView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/FinishSetupView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/SobrietyTracker.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORButton.swift (in target 'ANCHOR' from project 'ANCHOR')
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalListView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessment.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskQuestionView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/FinishSetupView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/SobrietyTracker.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORButton.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 Compiling\ JournalEntryCard+Models.swift,\ JournalViewModel.swift,\ WelcomeView.swift,\ DataExportService.swift,\ ANCHORApp.swift,\ JournalEditorView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/JournalEntryCard+Models.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/JournalViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/WelcomeView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DataExportService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ANCHORApp.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalEditorView.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/JournalEntryCard+Models.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/JournalViewModel.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/WelcomeView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DataExportService.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ANCHORApp.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalEditorView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 Compiling\ RiskAssessmentViewModel.swift,\ EncryptionService.swift,\ JournalEntryView.swift,\ OnboardingModels.swift,\ QuickActionCard.swift,\ RiskAssessmentView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/RiskAssessmentViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/EncryptionService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalEntryView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/OnboardingModels.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskAssessmentView.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/RiskAssessmentViewModel.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/EncryptionService.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalEntryView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/OnboardingModels.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskAssessmentView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 Compiling\ NotificationsService.swift,\ RiskAssessmentEntity.swift,\ ANCHORMoodIcon.swift,\ RiskResultsView.swift,\ ANCHORDesign.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/NotificationsService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessmentEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORMoodIcon.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskResultsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/ANCHORDesign.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/NotificationsService.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessmentEntity.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORMoodIcon.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskResultsView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/ANCHORDesign.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 Compiling\ SplashScreenView.swift,\ DailyQuoteService.swift,\ MainTabView.swift,\ JournalDetailView.swift,\ JournalEntryEntity.swift,\ MonthHeaderCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/SplashScreenView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DailyQuoteService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/MainTabView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalDetailView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntryEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/MonthHeaderCard.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/SplashScreenView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DailyQuoteService.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/MainTabView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalDetailView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntryEntity.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/MonthHeaderCard.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 Compiling\ Color+Theme.swift,\ PermissionRequestView.swift,\ CheckInView.swift,\ SobrietyProgressCard.swift,\ GradientBackground.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Color+Theme.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionRequestView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/CheckInView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/SobrietyProgressCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/GradientBackground.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Color+Theme.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionRequestView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/CheckInView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/SobrietyProgressCard.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/GradientBackground.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 Compiling\ JournalEntry.swift,\ Item+CoreDataClass.swift,\ Item+CoreDataProperties.swift,\ ANCHOR+CoreDataModel.swift,\ GeneratedAssetSymbols.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntry.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataClass.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataProperties.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/ANCHOR+CoreDataModel.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntry.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataClass.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataProperties.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/ANCHOR+CoreDataModel.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 Compiling\ ModelExtensions.swift,\ MoodFilterPill.swift,\ UserProfileViewModel.swift,\ RiskAssessmentHistoryView.swift,\ KeychainHelper.swift,\ Persistence.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/ModelExtensions.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/MoodFilterPill.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/UserProfileViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskAssessmentHistoryView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/KeychainHelper.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Persistence.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/ModelExtensions.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/MoodFilterPill.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/UserProfileViewModel.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskAssessmentHistoryView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/KeychainHelper.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Persistence.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 Compiling\ SettingsView.swift,\ DateFormatter+Extensions.swift,\ PermissionsView.swift,\ ContentView.swift,\ StatCard.swift,\ JournalEntryCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/SettingsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/DateFormatter+Extensions.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/ContentView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/StatCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/JournalEntryCard.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/SettingsView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/DateFormatter+Extensions.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionsView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/ContentView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/StatCard.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/JournalEntryCard.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 Compiling\ OnboardingCardView.swift,\ UserProfile.swift,\ AppRootView.swift,\ ANCHORProgressRing.swift,\ PrivacySettingsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingCardView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfile.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/AppRootView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORProgressRing.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/PrivacySettingsView.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingCardView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfile.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/AppRootView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORProgressRing.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/PrivacySettingsView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ ANCHOR (in target 'ANCHOR' from project 'ANCHOR')
+Failed frontend command:
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -frontend -emit-module -experimental-skip-non-inlinable-function-bodies-without-types /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/JournalEntryCard+Models.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/JournalViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/WelcomeView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DataExportService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ANCHORApp.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalEditorView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/ModelExtensions.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/MoodFilterPill.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/UserProfileViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskAssessmentHistoryView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/KeychainHelper.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Persistence.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalListView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessment.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskQuestionView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/FinishSetupView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/SobrietyTracker.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORButton.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/AppState.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfileEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/BreathingExerciseView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ShimmeringView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ComponentUtilities.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/SettingsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/DateFormatter+Extensions.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/ContentView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/StatCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/JournalEntryCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/SplashScreenView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DailyQuoteService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/MainTabView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalDetailView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntryEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/MonthHeaderCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/RiskAssessmentViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/EncryptionService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalEntryView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/OnboardingModels.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskAssessmentView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/NotificationsService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessmentEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORMoodIcon.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskResultsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/ANCHORDesign.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingCardView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfile.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/AppRootView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORProgressRing.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/PrivacySettingsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Color+Theme.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionRequestView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/CheckInView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/SobrietyProgressCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/GradientBackground.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Logger.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PrivacyDisclaimerView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntry.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataClass.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataProperties.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/ANCHOR+CoreDataModel.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/GeneratedAssetSymbols.swift -target arm64-apple-ios18.4-simulator -Xllvm -aarch64-use-tbi -enable-objc-interop -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.4.sdk -I /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator -F /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator -no-color-diagnostics -enable-testing -g -debug-info-format\=dwarf -dwarf-version\=5 -module-cache-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -profile-generate -profile-coverage-mapping -swift-version 5 -enforce-exclusivity\=checked -Onone -D DEBUG -serialize-debugging-options -const-gather-protocols-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR_const_extract_protocols.json -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -empty-abi-descriptor -validate-clang-modules-once -clang-build-session-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -working-directory -Xcc /Users/angadkumar16ak/Projects/ANCHOR -resource-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift -enable-anonymous-context-mangled-names -file-compilation-dir /Users/angadkumar16ak/Projects/ANCHOR -Xcc -ivfsstatcache -Xcc /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator18.4-22E235-71825a6d136aa4733edcbe86ece5525b.sdkstatcache -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/swift-overrides.hmap -Xcc -iquote -Xcc /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-generated-files.hmap -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-own-target-headers.hmap -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-all-target-headers.hmap -Xcc -iquote -Xcc /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-project-headers.hmap -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources-normal/arm64 -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/arm64 -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources -Xcc -DDEBUG\=1 -module-name ANCHOR -frontend-parseable-output -disable-clang-spi -target-sdk-version 18.4 -target-sdk-name iphonesimulator18.4 -external-plugin-path /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server -external-plugin-path /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/local/lib/swift/host/plugins\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server -in-process-plugin-server-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/libSwiftInProcPluginServer.dylib -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/local/lib/swift/host/plugins -emit-module-doc-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.swiftdoc -emit-module-source-info-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.swiftsourceinfo -emit-objc-header-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR-Swift.h -serialize-diagnostics-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR-master-emit-module.dia -emit-dependencies-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR-master-emit-module.d -o /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.swiftmodule -emit-abi-descriptor-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.abi.json
+
+EmitSwiftModule normal arm64 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift:679:15: warning: backward matching of the unlabeled trailing closure is deprecated; label the argument with 'action' to suppress this warning
+            ) {
+~~~~~~~~~~~~~ ^
+, action: 
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift:68:5: note: 'init(title:subtitle:icon:style:size:iconStyle:layout:showBadge:badgeText:badgeColor:isEnabled:showProgress:progressValue:customGradient:customBackground:customPadding:customCornerRadius:customShadow:animateOnAppear:bounceOnTap:hoverEffect:hapticFeedback:pulseEffect:enableAnalytics:enableCache:enableKeyboardNavigation:enableAdvancedGestures:enableParticleEffects:loadingStateBinding:contextMenuActions:accessibilityLabel:accessibilityHint:accessibilityValue:onTap:onDoubleTap:onSwipeLeft:onSwipeRight:action:)' declared here
+    init(
+    ^
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift:688:15: warning: backward matching of the unlabeled trailing closure is deprecated; label the argument with 'action' to suppress this warning
+            ) {
+~~~~~~~~~~~~~ ^
+, action: 
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift:68:5: note: 'init(title:subtitle:icon:style:size:iconStyle:layout:showBadge:badgeText:badgeColor:isEnabled:showProgress:progressValue:customGradient:customBackground:customPadding:customCornerRadius:customShadow:animateOnAppear:bounceOnTap:hoverEffect:hapticFeedback:pulseEffect:enableAnalytics:enableCache:enableKeyboardNavigation:enableAdvancedGestures:enableParticleEffects:loadingStateBinding:contextMenuActions:accessibilityLabel:accessibilityHint:accessibilityValue:onTap:onDoubleTap:onSwipeLeft:onSwipeRight:action:)' declared here
+    init(
+    ^
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift:700:15: warning: backward matching of the unlabeled trailing closure is deprecated; label the argument with 'action' to suppress this warning
+            ) {
+~~~~~~~~~~~~~ ^
+, action: 
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift:68:5: note: 'init(title:subtitle:icon:style:size:iconStyle:layout:showBadge:badgeText:badgeColor:isEnabled:showProgress:progressValue:customGradient:customBackground:customPadding:customCornerRadius:customShadow:animateOnAppear:bounceOnTap:hoverEffect:hapticFeedback:pulseEffect:enableAnalytics:enableCache:enableKeyboardNavigation:enableAdvancedGestures:enableParticleEffects:loadingStateBinding:contextMenuActions:accessibilityLabel:accessibilityHint:accessibilityValue:onTap:onDoubleTap:onSwipeLeft:onSwipeRight:action:)' declared here
+    init(
+    ^
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift:712:15: warning: backward matching of the unlabeled trailing closure is deprecated; label the argument with 'action' to suppress this warning
+            ) {
+~~~~~~~~~~~~~ ^
+, action: 
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift:68:5: note: 'init(title:subtitle:icon:style:size:iconStyle:layout:showBadge:badgeText:badgeColor:isEnabled:showProgress:progressValue:customGradient:customBackground:customPadding:customCornerRadius:customShadow:animateOnAppear:bounceOnTap:hoverEffect:hapticFeedback:pulseEffect:enableAnalytics:enableCache:enableKeyboardNavigation:enableAdvancedGestures:enableParticleEffects:loadingStateBinding:contextMenuActions:accessibilityLabel:accessibilityHint:accessibilityValue:onTap:onDoubleTap:onSwipeLeft:onSwipeRight:action:)' declared here
+    init(
+    ^
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift:724:15: warning: backward matching of the unlabeled trailing closure is deprecated; label the argument with 'action' to suppress this warning
+            ) {
+~~~~~~~~~~~~~ ^
+, action: 
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift:68:5: note: 'init(title:subtitle:icon:style:size:iconStyle:layout:showBadge:badgeText:badgeColor:isEnabled:showProgress:progressValue:customGradient:customBackground:customPadding:customCornerRadius:customShadow:animateOnAppear:bounceOnTap:hoverEffect:hapticFeedback:pulseEffect:enableAnalytics:enableCache:enableKeyboardNavigation:enableAdvancedGestures:enableParticleEffects:loadingStateBinding:contextMenuActions:accessibilityLabel:accessibilityHint:accessibilityValue:onTap:onDoubleTap:onSwipeLeft:onSwipeRight:action:)' declared here
+    init(
+    ^
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift:737:15: warning: backward matching of the unlabeled trailing closure is deprecated; label the argument with 'action' to suppress this warning
+            ) {
+~~~~~~~~~~~~~ ^
+, action: 
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift:68:5: note: 'init(title:subtitle:icon:style:size:iconStyle:layout:showBadge:badgeText:badgeColor:isEnabled:showProgress:progressValue:customGradient:customBackground:customPadding:customCornerRadius:customShadow:animateOnAppear:bounceOnTap:hoverEffect:hapticFeedback:pulseEffect:enableAnalytics:enableCache:enableKeyboardNavigation:enableAdvancedGestures:enableParticleEffects:loadingStateBinding:contextMenuActions:accessibilityLabel:accessibilityHint:accessibilityValue:onTap:onDoubleTap:onSwipeLeft:onSwipeRight:action:)' declared here
+    init(
+    ^
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift:274:17: error: invalid redeclaration of 'cardContent'
+    private var cardContent: some View {
+                ^
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift:264:17: note: 'cardContent' previously declared here
+    private var cardContent: some View {
+                ^
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift:264:17: note: 'cardContent' previously declared here
+    private var cardContent: some View {
+                ^
+
+SwiftCompile normal arm64 Compiling\ RecoveryTipCard.swift,\ Logger.swift,\ PrivacyDisclaimerView.swift,\ AIAnalysisService.swift,\ DashboardView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Logger.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PrivacyDisclaimerView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardView.swift (in target 'ANCHOR' from project 'ANCHOR')
+Command SwiftCompile failed with a nonzero exit code
+
+** BUILD FAILED **
+
+
+The following build commands failed:
+	SwiftEmitModule normal arm64 Emitting\ module\ for\ ANCHOR (in target 'ANCHOR' from project 'ANCHOR')
+	EmitSwiftModule normal arm64 (in target 'ANCHOR' from project 'ANCHOR')
+	SwiftCompile normal arm64 Compiling\ RecoveryTipCard.swift,\ Logger.swift,\ PrivacyDisclaimerView.swift,\ AIAnalysisService.swift,\ DashboardView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Logger.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PrivacyDisclaimerView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardView.swift (in target 'ANCHOR' from project 'ANCHOR')
+	Building project ANCHOR with scheme ANCHOR
+(4 failures)
+An error was encountered processing the command (domain=IXUserPresentableErrorDomain, code=1):
+App installation failed: Unable to Install “ANCHOR”
+Please try again later.
+ANCHOR.app is missing its bundle executable. Please check your build settings to make sure that a bundle executable is produced at the path "ANCHOR.app/ANCHOR".
+Underlying error (domain=IXUserPresentableErrorDomain, code=1):
+	Unable to Install “ANCHOR”
+	Please try again later.
