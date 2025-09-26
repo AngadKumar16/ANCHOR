@@ -38,19 +38,19 @@ ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeD
 
 ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
 
-Build description signature: 58f4b2acd0ec4538d93e1c59efc56512
-Build description path: /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/XCBuildData/58f4b2acd0ec4538d93e1c59efc56512.xcbuilddata
+Build description signature: 100c67ebaf3c14d411110be7550e04b0
+Build description path: /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/XCBuildData/100c67ebaf3c14d411110be7550e04b0.xcbuilddata
 ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.4.sdk /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator18.4-22E235-71825a6d136aa4733edcbe86ece5525b.sdkstatcache
     cd /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR.xcodeproj
     /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.4.sdk -o /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator18.4-22E235-71825a6d136aa4733edcbe86ece5525b.sdkstatcache
 
-WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.SwiftConstValuesFileList (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.SwiftConstValuesFileList
-
 WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.SwiftFileList (in target 'ANCHOR' from project 'ANCHOR')
     cd /Users/angadkumar16ak/Projects/ANCHOR
     write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.SwiftFileList
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.SwiftConstValuesFileList (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.SwiftConstValuesFileList
 
 WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.LinkFileList (in target 'ANCHOR' from project 'ANCHOR')
     cd /Users/angadkumar16ak/Projects/ANCHOR
@@ -64,88 +64,60 @@ SwiftDriver ANCHOR normal arm64 com.apple.xcode.tools.swift.compiler (in target 
     cd /Users/angadkumar16ak/Projects/ANCHOR
     builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name ANCHOR -Onone -enforce-exclusivity\=checked @/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.SwiftFileList -DDEBUG -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.4.sdk -target arm64-apple-ios18.4-simulator -g -module-cache-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -index-store-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Index.noindex/DataStore -swift-version 5 -I /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator -F /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator -emit-localized-strings -emit-localized-strings-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64 -c -j12 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator18.4-22E235-71825a6d136aa4733edcbe86ece5525b.sdkstatcache -output-file-map /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR_const_extract_protocols.json -Xcc -iquote -Xcc /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-generated-files.hmap -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-own-target-headers.hmap -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-all-target-headers.hmap -Xcc -iquote -Xcc /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-project-headers.hmap -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources-normal/arm64 -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/arm64 -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR-Swift.h -working-directory /Users/angadkumar16ak/Projects/ANCHOR -experimental-emit-module-separately -disable-cmo
 
-SwiftCompile normal arm64 Compiling\ JournalEntryEntity.swift,\ RiskAssessmentHistoryView.swift,\ JournalListView.swift,\ EncryptionService.swift,\ ANCHORApp.swift,\ OnboardingModels.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntryEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskAssessmentHistoryView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalListView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/EncryptionService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ANCHORApp.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/OnboardingModels.swift (in target 'ANCHOR' from project 'ANCHOR')
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntryEntity.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskAssessmentHistoryView.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalListView.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/EncryptionService.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ANCHORApp.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/OnboardingModels.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 Compiling\ OnboardingView.swift,\ ANCHORDesign.swift,\ ShimmeringView.swift,\ ComponentUtilities.swift,\ UserProfile.swift,\ SettingsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/ANCHORDesign.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ShimmeringView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ComponentUtilities.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfile.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/SettingsView.swift (in target 'ANCHOR' from project 'ANCHOR')
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingView.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/ANCHORDesign.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ShimmeringView.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ComponentUtilities.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
+SwiftCompile normal arm64 Compiling\ UserProfile.swift,\ JournalEntryView.swift,\ ANCHORProgressRing.swift,\ MainTabView.swift,\ Color+Theme.swift,\ RiskAssessmentView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfile.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalEntryView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORProgressRing.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/MainTabView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Color+Theme.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskAssessmentView.swift (in target 'ANCHOR' from project 'ANCHOR')
 
 SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfile.swift (in target 'ANCHOR' from project 'ANCHOR')
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
 
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/SettingsView.swift (in target 'ANCHOR' from project 'ANCHOR')
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalEntryView.swift (in target 'ANCHOR' from project 'ANCHOR')
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
 
-SwiftCompile normal arm64 Compiling\ SplashScreenView.swift,\ Logger.swift,\ JournalDetailView.swift,\ MonthHeaderCard.swift,\ AIAnalysisService.swift,\ ContentView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/SplashScreenView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Logger.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalDetailView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/MonthHeaderCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/ContentView.swift (in target 'ANCHOR' from project 'ANCHOR')
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/SplashScreenView.swift (in target 'ANCHOR' from project 'ANCHOR')
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORProgressRing.swift (in target 'ANCHOR' from project 'ANCHOR')
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
 
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Logger.swift (in target 'ANCHOR' from project 'ANCHOR')
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/MainTabView.swift (in target 'ANCHOR' from project 'ANCHOR')
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
 
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalDetailView.swift (in target 'ANCHOR' from project 'ANCHOR')
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Color+Theme.swift (in target 'ANCHOR' from project 'ANCHOR')
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
 
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/MonthHeaderCard.swift (in target 'ANCHOR' from project 'ANCHOR')
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskAssessmentView.swift (in target 'ANCHOR' from project 'ANCHOR')
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
 
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisService.swift (in target 'ANCHOR' from project 'ANCHOR')
+SwiftCompile normal arm64 Compiling\ JournalEntryCard+Models.swift,\ JournalViewModel.swift,\ PrivacySettingsView.swift,\ DataExportService.swift,\ PermissionRequestView.swift,\ ModelExtensions.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/JournalEntryCard+Models.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/JournalViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/PrivacySettingsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DataExportService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionRequestView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/ModelExtensions.swift (in target 'ANCHOR' from project 'ANCHOR')
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/JournalEntryCard+Models.swift (in target 'ANCHOR' from project 'ANCHOR')
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
 
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/ContentView.swift (in target 'ANCHOR' from project 'ANCHOR')
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/JournalViewModel.swift (in target 'ANCHOR' from project 'ANCHOR')
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
 
-SwiftCompile normal arm64 Compiling\ PermissionRequestView.swift,\ AppState.swift,\ SobrietyProgressCard.swift,\ GradientBackground.swift,\ UserProfileEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionRequestView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/AppState.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/SobrietyProgressCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/GradientBackground.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfileEntity.swift (in target 'ANCHOR' from project 'ANCHOR')
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/PrivacySettingsView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DataExportService.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
 SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionRequestView.swift (in target 'ANCHOR' from project 'ANCHOR')
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
 
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/AppState.swift (in target 'ANCHOR' from project 'ANCHOR')
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/ModelExtensions.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 Compiling\ MoodFilterPill.swift,\ SobrietyProgressCard.swift,\ UserProfileViewModel.swift,\ AppRootView.swift,\ KeychainHelper.swift,\ PrivacyDisclaimerView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/MoodFilterPill.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/SobrietyProgressCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/UserProfileViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/AppRootView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/KeychainHelper.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PrivacyDisclaimerView.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/MoodFilterPill.swift (in target 'ANCHOR' from project 'ANCHOR')
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
 
@@ -153,7 +125,133 @@ SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Com
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
 
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/UserProfileViewModel.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/AppRootView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/KeychainHelper.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PrivacyDisclaimerView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 Compiling\ DailyQuoteService.swift,\ OnboardingView.swift,\ JournalEntryEntity.swift,\ MonthHeaderCard.swift,\ ShimmeringView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DailyQuoteService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntryEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/MonthHeaderCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ShimmeringView.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DailyQuoteService.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntryEntity.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/MonthHeaderCard.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ShimmeringView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 Compiling\ RiskAssessment.swift,\ CheckInView.swift,\ WelcomeView.swift,\ SobrietyTracker.swift,\ JournalEditorView.swift,\ ANCHORButton.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessment.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/CheckInView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/WelcomeView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/SobrietyTracker.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalEditorView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORButton.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessment.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/CheckInView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/WelcomeView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/SobrietyTracker.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalEditorView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORButton.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 Compiling\ ANCHORApp.swift,\ DateFormatter+Extensions.swift,\ RiskQuestionView.swift,\ FinishSetupView.swift,\ JournalEntryCard.swift,\ Persistence.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ANCHORApp.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/DateFormatter+Extensions.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskQuestionView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/FinishSetupView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/JournalEntryCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Persistence.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ANCHORApp.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/DateFormatter+Extensions.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskQuestionView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/FinishSetupView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/JournalEntryCard.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Persistence.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 Compiling\ GradientBackground.swift,\ Logger.swift,\ RiskResultsView.swift,\ AIAnalysisService.swift,\ OnboardingCardView.swift,\ JournalEntry.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/GradientBackground.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Logger.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskResultsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingCardView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntry.swift (in target 'ANCHOR' from project 'ANCHOR')
+
 SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/GradientBackground.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Logger.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskResultsView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisService.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingCardView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntry.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 Compiling\ DashboardView.swift,\ AppState.swift,\ RiskAssessmentHistoryView.swift,\ UserProfileEntity.swift,\ JournalListView.swift,\ ComponentUtilities.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/AppState.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskAssessmentHistoryView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfileEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalListView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ComponentUtilities.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/AppState.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskAssessmentHistoryView.swift (in target 'ANCHOR' from project 'ANCHOR')
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
 
@@ -161,9 +259,39 @@ SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/Us
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
 
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalListView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ComponentUtilities.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 Compiling\ QuickActionCard.swift,\ StatCard.swift,\ BreathingExerciseView.swift,\ NotificationsService.swift,\ RecoveryTipCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/StatCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/BreathingExerciseView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/NotificationsService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/StatCard.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/BreathingExerciseView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/NotificationsService.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
 SwiftEmitModule normal arm64 Emitting\ module\ for\ ANCHOR (in target 'ANCHOR' from project 'ANCHOR')
 Failed frontend command:
-/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -frontend -emit-module -experimental-skip-non-inlinable-function-bodies-without-types /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/WelcomeView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalEditorView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/MoodFilterPill.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DailyQuoteService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/UserProfileViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntryEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskAssessmentHistoryView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalListView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/EncryptionService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ANCHORApp.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/OnboardingModels.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskQuestionView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/FinishSetupView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/NotificationsService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Persistence.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORButton.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessmentEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/ANCHORDesign.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ShimmeringView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ComponentUtilities.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfile.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/SettingsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Color+Theme.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/StatCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/JournalEntryCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/BreathingExerciseView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/SplashScreenView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Logger.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalDetailView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/MonthHeaderCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/ContentView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/RiskAssessmentViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntry.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalEntryView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DataExportService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/MainTabView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/ModelExtensions.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskAssessmentView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/KeychainHelper.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORMoodIcon.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessment.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskResultsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingCardView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORProgressRing.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/SobrietyTracker.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/PrivacySettingsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionRequestView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/AppState.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/SobrietyProgressCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/GradientBackground.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfileEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/AppRootView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PrivacyDisclaimerView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/DateFormatter+Extensions.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/JournalEntryCard+Models.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/CheckInView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/JournalViewModel.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataClass.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataProperties.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/ANCHOR+CoreDataModel.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/GeneratedAssetSymbols.swift -target arm64-apple-ios18.4-simulator -Xllvm -aarch64-use-tbi -enable-objc-interop -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.4.sdk -I /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator -F /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator -no-color-diagnostics -enable-testing -g -debug-info-format\=dwarf -dwarf-version\=5 -module-cache-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -profile-generate -profile-coverage-mapping -swift-version 5 -enforce-exclusivity\=checked -Onone -D DEBUG -serialize-debugging-options -const-gather-protocols-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR_const_extract_protocols.json -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -empty-abi-descriptor -validate-clang-modules-once -clang-build-session-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -working-directory -Xcc /Users/angadkumar16ak/Projects/ANCHOR -resource-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift -enable-anonymous-context-mangled-names -file-compilation-dir /Users/angadkumar16ak/Projects/ANCHOR -Xcc -ivfsstatcache -Xcc /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator18.4-22E235-71825a6d136aa4733edcbe86ece5525b.sdkstatcache -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/swift-overrides.hmap -Xcc -iquote -Xcc /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-generated-files.hmap -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-own-target-headers.hmap -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-all-target-headers.hmap -Xcc -iquote -Xcc /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-project-headers.hmap -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources-normal/arm64 -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/arm64 -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources -Xcc -DDEBUG\=1 -module-name ANCHOR -frontend-parseable-output -disable-clang-spi -target-sdk-version 18.4 -target-sdk-name iphonesimulator18.4 -external-plugin-path /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server -external-plugin-path /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/local/lib/swift/host/plugins\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server -in-process-plugin-server-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/libSwiftInProcPluginServer.dylib -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/local/lib/swift/host/plugins -emit-module-doc-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.swiftdoc -emit-module-source-info-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.swiftsourceinfo -emit-objc-header-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR-Swift.h -serialize-diagnostics-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR-master-emit-module.dia -emit-dependencies-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR-master-emit-module.d -o /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.swiftmodule -emit-abi-descriptor-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.abi.json
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -frontend -emit-module -experimental-skip-non-inlinable-function-bodies-without-types /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfile.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalEntryView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORProgressRing.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/MainTabView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Color+Theme.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskAssessmentView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/GradientBackground.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Logger.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskResultsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingCardView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntry.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/JournalEntryCard+Models.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/JournalViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/PrivacySettingsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DataExportService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionRequestView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/ModelExtensions.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/MoodFilterPill.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/SobrietyProgressCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/UserProfileViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/AppRootView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/KeychainHelper.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PrivacyDisclaimerView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessment.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/CheckInView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/WelcomeView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/SobrietyTracker.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalEditorView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORButton.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/AppState.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskAssessmentHistoryView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfileEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalListView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ComponentUtilities.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ANCHORApp.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/DateFormatter+Extensions.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskQuestionView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/FinishSetupView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/JournalEntryCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Persistence.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DailyQuoteService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntryEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/MonthHeaderCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ShimmeringView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/RiskAssessmentViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/SettingsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/EncryptionService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/OnboardingModels.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/StatCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/BreathingExerciseView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/NotificationsService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/SplashScreenView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessmentEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalDetailView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORMoodIcon.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/ContentView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/ANCHORDesign.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataClass.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataProperties.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/ANCHOR+CoreDataModel.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/GeneratedAssetSymbols.swift -target arm64-apple-ios18.4-simulator -Xllvm -aarch64-use-tbi -enable-objc-interop -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.4.sdk -I /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator -F /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator -no-color-diagnostics -enable-testing -g -debug-info-format\=dwarf -dwarf-version\=5 -module-cache-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -profile-generate -profile-coverage-mapping -swift-version 5 -enforce-exclusivity\=checked -Onone -D DEBUG -serialize-debugging-options -const-gather-protocols-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR_const_extract_protocols.json -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -empty-abi-descriptor -validate-clang-modules-once -clang-build-session-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -working-directory -Xcc /Users/angadkumar16ak/Projects/ANCHOR -resource-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift -enable-anonymous-context-mangled-names -file-compilation-dir /Users/angadkumar16ak/Projects/ANCHOR -Xcc -ivfsstatcache -Xcc /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator18.4-22E235-71825a6d136aa4733edcbe86ece5525b.sdkstatcache -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/swift-overrides.hmap -Xcc -iquote -Xcc /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-generated-files.hmap -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-own-target-headers.hmap -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-all-target-headers.hmap -Xcc -iquote -Xcc /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-project-headers.hmap -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources-normal/arm64 -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/arm64 -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources -Xcc -DDEBUG\=1 -module-name ANCHOR -frontend-parseable-output -disable-clang-spi -target-sdk-version 18.4 -target-sdk-name iphonesimulator18.4 -external-plugin-path /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server -external-plugin-path /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/local/lib/swift/host/plugins\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server -in-process-plugin-server-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/libSwiftInProcPluginServer.dylib -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/local/lib/swift/host/plugins -emit-module-doc-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.swiftdoc -emit-module-source-info-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.swiftsourceinfo -emit-objc-header-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR-Swift.h -serialize-diagnostics-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR-master-emit-module.dia -emit-dependencies-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR-master-emit-module.d -o /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.swiftmodule -emit-abi-descriptor-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.abi.json
 
 EmitSwiftModule normal arm64 (in target 'ANCHOR' from project 'ANCHOR')
     cd /Users/angadkumar16ak/Projects/ANCHOR
@@ -220,8 +348,30 @@ EmitSwiftModule normal arm64 (in target 'ANCHOR' from project 'ANCHOR')
     private var cardContent: some View {
                 ^
 
-SwiftCompile normal arm64 Compiling\ JournalViewModel.swift,\ Item+CoreDataClass.swift,\ Item+CoreDataProperties.swift,\ ANCHOR+CoreDataModel.swift,\ GeneratedAssetSymbols.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/JournalViewModel.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataClass.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataProperties.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/ANCHOR+CoreDataModel.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'ANCHOR' from project 'ANCHOR')
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/JournalViewModel.swift (in target 'ANCHOR' from project 'ANCHOR')
+SwiftCompile normal arm64 Compiling\ RiskAssessmentViewModel.swift,\ SettingsView.swift,\ EncryptionService.swift,\ PermissionsView.swift,\ OnboardingModels.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/RiskAssessmentViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/SettingsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/EncryptionService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/OnboardingModels.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/RiskAssessmentViewModel.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/SettingsView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/EncryptionService.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionsView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/OnboardingModels.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 Compiling\ ANCHORDesign.swift,\ Item+CoreDataClass.swift,\ Item+CoreDataProperties.swift,\ ANCHOR+CoreDataModel.swift,\ GeneratedAssetSymbols.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/ANCHORDesign.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataClass.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataProperties.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/ANCHOR+CoreDataModel.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'ANCHOR' from project 'ANCHOR')
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/ANCHORDesign.swift (in target 'ANCHOR' from project 'ANCHOR')
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
 
@@ -241,154 +391,7 @@ SwiftCompile normal arm64 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedD
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
 
-SwiftCompile normal arm64 Compiling\ AppRootView.swift,\ PrivacyDisclaimerView.swift,\ DateFormatter+Extensions.swift,\ JournalEntryCard+Models.swift,\ CheckInView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/AppRootView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PrivacyDisclaimerView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/DateFormatter+Extensions.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/JournalEntryCard+Models.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/CheckInView.swift (in target 'ANCHOR' from project 'ANCHOR')
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/AppRootView.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PrivacyDisclaimerView.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/DateFormatter+Extensions.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/JournalEntryCard+Models.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/CheckInView.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 Compiling\ RiskQuestionView.swift,\ FinishSetupView.swift,\ NotificationsService.swift,\ Persistence.swift,\ ANCHORButton.swift,\ RiskAssessmentEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskQuestionView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/FinishSetupView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/NotificationsService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Persistence.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORButton.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessmentEntity.swift (in target 'ANCHOR' from project 'ANCHOR')
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskQuestionView.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/FinishSetupView.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/NotificationsService.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Persistence.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORButton.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessmentEntity.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 Compiling\ WelcomeView.swift,\ JournalEditorView.swift,\ MoodFilterPill.swift,\ DailyQuoteService.swift,\ DashboardView.swift,\ UserProfileViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/WelcomeView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalEditorView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/MoodFilterPill.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DailyQuoteService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/UserProfileViewModel.swift (in target 'ANCHOR' from project 'ANCHOR')
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/WelcomeView.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalEditorView.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/MoodFilterPill.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DailyQuoteService.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardView.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/UserProfileViewModel.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 Compiling\ PermissionsView.swift,\ Color+Theme.swift,\ StatCard.swift,\ JournalEntryCard.swift,\ BreathingExerciseView.swift,\ RecoveryTipCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Color+Theme.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/StatCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/JournalEntryCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/BreathingExerciseView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift (in target 'ANCHOR' from project 'ANCHOR')
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionsView.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Color+Theme.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/StatCard.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/JournalEntryCard.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/BreathingExerciseView.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 Compiling\ RiskResultsView.swift,\ OnboardingCardView.swift,\ ANCHORProgressRing.swift,\ SobrietyTracker.swift,\ PrivacySettingsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskResultsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingCardView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORProgressRing.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/SobrietyTracker.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/PrivacySettingsView.swift (in target 'ANCHOR' from project 'ANCHOR')
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskResultsView.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingCardView.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORProgressRing.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/SobrietyTracker.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/PrivacySettingsView.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 Compiling\ RiskAssessmentViewModel.swift,\ JournalEntry.swift,\ JournalEntryView.swift,\ QuickActionCard.swift,\ DataExportService.swift,\ MainTabView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/RiskAssessmentViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntry.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalEntryView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DataExportService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/MainTabView.swift (in target 'ANCHOR' from project 'ANCHOR')
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/RiskAssessmentViewModel.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntry.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalEntryView.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DataExportService.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/MainTabView.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal arm64 Compiling\ ModelExtensions.swift,\ RiskAssessmentView.swift,\ KeychainHelper.swift,\ ANCHORMoodIcon.swift,\ RiskAssessment.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/ModelExtensions.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskAssessmentView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/KeychainHelper.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORMoodIcon.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessment.swift (in target 'ANCHOR' from project 'ANCHOR')
+SwiftCompile normal arm64 Compiling\ SplashScreenView.swift,\ RiskAssessmentEntity.swift,\ JournalDetailView.swift,\ ANCHORMoodIcon.swift,\ ContentView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/SplashScreenView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessmentEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalDetailView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORMoodIcon.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/ContentView.swift (in target 'ANCHOR' from project 'ANCHOR')
 Command SwiftCompile failed with a nonzero exit code
 
 ** BUILD FAILED **
@@ -397,7 +400,7 @@ Command SwiftCompile failed with a nonzero exit code
 The following build commands failed:
 	SwiftEmitModule normal arm64 Emitting\ module\ for\ ANCHOR (in target 'ANCHOR' from project 'ANCHOR')
 	EmitSwiftModule normal arm64 (in target 'ANCHOR' from project 'ANCHOR')
-	SwiftCompile normal arm64 Compiling\ ModelExtensions.swift,\ RiskAssessmentView.swift,\ KeychainHelper.swift,\ ANCHORMoodIcon.swift,\ RiskAssessment.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/ModelExtensions.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskAssessmentView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/KeychainHelper.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORMoodIcon.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessment.swift (in target 'ANCHOR' from project 'ANCHOR')
+	SwiftCompile normal arm64 Compiling\ SplashScreenView.swift,\ RiskAssessmentEntity.swift,\ JournalDetailView.swift,\ ANCHORMoodIcon.swift,\ ContentView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/SplashScreenView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessmentEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalDetailView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORMoodIcon.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/ContentView.swift (in target 'ANCHOR' from project 'ANCHOR')
 	Building project ANCHOR with scheme ANCHOR
 (4 failures)
 An error was encountered processing the command (domain=IXUserPresentableErrorDomain, code=1):
@@ -407,4 +410,4 @@ ANCHOR.app is missing its bundle executable. Please check your build settings to
 Underlying error (domain=IXUserPresentableErrorDomain, code=1):
 	Unable to Install “ANCHOR”
 	Please try again later.
-com.AngadKumar16.ANCHOR: 17207
+com.AngadKumar16.ANCHOR: 17338
