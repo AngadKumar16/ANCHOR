@@ -147,7 +147,11 @@ while : ; do
   if [ "$RUN_MODE" = "test" ]; then
     "${BUILD_BASE[@]}" -scheme "$SCHEME" -sdk iphonesimulator -destination "platform=iOS Simulator,name=$SIM_NAME" test > "$LOG" 2>&1 || true
   else
-    "${BUILD_BASE[@]}" -scheme "$SCHEME" -sdk iphonesimulator -destination "platform=iOS Simulator,name=$SIM_NAME" build > "$LOG" 2>&1 || true
+    if [ -n "${SIM_NAME:-}" ]; then
+      "${BUILD_BASE[@]}" -scheme "$SCHEME" -sdk iphonesimulator -destination "platform=iOS Simulator,name=$SIM_NAME" build > "$LOG" 2>&1 || true
+    else
+      "${BUILD_BASE[@]}" -scheme "$SCHEME" -sdk iphonesimulator build > "$LOG" 2>&1 || true
+    fi
   fi
 
   # optional launch mode to capture runtime logs for a short window
