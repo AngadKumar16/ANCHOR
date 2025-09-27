@@ -4,7 +4,7 @@ Command line invocation:
 Build settings from command line:
     SDKROOT = iphonesimulator26.0
 
-2025-09-27 08:25:18.410 xcodebuild[27596:4090263] [MT] IDERunDestination: Supported platforms for the buildables in the current scheme is empty.
+2025-09-27 08:25:21.448 xcodebuild[27655:4090541] [MT] IDERunDestination: Supported platforms for the buildables in the current scheme is empty.
 --- xcodebuild: WARNING: Using the first of multiple matching destinations:
 { platform:iOS Simulator, id:dvtdevice-DVTiOSDeviceSimulatorPlaceholder-iphonesimulator:placeholder, name:Any iOS Simulator Device }
 { platform:iOS Simulator, arch:arm64, id:FFE173D2-6257-4955-9FBC-B3B83FC9A0FB, OS:18.4, name:iPad (A16) }
@@ -73,8 +73,8 @@ ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeD
 
 ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
 
-Build description signature: 352e8c4afbfea85bc46163e02df8ebb6
-Build description path: /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/XCBuildData/352e8c4afbfea85bc46163e02df8ebb6.xcbuilddata
+Build description signature: 4ec67cf6afb8676867337d8c8e5c8f81
+Build description path: /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/XCBuildData/4ec67cf6afb8676867337d8c8e5c8f81.xcbuilddata
 ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.0.sdk /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.0-23A339-26257891a6c027eb51374368541b8346.sdkstatcache
     cd /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR.xcodeproj
     /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.0.sdk -o /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.0-23A339-26257891a6c027eb51374368541b8346.sdkstatcache
@@ -117,6 +117,83 @@ SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Co
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
 
+SwiftCompile normal x86_64 Compiling\ DateFormatter+Extensions.swift,\ Logger.swift,\ JournalViewModel.swift,\ RiskAssessmentViewModel.swift,\ UserProfileViewModel.swift,\ ANCHORButton.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/DateFormatter+Extensions.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Logger.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/JournalViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/RiskAssessmentViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/UserProfileViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORButton.swift (in target 'ANCHOR' from project 'ANCHOR')
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/DateFormatter+Extensions.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Logger.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/JournalViewModel.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/RiskAssessmentViewModel.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/UserProfileViewModel.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORButton.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 Compiling\ JournalEntry.swift,\ JournalEntryEntity.swift,\ ModelExtensions.swift,\ OnboardingModels.swift,\ RiskAssessment.swift,\ RiskAssessmentEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntry.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntryEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/ModelExtensions.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/OnboardingModels.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessment.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessmentEntity.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntry.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntryEntity.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/ModelExtensions.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/OnboardingModels.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessment.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessmentEntity.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 Compiling\ EncryptionService.swift,\ KeychainHelper.swift,\ NotificationsService.swift,\ ANCHORDesign.swift,\ AppState.swift,\ Color+Theme.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/EncryptionService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/KeychainHelper.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/NotificationsService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/ANCHORDesign.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/AppState.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Color+Theme.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/EncryptionService.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/KeychainHelper.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/NotificationsService.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/ANCHORDesign.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/AppState.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Color+Theme.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
 SwiftCompile normal x86_64 Compiling\ MonthHeaderCard.swift,\ MoodFilterPill.swift,\ QuickActionCard.swift,\ RecoveryTipCard.swift,\ ShimmeringView.swift,\ SobrietyProgressCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/MonthHeaderCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/MoodFilterPill.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ShimmeringView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/SobrietyProgressCard.swift (in target 'ANCHOR' from project 'ANCHOR')
 
 SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/MonthHeaderCard.swift (in target 'ANCHOR' from project 'ANCHOR')
@@ -144,6 +221,7 @@ SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Co
     
 
 SwiftCompile normal x86_64 Compiling\ StatCard.swift,\ JournalDetailView.swift,\ JournalEditorView.swift,\ JournalEntryView.swift,\ JournalListView.swift,\ FinishSetupView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/StatCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalDetailView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalEditorView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalEntryView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalListView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/FinishSetupView.swift (in target 'ANCHOR' from project 'ANCHOR')
+
 SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/StatCard.swift (in target 'ANCHOR' from project 'ANCHOR')
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
@@ -190,146 +268,25 @@ SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Ri
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
 
-SwiftCompile normal x86_64 Compiling\ Persistence.swift,\ Item+CoreDataClass.swift,\ Item+CoreDataProperties.swift,\ ANCHOR+CoreDataModel.swift,\ GeneratedAssetSymbols.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Persistence.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataClass.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataProperties.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/ANCHOR+CoreDataModel.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'ANCHOR' from project 'ANCHOR')
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Persistence.swift (in target 'ANCHOR' from project 'ANCHOR')
+SwiftCompile normal x86_64 Compiling\ OnboardingCardView.swift,\ OnboardingView.swift,\ PermissionRequestView.swift,\ PermissionsView.swift,\ PrivacyDisclaimerView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingCardView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionRequestView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PrivacyDisclaimerView.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingCardView.swift (in target 'ANCHOR' from project 'ANCHOR')
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
 
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataClass.swift (in target 'ANCHOR' from project 'ANCHOR')
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingView.swift (in target 'ANCHOR' from project 'ANCHOR')
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
 
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataProperties.swift (in target 'ANCHOR' from project 'ANCHOR')
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionRequestView.swift (in target 'ANCHOR' from project 'ANCHOR')
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
 
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/ANCHOR+CoreDataModel.swift (in target 'ANCHOR' from project 'ANCHOR')
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionsView.swift (in target 'ANCHOR' from project 'ANCHOR')
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
 
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 Compiling\ CheckInView.swift,\ ContentView.swift,\ DashboardView.swift,\ MainTabView.swift,\ ANCHORApp.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/CheckInView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/ContentView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/MainTabView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ANCHORApp.swift (in target 'ANCHOR' from project 'ANCHOR')
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/CheckInView.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/ContentView.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardView.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/MainTabView.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ANCHORApp.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 Compiling\ DateFormatter+Extensions.swift,\ Logger.swift,\ JournalViewModel.swift,\ RiskAssessmentViewModel.swift,\ UserProfileViewModel.swift,\ ANCHORButton.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/DateFormatter+Extensions.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Logger.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/JournalViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/RiskAssessmentViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/UserProfileViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORButton.swift (in target 'ANCHOR' from project 'ANCHOR')
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/DateFormatter+Extensions.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Logger.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/JournalViewModel.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/RiskAssessmentViewModel.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/UserProfileViewModel.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORButton.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 Compiling\ SobrietyTracker.swift,\ UserProfile.swift,\ UserProfileEntity.swift,\ AIAnalysisService.swift,\ DailyQuoteService.swift,\ DataExportService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/SobrietyTracker.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfile.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfileEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DailyQuoteService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DataExportService.swift (in target 'ANCHOR' from project 'ANCHOR')
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/SobrietyTracker.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfile.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfileEntity.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisService.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DailyQuoteService.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DataExportService.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 Compiling\ EncryptionService.swift,\ KeychainHelper.swift,\ NotificationsService.swift,\ ANCHORDesign.swift,\ AppState.swift,\ Color+Theme.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/EncryptionService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/KeychainHelper.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/NotificationsService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/ANCHORDesign.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/AppState.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Color+Theme.swift (in target 'ANCHOR' from project 'ANCHOR')
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/EncryptionService.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/KeychainHelper.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/NotificationsService.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/ANCHORDesign.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/AppState.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Color+Theme.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 Compiling\ RiskResultsView.swift,\ PrivacySettingsView.swift,\ SettingsView.swift,\ AppRootView.swift,\ BreathingExerciseView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskResultsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/PrivacySettingsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/SettingsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/AppRootView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/BreathingExerciseView.swift (in target 'ANCHOR' from project 'ANCHOR')
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskResultsView.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/PrivacySettingsView.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/SettingsView.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/AppRootView.swift (in target 'ANCHOR' from project 'ANCHOR')
-    cd /Users/angadkumar16ak/Projects/ANCHOR
-    
-
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/BreathingExerciseView.swift (in target 'ANCHOR' from project 'ANCHOR')
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PrivacyDisclaimerView.swift (in target 'ANCHOR' from project 'ANCHOR')
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
 
@@ -392,25 +349,73 @@ EmitSwiftModule normal x86_64 (in target 'ANCHOR' from project 'ANCHOR')
     private var cardContent: some View {
                 ^
 
-SwiftCompile normal x86_64 Compiling\ OnboardingCardView.swift,\ OnboardingView.swift,\ PermissionRequestView.swift,\ PermissionsView.swift,\ PrivacyDisclaimerView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingCardView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionRequestView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PrivacyDisclaimerView.swift (in target 'ANCHOR' from project 'ANCHOR')
+SwiftCompile normal x86_64 Compiling\ CheckInView.swift,\ ContentView.swift,\ DashboardView.swift,\ MainTabView.swift,\ ANCHORApp.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/CheckInView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/ContentView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/MainTabView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ANCHORApp.swift (in target 'ANCHOR' from project 'ANCHOR')
 
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingCardView.swift (in target 'ANCHOR' from project 'ANCHOR')
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/CheckInView.swift (in target 'ANCHOR' from project 'ANCHOR')
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
 
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingView.swift (in target 'ANCHOR' from project 'ANCHOR')
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/ContentView.swift (in target 'ANCHOR' from project 'ANCHOR')
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
 
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionRequestView.swift (in target 'ANCHOR' from project 'ANCHOR')
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardView.swift (in target 'ANCHOR' from project 'ANCHOR')
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
 
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionsView.swift (in target 'ANCHOR' from project 'ANCHOR')
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/MainTabView.swift (in target 'ANCHOR' from project 'ANCHOR')
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
 
-SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PrivacyDisclaimerView.swift (in target 'ANCHOR' from project 'ANCHOR')
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ANCHORApp.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 Compiling\ Persistence.swift,\ Item+CoreDataClass.swift,\ Item+CoreDataProperties.swift,\ ANCHOR+CoreDataModel.swift,\ GeneratedAssetSymbols.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Persistence.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataClass.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataProperties.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/ANCHOR+CoreDataModel.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Persistence.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataClass.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataProperties.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/ANCHOR+CoreDataModel.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 Compiling\ SobrietyTracker.swift,\ UserProfile.swift,\ UserProfileEntity.swift,\ AIAnalysisService.swift,\ DailyQuoteService.swift,\ DataExportService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/SobrietyTracker.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfile.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfileEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DailyQuoteService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DataExportService.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/SobrietyTracker.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfile.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfileEntity.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisService.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DailyQuoteService.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal x86_64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DataExportService.swift (in target 'ANCHOR' from project 'ANCHOR')
     cd /Users/angadkumar16ak/Projects/ANCHOR
     
 
