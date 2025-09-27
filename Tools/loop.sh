@@ -201,30 +201,63 @@ while : ; do
 
   # check git changes
   CUR_LOG_HASH="$(hash_log)"
-  if ! git diff --quiet --exit-code; then
-    CHANGED=$(git --no-pager diff --name-only)
-    echo "🧾 Git changes detected:"
-    echo "$CHANGED"
-    git add -A
-    if git commit -m "Auto-fixer: attempt $ATTEMPT" >/dev/null 2>&1; then
-      echo "Committed fixes (attempt $ATTEMPT)."
-    else
-      echo "(commit failed or no changes staged)"
-    fi
-    STAGNANT_COUNT=0
-    PREV_LOG_HASH="$CUR_LOG_HASH"
-    echo "$PREV_LOG_HASH" > "$LAST_HASH_FILE"
+  # ----- begin replacement block -----
+if ! git diff --quiet --exit-code; then
+  CHANGED=$(git --no-pager diff --name-only)
+  echo "🧾 Git changes detected:"
+  echo "$CHANGED"
+
+  git add -A
+  if git commit -m "Auto-fixer: attempt $ATTEMPT" >/dev/null 2>&1; then
+    echo "Committed fixes (attempt $ATTEMPT)."
   else
-    echo "No file changes made by AI."
-    if [ -n "$CUR_LOG_HASH" ] && [ "$CUR_LOG_HASH" = "$PREV_LOG_HASH" ]; then
-      STAGNANT_COUNT=$((STAGNANT_COUNT+1))
-      echo "Log repeated; stagnant count $STAGNANT_COUNT / $MAX_STAGNANT_ATTEMPTS"
-    else
-      STAGNANT_COUNT=0
-    fi
-    PREV_LOG_HASH="$CUR_LOG_HASH"
-    echo "$PREV_LOG_HASH" > "$LAST_HASH_FILE"
+    echo "(commit failed or no changes staged)"
   fi
+
+  # Reset counters because we made changes
+  STAGNANT_COUNT=0
+  NO_MODIFY_COUNT=0
+
+  PREV_LOG_HASH="$CUR_LOG_HASH"
+  echo "$PREV_LOG_HASH" > "$LAST_HASH_FILE"
+else
+  echo "No file changes made by AI."
+
+  # Increment no-modify counter (used to trigger feature generation)
+  NO_MODIFY_COUNT=$((NO_MODIFY_COUNT+1))
+  echo "No-modify count: $NO_MODIFY_COUNT / $NO_MODIFY_TRIGGER"
+
+  # Stagnation logic: repeated identical logs
+  if [ -n "$CUR_LOG_HASH" ] && [ "$CUR_LOG_HASH" = "$PREV_LOG_HASH" ]; then
+    STAGNANT_COUNT=$((STAGNANT_COUNT+1))
+    echo "Log repeated; stagnant count $STAGNANT_COUNT / $MAX_STAGNANT_ATTEMPTS"
+  else
+    STAGNANT_COUNT=0
+  fi
+
+  PREV_LOG_HASH="$CUR_LOG_HASH"
+  echo "$PREV_LOG_HASH" > "$LAST_HASH_FILE"
+fi
+# ----- end replacement block -----
+
+# After checking for changes, optionally trigger feature-add mode
+if [ "${NO_MODIFY_COUNT:-0}" -ge "${NO_MODIFY_TRIGGER:-4}" ]; then
+  echo "📌 No modifications for $NO_MODIFY_COUNT iterations — switching to feature-add mode."
+  if [ -f "$AI_FEATURES_PY" ]; then
+    FEAT_ARGS=()
+    [ "${FIXER_DRY_RUN:-0}" = "1" ] && FEAT_ARGS+=("--dry-run")
+    [ "${FIXER_DEBUG:-0}" = "1" ] && FEAT_ARGS+=("--debug")
+    [ "${FIXER_COMMIT:-0}" = "1" ] && FEAT_ARGS+=("--commit")
+    echo "Invoking features: $PYTHON $AI_FEATURES_PY ${FEAT_ARGS[*]}"
+    # shellcheck disable=SC2086
+    $PYTHON "$AI_FEATURES_PY" "${FEAT_ARGS[@]}" || echo "(ai_features returned non-zero; continuing)"
+  else
+    echo "ai_features script not found at $AI_FEATURES_PY"
+  fi
+  # reset to avoid retriggering immediately next loop
+  NO_MODIFY_COUNT=0
+fi
+
 
   if [ "$STAGNANT_COUNT" -ge "$MAX_STAGNANT_ATTEMPTS" ] && [ "$MAX_STAGNANT_ATTEMPTS" -gt 0 ]; then
     echo "No progress after $STAGNANT_COUNT repeats; stopping loop for manual inspection."
