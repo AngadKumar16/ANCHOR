@@ -191,12 +191,9 @@ while : ; do
   # if build had no "error:" lines, consider it successful for this iteration
   if ! grep -q "error:" "$LOG"; then
     echo "✅ Build succeeded (or no 'error:' lines) on attempt $ATTEMPT"
-    # reset NO_MODIFY_COUNT because successful build is progress
-    NO_MODIFY_COUNT=0
-    # clear last hash and continue (optional: exit on success)
-    [ -f "$LAST_HASH_FILE" ] && rm -f "$LAST_HASH_FILE"
-    # If you want the loop to stop on success uncomment next line:
-    # exit 0
+    # NOTE: Do NOT reset NO_MODIFY_COUNT here anymore.
+    # Previously this caused NO_MODIFY_COUNT never to reach the trigger when builds were clean.
+    # Leave NO_MODIFY_COUNT alone so feature-mode can trigger after N consecutive iterations with no git changes.
     # continue to next iteration (maybe run tests etc.)
   else
     echo "❌ Build failed — parsing build log and running AI fixer (dry-run first)..."
@@ -256,12 +253,15 @@ PY
     else
       echo "(commit failed or no changes staged)"
     fi
+    # Reset counters when actual changes are made
     STAGNANT_COUNT=0
     NO_MODIFY_COUNT=0
     PREV_LOG_HASH="$CUR_LOG_HASH"
     echo "$PREV_LOG_HASH" > "$LAST_HASH_FILE"
   else
     echo "No file changes made by AI."
+    # increment no-modify counter — now this happens whenever there are no git changes,
+    # regardless of whether build was successful or not.
     NO_MODIFY_COUNT=$((NO_MODIFY_COUNT+1))
     echo "No-modify count: $NO_MODIFY_COUNT / $NO_MODIFY_TRIGGER"
 
@@ -282,20 +282,27 @@ PY
       FEAT_ARGS=()
       [ "$FIXER_DEBUG" = "1" ] && FEAT_ARGS+=("--debug")
       echo "Invoking ai_features (dry-run): $PYTHON $AI_FEATURES_PY --dry-run ${FEAT_ARGS[*]}"
+      # capture output (robust)
       OUT_FEAT=$($PYTHON "$AI_FEATURES_PY" --dry-run "${FEAT_ARGS[@]}" 2>&1 || true)
       echo "$OUT_FEAT"
-      # decision: if output contains "[dry-run] Would" or "Would create" or "Would write", then apply
-      if echo "$OUT_FEAT" | grep -Ei "(would create|Would create|Would write|\[dry-run\])" >/dev/null 2>&1; then
+      # decision: look for a variety of indicators that features would be created/modified
+      if echo "$OUT_FEAT" | grep -Ei "(would (create|write|modify|add|change)|Will create|Will write|\[dry-run\])" >/dev/null 2>&1; then
         echo "ai_features dry-run indicates actions. Applying feature changes now..."
         $PYTHON "$AI_FEATURES_PY" --commit "${FEAT_ARGS[@]}" 2>&1 || echo "(ai_features apply returned non-zero; continuing)"
+        # After attempting to apply features, reset NO_MODIFY_COUNT so we don't immediately retrigger
+        NO_MODIFY_COUNT=0
       else
         echo "ai_features dry-run indicated no actions or nothing to add."
+        # If dry-run didn't indicate actions, still reset the counter so we don't spam dry-runs forever.
+        NO_MODIFY_COUNT=0
       fi
     else
       echo "ai_features script not found at $AI_FEATURES_PY"
+      # avoid infinite loop if script missing
+      NO_MODIFY_COUNT=0
     fi
-    # reset counter to avoid immediate re-trigger
-    NO_MODIFY_COUNT=0
+    # small safety sleep to avoid tight loop
+    sleep 1
   fi
 
   if [ "$STAGNANT_COUNT" -ge "$MAX_STAGNANT_ATTEMPTS" ] && [ "$MAX_STAGNANT_ATTEMPTS" -gt 0 ]; then
