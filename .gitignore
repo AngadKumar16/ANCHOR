@@ -26,3 +26,5 @@ fastlane/Preview.html
 *.DS_Store
 .env
 .env.*
+Tools/build.log
+Tools/.last_build_hash
