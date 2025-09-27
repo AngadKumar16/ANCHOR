@@ -48,6 +48,10 @@ echo "Starting auto-fixer in $PROJECT_DIR"
 echo "Mode: $RUN_MODE"
 echo "Logs -> $LOG"
 echo "Ctrl-C to stop, or create $TOOL_DIR/STOP to stop."
+echo "Tools/build.log" >> .gitignore
+echo "Tools/.last_build_hash" >> .gitignore
+git add .gitignore && git commit -m "Ignore build logs for auto-fixer" || true
+
 
 # helpers
 detect_scheme_and_build_base() {
