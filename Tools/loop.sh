@@ -246,22 +246,43 @@ PY
   fi
 
   # --- Check for git changes and update counters/trigger features when appropriate
+    # --- Check for git changes and update counters/trigger features when appropriate
   CUR_LOG_HASH="$(hash_log)"
   if ! git diff --quiet --exit-code; then
     CHANGED=$(git --no-pager diff --name-only)
-    echo "🧾 Git changes detected:"
+    echo "🧾 Git changes detected (raw):"
     echo "$CHANGED"
-    git add -A
-    if git commit -m "Auto-fixer: attempt $ATTEMPT" >/dev/null 2>&1; then
-      echo "Committed fixes (attempt $ATTEMPT)."
+
+    # Filter out tool-only changes (Tools/ build log / last hash)
+    # Keep user-code changes only (non-Tools)
+    CHANGED_USER=$(echo "$CHANGED" | grep -Ev '^Tools/' || true)
+
+    if [ -n "$CHANGED_USER" ]; then
+      echo "Committing user-code changes:"
+      echo "$CHANGED_USER"
+      # stage only user files (avoid committing logs/.last_build_hash)
+      git add $CHANGED_USER >/dev/null 2>&1 || git add -A
+      if git commit -m "Auto-fixer: attempt $ATTEMPT" >/dev/null 2>&1; then
+        echo "Committed fixes (attempt $ATTEMPT)."
+        # Reset counters when actual code changes are made
+        STAGNANT_COUNT=0
+        NO_MODIFY_COUNT=0
+      else
+        echo "(commit failed or no changes staged for user files)"
+      fi
+      PREV_LOG_HASH="$CUR_LOG_HASH"
+      echo "$PREV_LOG_HASH" > "$LAST_HASH_file" 2>/dev/null || true
     else
-      echo "(commit failed or no changes staged)"
+      # Only Tools/ or build artifacts changed — do NOT commit these; avoid resetting counters.
+      echo "Only tool/build-log changes detected (Tools/, build.log, or .last_build_hash). Skipping commit."
+      echo "You can inspect these with: git --no-pager diff -- Tools/"
+      # leave NO_MODIFY_COUNT unchanged so the no-modify streak can continue
+      # update prev log hash (so we can detect stagnation of log contents too)
+      PREV_LOG_HASH="$CUR_LOG_HASH"
+      echo "$PREV_LOG_HASH" > "$LAST_HASH_FILE"
+      # Optionally discard log changes so git working tree stays clean:
+      # git checkout -- Tools/build.log Tools/.last_build_hash >/dev/null 2>&1 || true
     fi
-    # Reset counters when actual changes are made
-    STAGNANT_COUNT=0
-    NO_MODIFY_COUNT=0
-    PREV_LOG_HASH="$CUR_LOG_HASH"
-    echo "$PREV_LOG_HASH" > "$LAST_HASH_FILE"
   else
     echo "No file changes made by AI."
     # increment no-modify counter — now this happens whenever there are no git changes,
@@ -278,6 +299,7 @@ PY
     PREV_LOG_HASH="$CUR_LOG_HASH"
     echo "$PREV_LOG_HASH" > "$LAST_HASH_FILE"
   fi
+
 
   # --- Feature mode trigger: run ai_features.py in dry-run, then apply if it would do something
   if [ "$NO_MODIFY_COUNT" -ge "$NO_MODIFY_TRIGGER" ]; then
