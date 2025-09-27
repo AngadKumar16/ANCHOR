@@ -4,8 +4,8 @@ Command line invocation:
 Build settings from command line:
     SDKROOT = iphonesimulator26.0
 
-2025-09-27 00:01:55.609 xcodebuild[25375:3994698] [MT] IDERunDestination: Supported platforms for the buildables in the current scheme is empty.
-2025-09-27 00:02:55.762 xcodebuild[25375:3994698] Writing error result bundle to /var/folders/hm/gd68b5j14yq0c1ljts5gp1x40000gn/T/ResultBundle_2025-27-09_00-02-0055.xcresult
+2025-09-27 00:03:58.765 xcodebuild[25405:3997417] [MT] IDERunDestination: Supported platforms for the buildables in the current scheme is empty.
+2025-09-27 00:04:58.948 xcodebuild[25405:3997417] Writing error result bundle to /var/folders/hm/gd68b5j14yq0c1ljts5gp1x40000gn/T/ResultBundle_2025-27-09_00-04-0058.xcresult
 xcodebuild: error: Could not configure request to show build settings: Unable to find a device matching the provided destination specifier:
 		{ platform:iOS Simulator, OS:latest, name:iPhone 16 }
 
