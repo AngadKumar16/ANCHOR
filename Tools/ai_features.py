@@ -2,36 +2,36 @@
 """
 Tools/ai_features.py
 
-- If no backend detected, create a minimal FastAPI scaffold under ./backend/
-- Otherwise read plan.md and create the first *unchecked* feature (one feature per run)
-  by generating:
+- Uses need_work.md (falls back to plan.md) as the queue of things that need work.
+- For the first unchecked item, generates:
     - <Feature>View.swift
     - <Feature>ViewModel.swift
-- Supports --dry-run, --commit, --debug
-- Writes debug log to ~/.ai-fix-issues/features.log when --debug is set
+- If no backend detected, creates a minimal FastAPI scaffold.
+- Flags: --dry-run, --commit, --debug, --force
+- Logs debug output to ~/.ai-fix-issues/features.log when --debug is set
+- If --commit is used and commit succeeds, marks the need_work item as done.
 """
 from __future__ import annotations
 import argparse
 import os
 import re
-import subprocess
-import time
 import shutil
+import subprocess
+import sys
+import tempfile
+import time
 from pathlib import Path
 from typing import List, Tuple
 
-# --- configuration ---
 HOME = str(Path.home())
 DEBUG_LOG_DIR = os.path.join(HOME, ".ai-fix-issues")
 os.makedirs(DEBUG_LOG_DIR, exist_ok=True)
 DEBUG_LOG = os.path.join(DEBUG_LOG_DIR, "features.log")
 
-# default timeouts (seconds)
+# timeouts (seconds)
 SEARCH_TIMEOUT = 6
-GREP_TIMEOUT = 6
-RUN_CMD_TIMEOUT = 20
+RUN_CMD_TIMEOUT = 12
 
-# --- logging helper ---
 def dlog(msg: str, debug: bool = False):
     line = str(msg).rstrip()
     print(line)
@@ -42,10 +42,9 @@ def dlog(msg: str, debug: bool = False):
         except Exception:
             pass
 
-# --- robust command runner preferring rg (ripgrep) ---
 def run_cmd(cmd: List[str], input_text: str = None, cwd: str = None, timeout: int = RUN_CMD_TIMEOUT) -> Tuple[int, str, str]:
     """
-    Run command (list). Returns (rc, stdout, stderr).
+    Run a command safely with a timeout. Returns (rc, stdout, stderr).
     """
     try:
         proc = subprocess.run(cmd, input=input_text, text=True, capture_output=True, check=False, cwd=cwd, timeout=timeout)
@@ -57,25 +56,22 @@ def run_cmd(cmd: List[str], input_text: str = None, cwd: str = None, timeout: in
 
 def search_repo(term: str, timeout: int = SEARCH_TIMEOUT) -> Tuple[int, str, str]:
     """
-    Search the repo for a term. Use 'rg' if present; otherwise use grep -R.
-    Excludes common heavy directories.
+    Prefer ripgrep (rg) if available for speed. Exclude .git, DerivedData, node_modules.
     """
     rg = shutil.which("rg")
     if rg:
         cmd = [rg, "--line-number", "--hidden", "--glob", "!.git/**", "--glob", "!DerivedData/**", "--glob", "!node_modules/**", "-n", term, "."]
         return run_cmd(cmd, timeout=timeout)
     else:
-        # fallback: grep with excludes
         cmd = ["grep", "-R", "--line-number", "--exclude-dir=.git", "--exclude-dir=DerivedData", "--exclude-dir=node_modules", "-n", term, "."]
         return run_cmd(cmd, timeout=timeout)
 
-# ---------- Backend detection + ensure ----------
+# ---------------- backend helpers ----------------
 def repo_has_backend() -> bool:
     candidates = ["backend", "server", "api", "app.py", "requirements.txt", "backend/app.py", "backend/Dockerfile"]
     for c in candidates:
         if os.path.exists(c):
             return True
-    # quick content search for common backend frameworks
     rc, out, err = search_repo(r"FastAPI|uvicorn|flask|django|express|Vapor|http.server", timeout=4)
     if rc == 0 and out.strip():
         return True
@@ -111,39 +107,36 @@ RUN pip install -r requirements.txt
 COPY . .
 CMD [ "uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000" ]
 """
-    with open("backend/app.py", "w", encoding="utf8") as f:
-        f.write(app_py)
-    with open("backend/requirements.txt", "w", encoding="utf8") as f:
-        f.write(reqs)
-    with open("backend/Dockerfile", "w", encoding="utf8") as f:
-        f.write(dockerfile)
+    Path("backend/app.py").write_text(app_py, encoding="utf8")
+    Path("backend/requirements.txt").write_text(reqs, encoding="utf8")
+    Path("backend/Dockerfile").write_text(dockerfile, encoding="utf8")
     for p in created:
         dlog("Created " + p, debug)
     return created
 
-# ---------- plan parsing & detection ----------
-def load_need_work(path: str = "need_work.md") -> List[str]:
+# ---------------- plan / need_work parsing ----------------
+def load_need_work(path: str = "need_work.md") -> Tuple[List[str], str]:
     """
-    Return a list of unchecked checklist items from need_work.md (in order).
-    Matches lines like "- [ ] Task", "* [ ] Task", "1. [ ] Task".
-    Falls back to plan.md if need_work.md is not present (backwards compatible).
+    Return (items, source_path) where items are unchecked list entries from need_work.md.
+    Falls back to plan.md if need_work.md doesn't exist.
     """
-    # prefer a dedicated need_work.md; fall back to plan.md
-    if Path(path).exists():
-        text = Path(path).read_text(encoding="utf8")
+    preferred = Path(path)
+    fallback = Path("plan.md")
+    if preferred.exists():
+        text = preferred.read_text(encoding="utf8")
+        source = str(preferred)
+    elif fallback.exists():
+        text = fallback.read_text(encoding="utf8")
+        source = str(fallback)
     else:
-        fallback = "plan.md"
-        if not Path(fallback).exists():
-            return []
-        text = Path(fallback).read_text(encoding="utf8")
+        return [], ""
 
-    # Find unchecked checklist items like "- [ ] Something"
     unchecked_pattern = re.compile(r'^[\s\-\*\d\.\)]*\[\s*\]\s*(.+)$', re.MULTILINE)
     items = [m.strip() for m in unchecked_pattern.findall(text)]
     if items:
-        return items
+        return items, source
 
-    # Fallback: collect non-empty non-heading lines (strip bullets)
+    # fallback: non-empty non-heading lines stripped of bullet prefixes
     lines = []
     for raw in text.splitlines():
         s = raw.strip()
@@ -151,8 +144,9 @@ def load_need_work(path: str = "need_work.md") -> List[str]:
             continue
         m = re.match(r'^[\-\*\d\.\)]\s*(.+)$', s)
         lines.append(m.group(1).strip() if m else s)
-    return lines
+    return lines, source
 
+# ---------------- detection heuristics ----------------
 def tokens_for_feature(feature: str) -> List[str]:
     words = re.findall(r"[A-Za-z0-9_]+", feature)
     tokens = [w.lower() for w in words if len(w) >= 4]
@@ -160,17 +154,6 @@ def tokens_for_feature(feature: str) -> List[str]:
         tokens = [w.lower() for w in words][:2]
     return tokens[:3]
 
-def feature_present_in_repo(feature: str) -> bool:
-    tokens = tokens_for_feature(feature)
-    if not tokens:
-        return False
-    for t in tokens:
-        rc, out, err = search_repo(t, timeout=4)
-        if rc == 0 and out.strip():
-            return True
-    return False
-
-# ---------- file generation helpers ----------
 def safe_name_from_feature(feature: str) -> str:
     base = re.sub(r"[^A-Za-z0-9 ]+", "", feature).strip()
     base = "".join(word.capitalize() for word in base.split())
@@ -180,8 +163,46 @@ def safe_name_from_feature(feature: str) -> str:
         base = base + "View"
     return base
 
+def feature_present_in_repo(feature: str) -> bool:
+    """
+    Stricter detection: check for filename or symbol matches first.
+    """
+    try:
+        base_view = safe_name_from_feature(feature)             # e.g. HabitTrackingView
+        vm_name = base_view.replace("View", "ViewModel")        # e.g. HabitTrackingViewModel
+
+        # 1) filename check
+        if any(Path(".").rglob(f"*{base_view}.swift")):
+            return True
+        if any(Path(".").rglob(f"*{vm_name}.swift")):
+            return True
+
+        # 2) symbol check
+        rc, out, err = search_repo(rf"struct\s+{re.escape(base_view)}\b", timeout=2)
+        if rc == 0 and out.strip():
+            return True
+        rc, out, err = search_repo(rf"class\s+{re.escape(vm_name)}\b", timeout=2)
+        if rc == 0 and out.strip():
+            return True
+
+        # 3) fallback: require 2 token matches (reduces false positives)
+        tokens = tokens_for_feature(feature)
+        if not tokens:
+            return False
+        matches = 0
+        for t in tokens:
+            rc, out, err = search_repo(t, timeout=2)
+            if rc == 0 and out.strip():
+                matches += 1
+            if matches >= 2:
+                return True
+        return False
+    except Exception:
+        # conservative: if detection fails, treat as missing so generator can run
+        return False
+
+# ---------------- Swift generation helpers ----------------
 def choose_target_dir() -> str:
-    # prefer existing candidates; otherwise create App/Features
     candidates = ["App/Features", "Sources", "App"]
     for cand in candidates:
         if os.path.exists(cand):
@@ -191,9 +212,6 @@ def choose_target_dir() -> str:
     return default
 
 def make_view_and_viewmodel(feature: str) -> Tuple[str, str, str, str]:
-    """
-    Returns (view_path, view_contents, vm_path, vm_contents)
-    """
     base = safe_name_from_feature(feature)
     target_dir = choose_target_dir()
     view_path = f"{target_dir}/{base}.swift"
@@ -225,7 +243,7 @@ final class {vm_name}: ObservableObject {{
     }}
 }}
 """
-    # note: escape backslash before .self properly inside Python triple-quoted string
+
     view_contents = f"""import SwiftUI
 
 // Auto-generated View for feature: {feature}
@@ -247,7 +265,7 @@ struct {base}: View {{
                             .padding(.top, 8)
                     }}
                 }} else {{
-                    List(viewModel.items, id: \\\\.self) {{ item in
+                    List(viewModel.items, id: \\.self) {{ item in
                         Text(item)
                     }}
                 }}
@@ -283,19 +301,30 @@ struct {base}_Preview: PreviewProvider {{
 """
     return view_path, view_contents, vm_path, vm_contents
 
-def write_with_backup(path: str, contents: str, debug: bool):
-    if os.path.exists(path):
-        ts = int(time.time())
-        bak = f"{path}.bak.{ts}"
-        try:
-            os.replace(path, bak)
-            dlog(f"Backed up existing {path} -> {bak}", debug)
-        except Exception as e:
-            dlog(f"Backup failed for {path}: {e}", debug)
-    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
-    with open(path, "w", encoding="utf8") as f:
-        f.write(contents)
-    dlog(f"Wrote {path}", debug)
+def atomic_write(path: str, contents: str, debug: bool):
+    tmp_fd, tmp_path = tempfile.mkstemp(prefix="ai_features_", suffix=".tmp")
+    os.close(tmp_fd)
+    try:
+        with open(tmp_path, "w", encoding="utf8") as f:
+            f.write(contents)
+        os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+        # backup if exists
+        if os.path.exists(path):
+            ts = int(time.time())
+            bak = f"{path}.bak.{ts}"
+            try:
+                os.replace(path, bak)
+                dlog(f"Backed up existing {path} -> {bak}", debug)
+            except Exception as e:
+                dlog(f"Backup failed for {path}: {e}", debug)
+        os.replace(tmp_path, path)
+        dlog(f"Wrote {path}", debug)
+    finally:
+        if os.path.exists(tmp_path):
+            try:
+                os.remove(tmp_path)
+            except Exception:
+                pass
 
 def git_commit(paths: List[str], msg: str, debug: bool) -> bool:
     if not paths:
@@ -312,17 +341,42 @@ def git_commit(paths: List[str], msg: str, debug: bool) -> bool:
     dlog(f"Committed: {msg}", debug)
     return True
 
-# ---------- main ----------
+# ---------------- need_work update ----------------
+def mark_need_work_done(feature: str, source_path: str, debug: bool) -> bool:
+    """
+    Marks the first unchecked line that matches the feature text as checked in source_path.
+    Returns True if changed and written.
+    """
+    p = Path(source_path)
+    if not p.exists():
+        return False
+    text = p.read_text(encoding="utf8")
+    # naive but safe: find the first line that contains the feature and an unchecked checkbox
+    lines = text.splitlines()
+    pattern = re.compile(r'(^[\s\-\*\d\.\)]*\[\s*\]\s*)(.*' + re.escape(feature) + r'.*)', re.IGNORECASE)
+    for i, ln in enumerate(lines):
+        m = pattern.search(ln)
+        if m:
+            lines[i] = ln.replace(m.group(1), m.group(1).replace("[ ]", "[x]") if "[ ]" in m.group(1) else m.group(1).replace("[]", "[x]"))
+            new_text = "\n".join(lines) + ("\n" if text.endswith("\n") else "")
+            atomic_write(str(p), new_text, debug)
+            dlog(f"Marked done in {source_path}: {feature}", debug)
+            return True
+    return False
+
+# ---------------- main ----------------
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true", help="Don't write files")
     parser.add_argument("--commit", action="store_true", help="git add & commit changes")
     parser.add_argument("--debug", action="store_true", help="Write debug log")
+    parser.add_argument("--force", action="store_true", help="Force adding a feature even if heuristics say none missing")
     args = parser.parse_args()
 
     dry = args.dry_run
     do_commit = args.commit
     debug = args.debug
+    force = args.force or os.environ.get("AI_FEATURES_FORCE") == "1"
 
     # 1) backend
     if not repo_has_backend():
@@ -335,47 +389,68 @@ def main():
             dlog("No backend files created.", debug)
         return
 
-    # 2) plan -> first unchecked item
-    plan_items = load_need_work()
-    if not plan_items:
-        dlog("plan.md not found or contains no items to process. Nothing to do.", debug)
+    # 2) need_work / plan
+    items, source = load_need_work()
+    if not items:
+        dlog("need_work.md / plan.md not found or contains no unchecked items. Nothing to do.", debug)
         return
 
-    dlog(f"plan.md contains {len(plan_items)} unchecked/target items; scanning for first missing feature...", debug)
-    target_feature = None
-    for item in plan_items:
-        # skip short lines or headings
-        if not item or len(item.strip()) < 3:
+    dlog(f"Loaded {len(items)} items from {source}; scanning for first missing feature...", debug)
+    target = None
+    for it in items:
+        if not it or len(it.strip()) < 3:
             continue
-        if feature_present_in_repo(item):
-            dlog(f"Feature already present (skipping): {item}", debug)
+        if feature_present_in_repo(it):
+            dlog(f"Feature already present (skipping): {it}", debug)
             continue
-        target_feature = item
+        target = it
         break
 
-    if not target_feature:
-        dlog("No missing frontend features found in plan.md (all present according to heuristics).", debug)
-        return
+    if not target:
+        if force:
+            dlog("Force set: selecting the first need_work item despite heuristics.", debug)
+            target = items[0]
+        else:
+            dlog("No missing frontend features found in need_work.md / plan.md (all present according to heuristics).", debug)
+            return
 
-    dlog("Will implement one feature this run: " + target_feature, debug)
-    view_path, view_contents, vm_path, vm_contents = make_view_and_viewmodel(target_feature)
+    dlog("Will implement feature: " + target, debug)
+    view_path, view_contents, vm_path, vm_contents = make_view_and_viewmodel(target)
 
     if dry:
         dlog(f"[dry-run] Would create: {view_path}", debug)
         dlog(f"[dry-run] Would create: {vm_path}", debug)
         return
 
-    # write files with backups
-    write_with_backup(view_path, view_contents, debug)
-    write_with_backup(vm_path, vm_contents, debug)
+    # write files
+    atomic_write(view_path, view_contents, debug)
+    atomic_write(vm_path, vm_contents, debug)
     created = [view_path, vm_path]
 
+    committed = False
     if do_commit:
-        ok = git_commit(created, f"AI-feature: add {target_feature}", debug)
-        if not ok:
+        ok = git_commit(created, f"AI-feature: add {target}", debug)
+        if ok:
+            committed = True
+        else:
             dlog("Commit failed for feature files.", debug)
-    else:
-        dlog(f"Created feature files: {created} (not committed).", debug)
+
+    dlog(f"Created feature files: {created} (committed={committed})", debug)
+
+    # mark the need_work item done when commit succeeded (or mark anyway if not committing is undesired)
+    if committed:
+        changed = mark_need_work_done(target, source, debug)
+        if changed:
+            # stage the change and commit again (append to commit message)
+            rc, out, err = run_cmd(["git", "add", source])
+            if rc == 0:
+                rc2, out2, err2 = run_cmd(["git", "commit", "--amend", "--no-edit"])
+                if rc2 == 0:
+                    dlog(f"Marked {target} done in {source} and amended commit.", debug)
+                else:
+                    dlog(f"Marked done but amend commit failed: {err2}", debug)
+            else:
+                dlog(f"Marked done but git add failed: {err}", debug)
 
 if __name__ == "__main__":
     main()
