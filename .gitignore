@@ -14,23 +14,14 @@ xcuserdata/
 .vscode/
 Packages/
 .package/
-
 # CocoaPods
 Pods/
-
 # Fastlane
 fastlane/report.xml
 fastlane/Preview.html
-
 # Personal
 *.DS_Store
 .env
 .env.*
-Tools/build.log
-Tools/.last_build_hash
-Tools/build.log
-Tools/.last_build_hash
-Tools/build.log
-Tools/.last_build_hash
 Tools/build.log
 Tools/.last_build_hash
