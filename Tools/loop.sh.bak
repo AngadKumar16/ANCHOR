@@ -41,7 +41,6 @@ RUN_MODE="${RUN_MODE:-build}"   # allowed: build | test | launch
 # counters
 STAGNANT_COUNT=0
 NO_MODIFY_COUNT=0
-FEAT_ARGS=()
 
 cd "$PROJECT_DIR" || exit 1
 
@@ -301,41 +300,43 @@ PY
 
   # --- Feature mode trigger: run ai_features.py in dry-run, then apply if it would do something
   if [ "$NO_MODIFY_COUNT" -ge "$NO_MODIFY_TRIGGER" ]; then
-  echo "📌 No modifications for $NO_MODIFY_COUNT iterations — switching to feature-add dry-run."
-  if [ -f "$AI_FEATURES_PY" ]; then
-    # Always initialize FEAT_ARGS so expansion is safe under 'set -u'
-    FEAT_ARGS=()
-    # Add debug flag if requested
-    if [ "${FIXER_DEBUG:-0}" = "1" ]; then
-      FEAT_ARGS+=("--debug")
-    fi
+    echo "📌 No modifications for $NO_MODIFY_COUNT iterations — switching to feature-add dry-run."
+    if [ -f "$AI_FEATURES_PY" ]; then
+      # initialize feature args array safely so `set -u` won't complain
+      FEAT_ARGS=()
+      [ "${FIXER_DEBUG:-0}" = "1" ] && FEAT_ARGS+=("--debug")
 
-    # Build a preview string safely (only if FEAT_ARGS non-empty)
-    if [ "${#FEAT_ARGS[@]}" -gt 0 ]; then
-      FEAT_PREVIEW="$(printf ' %s' "${FEAT_ARGS[@]}")"
+      # build a human readable command preview (join with spaces, safe if empty)
+      if [ "${#FEAT_ARGS[@]}" -gt 0 ]; then
+        FEAT_PREVIEW="$(printf ' %s' "${FEAT_ARGS[@]}")"
+      else
+        FEAT_PREVIEW=""
+      fi
+
+      echo "Invoking ai_features (dry-run): $PYTHON $AI_FEATURES_PY --dry-run${FEAT_PREVIEW}"
+      # run and capture output; use "${FEAT_ARGS[@]}" so empty array expands to nothing
+      OUT_FEAT=$($PYTHON "$AI_FEATURES_PY" --dry-run "${FEAT_ARGS[@]}" 2>&1 || true)
+      echo "$OUT_FEAT"
+
+      # decision: look for a variety of indicators that features would be created/modified
+      if echo "$OUT_FEAT" | grep -Ei "(would (create|write|modify|add|change)|Will create|Will write|\[dry-run\])" >/dev/null 2>&1; then
+        echo "ai_features dry-run indicates actions. Applying feature changes now..."
+        $PYTHON "$AI_FEATURES_PY" --commit "${FEAT_ARGS[@]}" 2>&1 || echo "(ai_features apply returned non-zero; continuing)"
+        # After attempting to apply features, reset NO_MODIFY_COUNT so we don't immediately retrigger
+        NO_MODIFY_COUNT=0
+      else
+        echo "ai_features dry-run indicated no actions or nothing to add."
+        # If dry-run didn't indicate actions, still reset the counter so we don't spam dry-runs forever.
+        NO_MODIFY_COUNT=0
+      fi
     else
-      FEAT_PREVIEW=""
-    fi
-
-    echo "Invoking ai_features (dry-run): $PYTHON $AI_FEATURES_PY --dry-run${FEAT_PREVIEW}"
-    # Call with "${FEAT_ARGS[@]}" so it safely expands to nothing if empty
-    OUT_FEAT=$($PYTHON "$AI_FEATURES_PY" --dry-run "${FEAT_ARGS[@]}" 2>&1 || true)
-    echo "$OUT_FEAT"
-
-    if echo "$OUT_FEAT" | grep -Ei "(would (create|write|modify|add|change)|Will create|Will write|\[dry-run\])" >/dev/null 2>&1; then
-      echo "ai_features dry-run indicates actions. Applying feature changes now..."
-      $PYTHON "$AI_FEATURES_PY" --commit "${FEAT_ARGS[@]}" 2>&1 || echo "(ai_features apply returned non-zero; continuing)"
-      NO_MODIFY_COUNT=0
-    else
-      echo "ai_features dry-run indicated no actions or nothing to add."
+      echo "ai_features script not found at $AI_FEATURES_PY"
+      # avoid infinite loop if script missing
       NO_MODIFY_COUNT=0
     fi
-  else
-    echo "ai_features script not found at $AI_FEATURES_PY"
-    NO_MODIFY_COUNT=0
+    # small safety sleep to avoid tight loop
+    sleep 1
   fi
-  sleep 1
-fi
 
   if [ "$STAGNANT_COUNT" -ge "$MAX_STAGNANT_ATTEMPTS" ] && [ "$MAX_STAGNANT_ATTEMPTS" -gt 0 ]; then
     echo "⚠️ No progress after $STAGNANT_COUNT repeats; stopping loop for manual inspection."

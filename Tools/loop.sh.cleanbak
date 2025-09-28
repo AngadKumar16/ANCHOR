@@ -42,6 +42,7 @@ RUN_MODE="${RUN_MODE:-build}"   # allowed: build | test | launch
 STAGNANT_COUNT=0
 NO_MODIFY_COUNT=0
 FEAT_ARGS=()
+FEAT_ARGS=()
 
 cd "$PROJECT_DIR" || exit 1
 

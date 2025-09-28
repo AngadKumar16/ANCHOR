@@ -1,0 +1,36 @@
+# Xcode
+build/
+DerivedData/
+*.xcworkspace
+xcuserdata/
+*.xcuserstate
+*.moved-aside
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+
+# Swift Package Manager
+.vscode/
+Packages/
+.package/
+
+# CocoaPods
+Pods/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+
+# Personal
+*.DS_Store
+.env
+.env.*
+Tools/build.log
+Tools/.last_build_hash
+Tools/build.log
+Tools/.last_build_hash
+Tools/build.log
+Tools/.last_build_hash
+Tools/build.log
+Tools/.last_build_hash
