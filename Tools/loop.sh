@@ -48,10 +48,6 @@ echo "Starting auto-fixer in $PROJECT_DIR"
 echo "Mode: $RUN_MODE"
 echo "Logs -> $LOG"
 echo "Ctrl-C to stop, or create $TOOL_DIR/STOP to stop."
-echo "Tools/build.log" >> .gitignore
-echo "Tools/.last_build_hash" >> .gitignore
-git add .gitignore && git commit -m "Ignore build logs for auto-fixer" || true
-
 
 # helpers
 detect_scheme_and_build_base() {
@@ -78,12 +74,13 @@ detect_scheme_and_build_base() {
 }
 
 detect_simulator() {
+  # Choose preferred simulator if available, otherwise pick the first iPhone device
   if xcrun simctl list devices available | grep -q "$PREFERRED_SIM"; then
     SIM_NAME="$PREFERRED_SIM"
   else
     SIM_NAME=$(xcrun simctl list devices available | grep -E 'iPhone' | sed -E 's/([^(]+) \(.*$/\1/' | sed -n '1p' | sed 's/ *$//')
   fi
-  if [ -z "$SIM_NAME" ]; then
+  if [ -z "${SIM_NAME:-}" ]; then
     echo "⚠️ No iPhone simulators available. Install runtimes in Xcode > Settings > Components."
     exit 1
   fi
@@ -106,8 +103,8 @@ hash_log() {
 build_ai_fix_args() {
   local args=()
   # always include dry-run first when called from main loop (we call apply separately)
-  [ "$FIXER_DEBUG" = "1" ] && args+=("--debug")
-  [ -n "$FIXER_MAX_EXCERPT" ] && args+=("--max-excerpt=$FIXER_MAX_EXCERPT")
+  [ "${FIXER_DEBUG:-0}" = "1" ] && args+=("--debug")
+  [ -n "${FIXER_MAX_EXCERPT:-}" ] && args+=("--max-excerpt=$FIXER_MAX_EXCERPT")
   echo "${args[@]}"
 }
 
@@ -124,7 +121,8 @@ fi
 trap 'echo "Interrupted by user"; exit 2' INT
 
 detect_scheme_and_build_base
-if [ "$RUN_MODE" = "launch" ] || [ "$RUN_MODE" = "test" ]; then
+# Ensure we detect simulator for build/test/launch (build uses simulator destination)
+if [ "$RUN_MODE" = "launch" ] || [ "$RUN_MODE" = "test" ] || [ "$RUN_MODE" = "build" ]; then
   detect_simulator
 fi
 
@@ -151,11 +149,7 @@ while : ; do
   if [ "$RUN_MODE" = "test" ]; then
     "${BUILD_BASE[@]}" -scheme "$SCHEME" -sdk iphonesimulator -destination "platform=iOS Simulator,name=$SIM_NAME" test > "$LOG" 2>&1 || true
   else
-    if [ -n "${SIM_NAME:-}" ]; then
-      "${BUILD_BASE[@]}" -scheme "$SCHEME" -sdk iphonesimulator -destination "platform=iOS Simulator,name=$SIM_NAME" build > "$LOG" 2>&1 || true
-    else
-      "${BUILD_BASE[@]}" -scheme "$SCHEME" -sdk iphonesimulator build > "$LOG" 2>&1 || true
-    fi
+    "${BUILD_BASE[@]}" -scheme "$SCHEME" -sdk iphonesimulator -destination "platform=iOS Simulator,name=$SIM_NAME" build > "$LOG" 2>&1 || true
   fi
 
   # optional launch mode to capture runtime logs for a short window
@@ -250,7 +244,6 @@ PY
   fi
 
   # --- Check for git changes and update counters/trigger features when appropriate
-    # --- Check for git changes and update counters/trigger features when appropriate
   CUR_LOG_HASH="$(hash_log)"
   if ! git diff --quiet --exit-code; then
     CHANGED=$(git --no-pager diff --name-only)
@@ -265,6 +258,7 @@ PY
       echo "Committing user-code changes:"
       echo "$CHANGED_USER"
       # stage only user files (avoid committing logs/.last_build_hash)
+      # note: using xargs is safer if many files include spaces - but keep simple
       git add $CHANGED_USER >/dev/null 2>&1 || git add -A
       if git commit -m "Auto-fixer: attempt $ATTEMPT" >/dev/null 2>&1; then
         echo "Committed fixes (attempt $ATTEMPT)."
@@ -275,22 +269,22 @@ PY
         echo "(commit failed or no changes staged for user files)"
       fi
       PREV_LOG_HASH="$CUR_LOG_HASH"
-      echo "$PREV_LOG_HASH" > "$LAST_HASH_file" 2>/dev/null || true
+      echo "$PREV_LOG_HASH" > "$LAST_HASH_FILE"
     else
       # Only Tools/ or build artifacts changed — do NOT commit these; avoid resetting counters.
       echo "Only tool/build-log changes detected (Tools/, build.log, or .last_build_hash). Skipping commit."
       echo "You can inspect these with: git --no-pager diff -- Tools/"
-      # leave NO_MODIFY_COUNT unchanged so the no-modify streak can continue
-      # update prev log hash (so we can detect stagnation of log contents too)
+      # Treat tool-only changes as "no-modify" iteration so features can trigger
       PREV_LOG_HASH="$CUR_LOG_HASH"
       echo "$PREV_LOG_HASH" > "$LAST_HASH_FILE"
-      # Optionally discard log changes so git working tree stays clean:
+      NO_MODIFY_COUNT=$((NO_MODIFY_COUNT+1))
+      echo "No-modify count (tool-only changes): $NO_MODIFY_COUNT / $NO_MODIFY_TRIGGER"
+      # Optionally revert/unstage the tool files so the working tree stays clean:
       # git checkout -- Tools/build.log Tools/.last_build_hash >/dev/null 2>&1 || true
     fi
   else
     echo "No file changes made by AI."
-    # increment no-modify counter — now this happens whenever there are no git changes,
-    # regardless of whether build was successful or not.
+    # increment no-modify counter — this happens whenever there are no git changes at all
     NO_MODIFY_COUNT=$((NO_MODIFY_COUNT+1))
     echo "No-modify count: $NO_MODIFY_COUNT / $NO_MODIFY_TRIGGER"
 
@@ -304,17 +298,26 @@ PY
     echo "$PREV_LOG_HASH" > "$LAST_HASH_FILE"
   fi
 
-
   # --- Feature mode trigger: run ai_features.py in dry-run, then apply if it would do something
   if [ "$NO_MODIFY_COUNT" -ge "$NO_MODIFY_TRIGGER" ]; then
     echo "📌 No modifications for $NO_MODIFY_COUNT iterations — switching to feature-add dry-run."
     if [ -f "$AI_FEATURES_PY" ]; then
+      # initialize feature args array safely so `set -u` won't complain
       FEAT_ARGS=()
-      [ "$FIXER_DEBUG" = "1" ] && FEAT_ARGS+=("--debug")
-      echo "Invoking ai_features (dry-run): $PYTHON $AI_FEATURES_PY --dry-run ${FEAT_ARGS[*]}"
-      # capture output (robust)
+      [ "${FIXER_DEBUG:-0}" = "1" ] && FEAT_ARGS+=("--debug")
+
+      # build a human readable command preview (join with spaces, safe if empty)
+      if [ "${#FEAT_ARGS[@]}" -gt 0 ]; then
+        FEAT_PREVIEW="$(printf ' %s' "${FEAT_ARGS[@]}")"
+      else
+        FEAT_PREVIEW=""
+      fi
+
+      echo "Invoking ai_features (dry-run): $PYTHON $AI_FEATURES_PY --dry-run${FEAT_PREVIEW}"
+      # run and capture output; use "${FEAT_ARGS[@]}" so empty array expands to nothing
       OUT_FEAT=$($PYTHON "$AI_FEATURES_PY" --dry-run "${FEAT_ARGS[@]}" 2>&1 || true)
       echo "$OUT_FEAT"
+
       # decision: look for a variety of indicators that features would be created/modified
       if echo "$OUT_FEAT" | grep -Ei "(would (create|write|modify|add|change)|Will create|Will write|\[dry-run\])" >/dev/null 2>&1; then
         echo "ai_features dry-run indicates actions. Applying feature changes now..."
