@@ -319,20 +319,12 @@ PY
 
     echo "Invoking ai_features (dry-run): $PYTHON $AI_FEATURES_PY --dry-run${FEAT_PREVIEW}"
     # Call with "${FEAT_ARGS[@]}" so it safely expands to nothing if empty
-    if [ "${#FEAT_ARGS[@]}" -gt 0 ]; then
-      OUT_FEAT=$($PYTHON "$AI_FEATURES_PY" --dry-run "${FEAT_ARGS[@]}" 2>&1 || true)
-    else
-      OUT_FEAT=$($PYTHON "$AI_FEATURES_PY" --dry-run 2>&1 || true)
-    fi
+    OUT_FEAT=$($PYTHON "$AI_FEATURES_PY" --dry-run "${FEAT_ARGS[@]}" 2>&1 || true)
     echo "$OUT_FEAT"
 
     if echo "$OUT_FEAT" | grep -Ei "(would (create|write|modify|add|change)|Will create|Will write|\[dry-run\])" >/dev/null 2>&1; then
       echo "ai_features dry-run indicates actions. Applying feature changes now..."
-      if [ "${#FEAT_ARGS[@]}" -gt 0 ]; then
-        $PYTHON "$AI_FEATURES_PY" --commit "${FEAT_ARGS[@]}" 2>&1 || echo "(ai_features apply returned non-zero; continuing)"
-      else
-        $PYTHON "$AI_FEATURES_PY" --commit 2>&1 || echo "(ai_features apply returned non-zero; continuing)"
-      fi
+      $PYTHON "$AI_FEATURES_PY" --commit "${FEAT_ARGS[@]}" 2>&1 || echo "(ai_features apply returned non-zero; continuing)"
       NO_MODIFY_COUNT=0
     else
       echo "ai_features dry-run indicated no actions or nothing to add."
