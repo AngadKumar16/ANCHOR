@@ -153,52 +153,17 @@ def tokens_for_feature(feature: str) -> List[str]:
         tokens = [w.lower() for w in words][:2]
     return tokens[:3]
 
-
 def feature_present_in_repo(feature: str) -> bool:
-    """
-    Stricter detection: prefer filename / symbol matches over loose token hits.
-    Looks for <BaseName>View.swift and <BaseName>ViewModel.swift (anywhere in repo),
-    or Swift symbols:
-      struct <BaseName>View : View
-      class <BaseName>ViewModel : ObservableObject
-    Falls back to token-search only if symbol/filename search fails.
-    """
-    try:
-        # Build canonical names using safe_name_from_feature (returns PascalCase ending with 'View')
-        base_view = safe_name_from_feature(feature)           # e.g. HabitTrackingView
-        vm_name = base_view.replace("View", "ViewModel")     # e.g. HabitTrackingViewModel
-
-        # 1) Check for matching filenames anywhere in repo (fast)
-        # look for any file that ends with the target name
-        repo_paths = list(Path(".").rglob(f"*{base_view}.swift")) + list(Path(".").rglob(f"*{vm_name}.swift"))
-        if repo_paths:
-            return True
-
-        # 2) Check for Swift symbols (struct/class) using repo search (short timeout)
-        # Search for "struct <BaseView>" or "class <VMName>" which indicates actual code
-        rc, out, err = search_repo(rf"struct\s+{re.escape(base_view)}\b", timeout=2)
+    tokens = tokens_for_feature(feature)
+    if not tokens:
+        return False
+    for t in tokens:
+        rc, out, err = search_repo(t, timeout=4)
         if rc == 0 and out.strip():
             return True
-        rc, out, err = search_repo(rf"class\s+{re.escape(vm_name)}\b", timeout=2)
-        if rc == 0 and out.strip():
-            return True
+    return False
 
-        # 3) Fallback: token search (legacy behavior) but stricter: require 2 tokens to match
-        tokens = tokens_for_feature(feature)
-        if not tokens:
-            return False
-        matches = 0
-        for t in tokens:
-            rc, out, err = search_repo(t, timeout=2)
-            if rc == 0 and out.strip():
-                matches += 1
-            if matches >= 2:
-                return True
-        return False
-    except Exception:
-        # conservative: if detection fails unexpectedly, say False so feature can be created
-        return False
-
+# ---------- file generation helpers ----------
 def safe_name_from_feature(feature: str) -> str:
     base = re.sub(r"[^A-Za-z0-9 ]+", "", feature).strip()
     base = "".join(word.capitalize() for word in base.split())
