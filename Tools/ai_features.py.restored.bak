@@ -122,28 +122,21 @@ CMD [ "uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000" ]
     return created
 
 # ---------- plan parsing & detection ----------
-def load_need_work(path: str = "need_work.md") -> List[str]:
+def load_plan_unchecked(path: str = "plan.md") -> List[str]:
     """
-    Return a list of unchecked checklist items from need_work.md (in order).
-    Matches lines like "- [ ] Task", "* [ ] Task", "1. [ ] Task".
-    Falls back to plan.md if need_work.md is not present (backwards compatible).
+    Return a list of unchecked checklist items from plan.md (in order).
+    - matches lines like "- [ ] Feature name", "* [ ] Feature name", "1. [ ] Feature name"
+    If none found, fall back to non-empty non-heading lines (bullets/headings ignored).
     """
-    # prefer a dedicated need_work.md; fall back to plan.md
-    if Path(path).exists():
-        text = Path(path).read_text(encoding="utf8")
-    else:
-        fallback = "plan.md"
-        if not Path(fallback).exists():
-            return []
-        text = Path(fallback).read_text(encoding="utf8")
-
-    # Find unchecked checklist items like "- [ ] Something"
+    if not os.path.exists(path):
+        return []
+    text = Path(path).read_text(encoding="utf8")
+    # find unchecked checklist items
     unchecked_pattern = re.compile(r'^[\s\-\*\d\.\)]*\[\s*\]\s*(.+)$', re.MULTILINE)
     items = [m.strip() for m in unchecked_pattern.findall(text)]
     if items:
         return items
-
-    # Fallback: collect non-empty non-heading lines (strip bullets)
+    # fallback: collect non-heading non-empty lines (strip bullets)
     lines = []
     for raw in text.splitlines():
         s = raw.strip()
@@ -336,7 +329,7 @@ def main():
         return
 
     # 2) plan -> first unchecked item
-    plan_items = load_need_work()
+    plan_items = load_plan_unchecked()
     if not plan_items:
         dlog("plan.md not found or contains no items to process. Nothing to do.", debug)
         return
