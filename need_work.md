@@ -47,7 +47,7 @@
   - Data export options
   - Data deletion
   - Privacy settings
-- [ ] Notification preferences
+- [x] Notification preferences
   - Customizable reminders
   - Notification scheduling
   - Quiet hours
