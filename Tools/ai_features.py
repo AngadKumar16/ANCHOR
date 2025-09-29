@@ -147,13 +147,6 @@ def load_need_work(path: str = "need_work.md") -> Tuple[List[str], str]:
     return lines, source
 
 # ---------------- detection heuristics ----------------
-def tokens_for_feature(feature: str) -> List[str]:
-    words = re.findall(r"[A-Za-z0-9_]+", feature)
-    tokens = [w.lower() for w in words if len(w) >= 4]
-    if not tokens:
-        tokens = [w.lower() for w in words][:2]
-    return tokens[:3]
-
 def safe_name_from_feature(feature: str) -> str:
     base = re.sub(r"[^A-Za-z0-9 ]+", "", feature).strip()
     base = "".join(word.capitalize() for word in base.split())
@@ -163,9 +156,21 @@ def safe_name_from_feature(feature: str) -> str:
         base = base + "View"
     return base
 
-def feature_present_in_repo(feature: str) -> bool:
+def tokens_for_feature(feature: str) -> List[str]:
+    # keep tokens shorter but useful: include words of length >=3 (instead of 4)
+    words = re.findall(r"[A-Za-z0-9_]+", feature)
+    tokens = [w.lower() for w in words if len(w) >= 3]
+    if not tokens:
+        tokens = [w.lower() for w in words][:2]
+    return tokens[:4]  # allow up to 4 tokens for better chance of a same-file match
+
+def feature_present_in_repo(feature: str, debug: bool = False) -> bool:
     """
-    Stricter detection: check for filename or symbol matches first.
+    Stricter detection:
+      1) check for filename matches (e.g. HabitTrackingView.swift / HabitTrackingViewModel.swift)
+      2) check for symbol matches (struct/class)
+      3) fallback: require >=2 feature tokens to appear in the *same file*
+    Returns True if feature is likely present.
     """
     try:
         base_view = safe_name_from_feature(feature)             # e.g. HabitTrackingView
@@ -173,32 +178,68 @@ def feature_present_in_repo(feature: str) -> bool:
 
         # 1) filename check
         if any(Path(".").rglob(f"*{base_view}.swift")):
+            if debug: dlog(f"Filename match for view: {base_view}", debug)
             return True
         if any(Path(".").rglob(f"*{vm_name}.swift")):
+            if debug: dlog(f"Filename match for viewmodel: {vm_name}", debug)
             return True
 
         # 2) symbol check
         rc, out, err = search_repo(rf"struct\s+{re.escape(base_view)}\b", timeout=2)
         if rc == 0 and out.strip():
+            if debug: dlog(f"Symbol match (struct) for {base_view}: {out.splitlines()[0]}", debug)
             return True
         rc, out, err = search_repo(rf"class\s+{re.escape(vm_name)}\b", timeout=2)
         if rc == 0 and out.strip():
+            if debug: dlog(f"Symbol match (class) for {vm_name}: {out.splitlines()[0]}", debug)
             return True
 
-        # 3) fallback: require 2 token matches (reduces false positives)
+        # 3) fallback: require >=2 tokens to be found within the same file
         tokens = tokens_for_feature(feature)
         if not tokens:
+            if debug: dlog("No tokens extracted for feature; treating as missing.", debug)
             return False
-        matches = 0
+
+        # map: filename -> number of distinct tokens found in that file
+        file_token_counts = {}
+
         for t in tokens:
+            # search for token and parse matching filenames
             rc, out, err = search_repo(t, timeout=2)
-            if rc == 0 and out.strip():
-                matches += 1
-            if matches >= 2:
+            if rc != 0 and not out.strip():
+                # no matches for this token
+                if debug:
+                    dlog(f"Token '{t}' not found (rc={rc}).", debug)
+                continue
+            # parse filenames from rg/grep output lines like: path:line:match
+            for line in out.splitlines():
+                # ignore lines that don't look like 'file:'
+                parts = line.split(":", 2)
+                if not parts:
+                    continue
+                fname = parts[0]
+                # normalize
+                fname = fname.strip()
+                if not fname:
+                    continue
+                file_token_counts.setdefault(fname, set()).add(t)
+
+        # decide: any file that contains two or more distinct tokens?
+        for fname, tokenset in file_token_counts.items():
+            if debug:
+                dlog(f"File '{fname}' contained tokens: {sorted(tokenset)}", debug)
+            if len(tokenset) >= 2:
+                if debug:
+                    dlog(f"Found >=2 tokens in same file -> treating feature as present (file={fname}).", debug)
                 return True
+
+        if debug:
+            dlog(f"No same-file token matches for feature '{feature}'. Tokens tried: {tokens}", debug)
         return False
-    except Exception:
-        # conservative: if detection fails, treat as missing so generator can run
+
+    except Exception as e:
+        # conservative: if detection fails unexpectedly, treat as missing so generator can run
+        dlog(f"feature_present_in_repo exception: {e}", debug)
         return False
 
 # ---------------- Swift generation helpers ----------------
