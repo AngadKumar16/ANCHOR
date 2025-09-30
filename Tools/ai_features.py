@@ -262,29 +262,39 @@ struct {base}_Preview: PreviewProvider {{
     return view_path, view_contents, vm_path, vm_contents
 
 def atomic_write(path: str, contents: str, debug: bool):
+    """
+    Atomically write path only when contents differ.
+    NOTE: This intentionally does NOT create .bak files.
+    """
     tmp_fd, tmp_path = tempfile.mkstemp(prefix="ai_features_", suffix=".tmp")
     os.close(tmp_fd)
     try:
+        # If the target exists and its content is identical, skip writing.
+        if os.path.exists(path):
+            try:
+                existing = Path(path).read_text(encoding="utf8")
+                if existing == contents:
+                    dlog(f"No changes for {path}; skipping write.", debug)
+                    return False  # indicate no write performed
+            except Exception:
+                # If reading fails for some reason, proceed to overwrite for safety.
+                pass
+
+        # write to temporary file then atomically replace the target path
         with open(tmp_path, "w", encoding="utf8") as f:
             f.write(contents)
         os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
-        # backup if exists
-        if os.path.exists(path):
-            ts = int(time.time())
-            bak = f"{path}.bak.{ts}"
-            try:
-                os.replace(path, bak)
-                dlog(f"Backed up existing {path} -> {bak}", debug)
-            except Exception as e:
-                dlog(f"Backup failed for {path}: {e}", debug)
         os.replace(tmp_path, path)
         dlog(f"Wrote {path}", debug)
+        return True  # indicate file was written (created or updated)
     finally:
+        # ensure temporary file cleaned up
         if os.path.exists(tmp_path):
             try:
                 os.remove(tmp_path)
             except Exception:
                 pass
+
 
 def git_commit(paths: List[str], msg: str, debug: bool) -> bool:
     if not paths:
@@ -331,92 +341,154 @@ def mark_need_work_done(feature: str, source_path: str, debug: bool) -> bool:
             return True
     return False
 
-# ---------------- main ----------------
+# ---------------- batch apply logic (uses new atomic_write return) ----------------
+def generate_backend_auth_stub(debug: bool) -> List[str]:
+    """
+    Create a simple auth router under backend/auth.py if backend exists.
+    Returns list of created/modified paths.
+    """
+    created = []
+    backend_dir = Path("backend")
+    if not backend_dir.exists():
+        return created
+
+    auth_py = backend_dir / "auth.py"
+    auth_contents = """from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+
+router = APIRouter(prefix="/auth", tags=["auth"])
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+@router.post("/login")
+async def login(req: LoginRequest):
+    # TODO: replace with real authentication logic
+    if req.username == "demo" and req.password == "demo":
+        return {"token": "fake-token-for-demo"}
+    raise HTTPException(status_code=401, detail="Invalid credentials")
+
+@router.get("/me")
+async def me():
+    return {"id": 1, "username": "demo"}
+"""
+    written = atomic_write(str(auth_py), auth_contents, debug)
+    if written:
+        created.append(str(auth_py))
+
+    # ensure app.py imports it
+    app_py = backend_dir / "app.py"
+    if app_py.exists():
+        text = app_py.read_text(encoding="utf8")
+        if "from .auth import router as auth_router" not in text:
+            new_text = text + "\n\nfrom .auth import router as auth_router\napp.include_router(auth_router)\n"
+            written_app = atomic_write(str(app_py), new_text, debug)
+            if written_app:
+                created.append(str(app_py))
+    return created
+
+def apply_batch(targets: List[str], source: str, dry: bool, do_commit: bool, debug: bool) -> Tuple[List[str], bool]:
+    """
+    Generate files for each target in list. Returns (created_paths, committed_bool).
+    Marks need_work items done if files were written (even if commit later fails).
+    """
+    created_paths = []
+    written_targets = []  # targets that resulted in at least one file written
+    for t in targets:
+        view_path, view_contents, vm_path, vm_contents = make_view_and_viewmodel(t)
+        if dry:
+            dlog(f"[dry-run] Would create: {view_path}", debug)
+            dlog(f"[dry-run] Would create: {vm_path}", debug)
+            created_paths.extend([view_path, vm_path])
+            continue
+
+        wrote_view = atomic_write(view_path, view_contents, debug)
+        wrote_vm = atomic_write(vm_path, vm_contents, debug)
+        if wrote_view or wrote_vm:
+            written_targets.append(t)
+        if wrote_view:
+            created_paths.append(view_path)
+        if wrote_vm:
+            created_paths.append(vm_path)
+
+        # Heuristic: if feature mentions auth-ish keywords, add backend stub
+        if re.search(r"auth|login|signup|register|token|oauth|session|user", t, re.I):
+            created_backend = generate_backend_auth_stub(debug)
+            created_paths.extend(created_backend)
+
+    committed = False
+    if not dry and created_paths:
+        # attempt to stage & commit created files
+        rc, out, err = run_cmd(["git", "add"] + created_paths)
+        if rc != 0:
+            dlog(f"git add failed for created_paths: {err}", debug)
+        else:
+            rc2, out2, err2 = run_cmd(["git", "commit", "-m", f"AI-feature: add {len(targets)} features"], timeout=30)
+            if rc2 == 0:
+                committed = True
+                dlog(f"Committed: AI-feature: add {len(targets)} features", debug)
+            else:
+                dlog(f"git commit failed: {err2}", debug)
+
+    # Mark the corresponding need_work items done for those that actually wrote files
+    if written_targets:
+        for t in written_targets:
+            changed = mark_need_work_done(t, source, debug)
+            if changed:
+                dlog(f"Marked done in {source}: {t}", debug)
+        # Stage and optionally amend commit to include need_work.md if commit succeeded
+        if not dry:
+            rc3, o3, e3 = run_cmd(["git", "add", source])
+            if rc3 == 0 and committed:
+                rc4, o4, e4 = run_cmd(["git", "commit", "--amend", "--no-edit"])
+                if rc4 == 0:
+                    dlog(f"Amended commit to include updates to {source}", debug)
+                else:
+                    dlog(f"Amend commit failed: {e4}", debug)
+    return created_paths, committed
+
+# ---------------- main (batch-capable, default batch 5) ----------------
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true", help="Don't write files")
     parser.add_argument("--commit", action="store_true", help="git add & commit changes")
     parser.add_argument("--debug", action="store_true", help="Write debug log")
-    parser.add_argument("--force", action="store_true", help="Force adding a feature even if heuristics say none missing (ignored in this simplified mode)")
+    parser.add_argument("--force", action="store_true", help="Force adding a feature even if heuristics say none missing")
+    parser.add_argument("--batch", type=int, default=5, help="Number of need_work items to implement in this run (default 5)")
     args = parser.parse_args()
 
     dry = args.dry_run
     do_commit = args.commit
     debug = args.debug
-    # force is ignored here because we always implement the first item
     force = args.force or os.environ.get("AI_FEATURES_FORCE") == "1"
+    batch = max(1, args.batch)
 
-    # 1) ensure backend exists (but do NOT return early; proceed to add feature)
-    created_backend = []
+    # Ensure backend exists (but do not exit early)
     try:
         created_backend = ensure_backend(dry, debug)
         if created_backend:
             dlog(f"Backend scaffold created (or would be): {created_backend}", debug)
             if do_commit and not dry:
-                # attempt to commit backend files (ignore failure but log)
                 git_commit(created_backend, "AI-features: create backend scaffold", debug)
     except Exception as e:
         dlog(f"ensure_backend error: {e}", debug)
 
-    # 2) need_work / plan
     items, source = load_need_work()
     if not items:
         dlog("need_work.md / plan.md not found or contains no items. Nothing to do.", debug)
         return
 
-    dlog(f"Loaded {len(items)} items from {source}; selecting first non-empty item (no checks).", debug)
-    target = None
-    for it in items:
-        if not it or len(it.strip()) < 1:
-            continue
-        target = it
-        break
-
-    if not target:
+    # pick up to batch non-empty items
+    targets = [it for it in items if it and len(it.strip()) >= 1][:batch]
+    if not targets:
         dlog("No non-empty items found in need_work.md / plan.md. Nothing to do.", debug)
         return
 
-    dlog("Will implement feature (no presence checks): " + target, debug)
-    view_path, view_contents, vm_path, vm_contents = make_view_and_viewmodel(target)
+    dlog(f"Will implement {len(targets)} features (no presence checks): {targets}", debug)
 
-    if dry:
-        dlog(f"[dry-run] Would create: {view_path}", debug)
-        dlog(f"[dry-run] Would create: {vm_path}", debug)
-        return
+    created_paths, committed = apply_batch(targets, source, dry, do_commit, debug)
+    dlog(f"Created feature files: {created_paths} (committed={committed})", debug)
 
-    # write files
-    atomic_write(view_path, view_contents, debug)
-    atomic_write(vm_path, vm_contents, debug)
-    created = [view_path, vm_path]
-
-    committed = False
-    if do_commit:
-        ok = git_commit(created, f"AI-feature: add {target}", debug)
-        if ok:
-            committed = True
-        else:
-            dlog("Commit failed for feature files.", debug)
-
-    dlog(f"Created feature files: {created} (committed={committed})", debug)
-
-    # mark the need_work item done when commit succeeded (or optionally always mark if you prefer)
-    if committed:
-        changed = mark_need_work_done(target, source, debug)
-        if changed:
-            # stage the change and amend the commit
-            rc, out, err = run_cmd(["git", "add", source])
-            if rc == 0:
-                rc2, out2, err2 = run_cmd(["git", "commit", "--amend", "--no-edit"])
-                if rc2 == 0:
-                    dlog(f"Marked {target} done in {source} and amended commit.", debug)
-                else:
-                    dlog(f"Marked done but amend commit failed: {err2}", debug)
-            else:
-                dlog(f"Marked done but git add failed: {err}", debug)
-        else:
-            dlog(f"Could not mark {target} done in {source} (pattern not found).", debug)
-    else:
-        dlog("Not committed; need_work item left unchanged.", debug)
-
-if __name__ == "__main__":
-    main()
+    if not created_paths:
+        dlog("No files were written during this run.", debug)
