@@ -1,23 +1,21 @@
 #!/usr/bin/env bash
 # Tools/loop.sh
 # Orchestrates: build -> run -> ai-fix(dry-run) -> ai-fix(apply) -> commit -> repeat
-# After N no-modify iterations -> ai_features(dry-run) -> ai_features(apply)
+# After NO_MODIFY_TRIGGER no-modify iterations -> ai_features(dry-run) -> ai_features(apply)
 #
 # Usage: from repo root:
 #   RUN_MODE=launch ./Tools/loop.sh
 #
-# Env controls:
+# Env controls: (unchanged except NO_MODIFY_TRIGGER default now 1)
 #   FIXER_SCHEME        (optional) override scheme name
 #   MAX_RETRIES         (optional) 0 = infinite (default 0)
 #   PREFERRED_SIM       (optional) e.g. "iPhone 16" (default)
 #   RUN_MODE            "build" (default) | "test" | "launch"
 #   FIXER_DEBUG         "1" to enable ai-fix debug logs
 #   FIXER_MAX_EXCERPT   max excerpt passed to ai-fix (default 8000)
-#   NO_MODIFY_TRIGGER   number of no-modify iterations before features mode (default 4)
+#   NO_MODIFY_TRIGGER   number of no-modify iterations before features mode (default 1 -> immediate)
 #   MAX_STAGNANT_ATTEMPTS (default 5)
 #   PYTHON              python binary (default python3)
-#   GENAI_LOCAL/GEMINI_API_KEY for local Gemini if available
-#
 set -u
 
 PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
@@ -34,7 +32,7 @@ AI_FIX_NODE="$TOOL_DIR/ai-fix.js"
 AI_FEATURES_PY="$TOOL_DIR/ai_features.py"
 FIXER_DEBUG="${FIXER_DEBUG:-0}"
 FIXER_MAX_EXCERPT="${FIXER_MAX_EXCERPT:-8000}"
-NO_MODIFY_TRIGGER="${NO_MODIFY_TRIGGER:-4}"
+NO_MODIFY_TRIGGER="${NO_MODIFY_TRIGGER:-1}"   # DEFAULT CHANGED: 1 => trigger features immediately on first no-modify
 MAX_STAGNANT_ATTEMPTS="${MAX_STAGNANT_ATTEMPTS:-5}"
 RUN_MODE="${RUN_MODE:-build}"   # allowed: build | test | launch
 
@@ -50,7 +48,7 @@ echo "Mode: $RUN_MODE"
 echo "Logs -> $LOG"
 echo "Ctrl-C to stop, or create $TOOL_DIR/STOP to stop."
 
-# helpers
+# helpers (unchanged)
 detect_scheme_and_build_base() {
   if [ -f "$PROJECT_DIR/Anchor.xcworkspace" ]; then
     LIST_CMD=(xcodebuild -list -workspace Anchor.xcworkspace)
@@ -75,7 +73,6 @@ detect_scheme_and_build_base() {
 }
 
 detect_simulator() {
-  # Choose preferred simulator if available, otherwise pick the first iPhone device
   if xcrun simctl list devices available | grep -q "$PREFERRED_SIM"; then
     SIM_NAME="$PREFERRED_SIM"
   else
@@ -103,17 +100,14 @@ hash_log() {
 
 build_ai_fix_args() {
   local args=()
-  # always include dry-run first when called from main loop (we call apply separately)
   [ "${FIXER_DEBUG:-0}" = "1" ] && args+=("--debug")
   [ -n "${FIXER_MAX_EXCERPT:-}" ] && args+=("--max-excerpt=$FIXER_MAX_EXCERPT")
   echo "${args[@]}"
 }
 
-# read previous hash if present
 PREV_LOG_HASH=""
 [ -f "$LAST_HASH_FILE" ] && PREV_LOG_HASH="$(cat "$LAST_HASH_FILE" 2>/dev/null || true)"
 
-# make sure tools exist
 if [ ! -f "$AI_FIX_PY" ] && [ ! -f "$AI_FIX_NODE" ]; then
   echo "No ai-fix script found at $AI_FIX_PY or $AI_FIX_NODE. Please add one."
   exit 1
@@ -122,7 +116,6 @@ fi
 trap 'echo "Interrupted by user"; exit 2' INT
 
 detect_scheme_and_build_base
-# Ensure we detect simulator for build/test/launch (build uses simulator destination)
 if [ "$RUN_MODE" = "launch" ] || [ "$RUN_MODE" = "test" ] || [ "$RUN_MODE" = "build" ]; then
   detect_simulator
 fi
@@ -146,14 +139,12 @@ while : ; do
   echo "Attempt $ATTEMPT - $(date)"
   echo "Building..."
 
-  # run build/test (do not exit on non-zero)
   if [ "$RUN_MODE" = "test" ]; then
     "${BUILD_BASE[@]}" -scheme "$SCHEME" -sdk iphonesimulator -destination "platform=iOS Simulator,name=$SIM_NAME" test > "$LOG" 2>&1 || true
   else
     "${BUILD_BASE[@]}" -scheme "$SCHEME" -sdk iphonesimulator -destination "platform=iOS Simulator,name=$SIM_NAME" build > "$LOG" 2>&1 || true
   fi
 
-  # optional launch mode to capture runtime logs for a short window
   if [ "$RUN_MODE" = "launch" ]; then
     echo "Gathering build settings to locate built .app..."
     TMPSETTINGS="$TOOL_DIR/build_settings.txt"
@@ -191,33 +182,22 @@ while : ; do
     fi
   fi
 
-  # if build had no "error:" lines, consider it successful for this iteration
   if ! grep -q "error:" "$LOG"; then
     echo "✅ Build succeeded (or no 'error:' lines) on attempt $ATTEMPT"
-    # NOTE: Do NOT reset NO_MODIFY_COUNT here anymore.
-    # Previously this caused NO_MODIFY_COUNT never to reach the trigger when builds were clean.
-    # Leave NO_MODIFY_COUNT alone so feature-mode can trigger after N consecutive iterations with no git changes.
-    # continue to next iteration (maybe run tests etc.)
   else
     echo "❌ Build failed — parsing build log and running AI fixer (dry-run first)..."
-    # --- AI fixer dry-run
     AI_ARGS="$(build_ai_fix_args)"
     echo "Invoking ai-fix (dry-run): $PYTHON $AI_FIX_PY $LOG $AI_ARGS --dry-run"
-    # shellcheck disable=SC2086
     if [ -f "$AI_FIX_PY" ]; then
       $PYTHON "$AI_FIX_PY" "$LOG" $AI_ARGS --dry-run || echo "(ai-fix dry-run returned non-zero; continuing)"
     else
       node "$AI_FIX_NODE" "$LOG" --dry-run || echo "(node ai-fix dry-run returned non-zero; continuing)"
     fi
 
-    # detect whether ai-fix proposed changes by checking ~/.ai-fix-issues/issues.json
     ISSUES_DB="$HOME/.ai-fix-issues/issues.json"
     PROPOSED=0
-    if [ -f "$ISSUES_DB" ]; then
-      # non-empty json -> proposals present
-      if [ -s "$ISSUES_DB" ]; then
-        # check if JSON has any keys (naive)
-        if python3 - <<PY >/dev/null 2>&1
+    if [ -f "$ISSUES_DB" ] && [ -s "$ISSUES_DB" ]; then
+      if python3 - <<PY >/dev/null 2>&1
 import json,sys
 try:
   d=json.load(open("$ISSUES_DB"))
@@ -225,15 +205,13 @@ try:
 except Exception:
   sys.exit(1)
 PY
-        then
-          PROPOSED=1
-        fi
+      then
+        PROPOSED=1
       fi
     fi
 
     if [ "$PROPOSED" -eq 1 ]; then
       echo "AI produced proposals (dry-run). Now applying fixes (real run)..."
-      # apply fixes (no dry-run) and commit
       if [ -f "$AI_FIX_PY" ]; then
         $PYTHON "$AI_FIX_PY" "$LOG" $AI_ARGS --commit || echo "(ai-fix apply returned non-zero; continuing)"
       else
@@ -244,26 +222,20 @@ PY
     fi
   fi
 
-  # --- Check for git changes and update counters/trigger features when appropriate
   CUR_LOG_HASH="$(hash_log)"
   if ! git diff --quiet --exit-code; then
     CHANGED=$(git --no-pager diff --name-only)
     echo "🧾 Git changes detected (raw):"
     echo "$CHANGED"
 
-    # Filter out tool-only changes (Tools/ build log / last hash)
-    # Keep user-code changes only (non-Tools)
     CHANGED_USER=$(echo "$CHANGED" | grep -Ev '^Tools/' || true)
 
     if [ -n "$CHANGED_USER" ]; then
       echo "Committing user-code changes:"
       echo "$CHANGED_USER"
-      # stage only user files (avoid committing logs/.last_build_hash)
-      # note: using xargs is safer if many files include spaces - but keep simple
       git add $CHANGED_USER >/dev/null 2>&1 || git add -A
       if git commit -m "Auto-fixer: attempt $ATTEMPT" >/dev/null 2>&1; then
         echo "Committed fixes (attempt $ATTEMPT)."
-        # Reset counters when actual code changes are made
         STAGNANT_COUNT=0
         NO_MODIFY_COUNT=0
       else
@@ -272,20 +244,14 @@ PY
       PREV_LOG_HASH="$CUR_LOG_HASH"
       echo "$PREV_LOG_HASH" > "$LAST_HASH_FILE"
     else
-      # Only Tools/ or build artifacts changed — do NOT commit these; avoid resetting counters.
       echo "Only tool/build-log changes detected (Tools/, build.log, or .last_build_hash). Skipping commit."
-      echo "You can inspect these with: git --no-pager diff -- Tools/"
-      # Treat tool-only changes as "no-modify" iteration so features can trigger
       PREV_LOG_HASH="$CUR_LOG_HASH"
       echo "$PREV_LOG_HASH" > "$LAST_HASH_FILE"
       NO_MODIFY_COUNT=$((NO_MODIFY_COUNT+1))
       echo "No-modify count (tool-only changes): $NO_MODIFY_COUNT / $NO_MODIFY_TRIGGER"
-      # Optionally revert/unstage the tool files so the working tree stays clean:
-      # git checkout -- Tools/build.log Tools/.last_build_hash >/dev/null 2>&1 || true
     fi
   else
     echo "No file changes made by AI."
-    # increment no-modify counter — this happens whenever there are no git changes at all
     NO_MODIFY_COUNT=$((NO_MODIFY_COUNT+1))
     echo "No-modify count: $NO_MODIFY_COUNT / $NO_MODIFY_TRIGGER"
 
@@ -299,51 +265,48 @@ PY
     echo "$PREV_LOG_HASH" > "$LAST_HASH_FILE"
   fi
 
-  # --- Feature mode trigger: run ai_features.py in dry-run, then apply if it would do something
+  # --- Feature mode trigger (now immediate when NO_MODIFY_COUNT >= NO_MODIFY_TRIGGER)
   if [ "$NO_MODIFY_COUNT" -ge "$NO_MODIFY_TRIGGER" ]; then
-  echo "📌 No modifications for $NO_MODIFY_COUNT iterations — switching to feature-add dry-run."
-  if [ -f "$AI_FEATURES_PY" ]; then
-    # Always initialize FEAT_ARGS so expansion is safe under 'set -u'
-    FEAT_ARGS=()
-    # Add debug flag if requested
-    if [ "${FIXER_DEBUG:-0}" = "1" ]; then
-      FEAT_ARGS+=("--debug")
-    fi
-
-    # Build a preview string safely (only if FEAT_ARGS non-empty)
-    if [ "${#FEAT_ARGS[@]}" -gt 0 ]; then
-      FEAT_PREVIEW="$(printf ' %s' "${FEAT_ARGS[@]}")"
-    else
-      FEAT_PREVIEW=""
-    fi
-
-    echo "Invoking ai_features (dry-run): $PYTHON $AI_FEATURES_PY --dry-run${FEAT_PREVIEW}"
-    # Call with "${FEAT_ARGS[@]}" so it safely expands to nothing if empty
-    if [ "${#FEAT_ARGS[@]}" -gt 0 ]; then
-      OUT_FEAT=$($PYTHON "$AI_FEATURES_PY" --dry-run "${FEAT_ARGS[@]}" 2>&1 || true)
-    else
-      OUT_FEAT=$($PYTHON "$AI_FEATURES_PY" --dry-run 2>&1 || true)
-    fi
-    echo "$OUT_FEAT"
-
-    if echo "$OUT_FEAT" | grep -Ei "(would (create|write|modify|add|change)|Will create|Will write|\[dry-run\])" >/dev/null 2>&1; then
-      echo "ai_features dry-run indicates actions. Applying feature changes now..."
-      if [ "${#FEAT_ARGS[@]}" -gt 0 ]; then
-        $PYTHON "$AI_FEATURES_PY" --commit "${FEAT_ARGS[@]}" 2>&1 || echo "(ai_features apply returned non-zero; continuing)"
-      else
-        $PYTHON "$AI_FEATURES_PY" --commit 2>&1 || echo "(ai_features apply returned non-zero; continuing)"
+    echo "📌 No modifications for $NO_MODIFY_COUNT iterations — switching to feature-add dry-run."
+    if [ -f "$AI_FEATURES_PY" ]; then
+      FEAT_ARGS=()
+      if [ "${FIXER_DEBUG:-0}" = "1" ]; then
+        FEAT_ARGS+=("--debug")
       fi
-      NO_MODIFY_COUNT=0
+
+      if [ "${#FEAT_ARGS[@]}" -gt 0 ]; then
+        FEAT_PREVIEW="$(printf ' %s' "${FEAT_ARGS[@]}")"
+      else
+        FEAT_PREVIEW=""
+      fi
+
+      echo "Invoking ai_features (dry-run): $PYTHON $AI_FEATURES_PY --dry-run${FEAT_PREVIEW}"
+      if [ "${#FEAT_ARGS[@]}" -gt 0 ]; then
+        OUT_FEAT=$($PYTHON "$AI_FEATURES_PY" --dry-run "${FEAT_ARGS[@]}" 2>&1 || true)
+      else
+        OUT_FEAT=$($PYTHON "$AI_FEATURES_PY" --dry-run 2>&1 || true)
+      fi
+      echo "$OUT_FEAT"
+
+      if echo "$OUT_FEAT" | grep -Ei "(would (create|write|modify|add|change)|Will create|Will write|\[dry-run\])" >/dev/null 2>&1; then
+        echo "ai_features dry-run indicates actions. Applying feature changes now..."
+        if [ "${#FEAT_ARGS[@]}" -gt 0 ]; then
+          $PYTHON "$AI_FEATURES_PY" --commit "${FEAT_ARGS[@]}" 2>&1 || echo "(ai_features apply returned non-zero; continuing)"
+        else
+          $PYTHON "$AI_FEATURES_PY" --commit 2>&1 || echo "(ai_features apply returned non-zero; continuing)"
+        fi
+        # reset no-modify counter so we don't immediately re-trigger
+        NO_MODIFY_COUNT=0
+      else
+        echo "ai_features dry-run indicated no actions or nothing to add."
+        NO_MODIFY_COUNT=0
+      fi
     else
-      echo "ai_features dry-run indicated no actions or nothing to add."
+      echo "ai_features script not found at $AI_FEATURES_PY"
       NO_MODIFY_COUNT=0
     fi
-  else
-    echo "ai_features script not found at $AI_FEATURES_PY"
-    NO_MODIFY_COUNT=0
+    sleep 1
   fi
-  sleep 1
-fi
 
   if [ "$STAGNANT_COUNT" -ge "$MAX_STAGNANT_ATTEMPTS" ] && [ "$MAX_STAGNANT_ATTEMPTS" -gt 0 ]; then
     echo "⚠️ No progress after $STAGNANT_COUNT repeats; stopping loop for manual inspection."
