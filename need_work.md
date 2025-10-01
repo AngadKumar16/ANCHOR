@@ -10,17 +10,17 @@
   - Password reset flow
 
 ### Data Management
-- [ ] Set up cloud sync (iCloud/Core Data)
+- [x] Set up cloud sync (iCloud/Core Data)
   - Initial sync implementation
   - Conflict resolution
   - Offline support
-- [ ] Implement backup/restore functionality
+- [x] Implement backup/restore functionality
   - Local backup to files
   - Cloud backup options
   - Backup scheduling
 
 ### Core Features
-- [ ] Risk assessment system
+- [x] Risk assessment system
   - Question bank
   - Scoring algorithm
   - Response storage
@@ -28,22 +28,22 @@
 ## Critical Frontend Tasks
 
 ### Core User Experience
-- [ ] Mood tracking interface
+- [x] Mood tracking interface
   - Mood logging UI
   - Mood history visualization
   - Mood patterns and insights
 
 ### Journal Enhancements
-- [ ] Rich text formatting for entries
+- [x] Rich text formatting for entries
   - Basic formatting (bold, italic, lists)
   - Entry preview
-- [ ] Entry categorization/tagging
+- [x] Entry categorization/tagging
   - Tag management
   - Filtering by tags
   - Tag-based insights
 
 ### Settings & Preferences
-- [ ] Privacy controls
+- [x] Privacy controls
   - Data export options
   - Data deletion
   - Privacy settings
