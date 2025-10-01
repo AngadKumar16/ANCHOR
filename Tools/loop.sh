@@ -1,21 +1,15 @@
 #!/usr/bin/env bash
 # Tools/loop.sh
-# Orchestrates: build -> run -> ai-fix(dry-run) -> ai-fix(apply) -> commit -> repeat
-# After NO_MODIFY_TRIGGER no-modify iterations -> ai_features(dry-run) -> ai_features(apply)
+# Orchestrates: build -> run -> ai-fix(apply) -> commit -> repeat
+# After NO_MODIFY_TRIGGER no-modify iterations -> ai_features(apply)
 #
 # Usage: from repo root:
 #   RUN_MODE=launch ./Tools/loop.sh
 #
-# Env controls: (unchanged except NO_MODIFY_TRIGGER default now 1)
-#   FIXER_SCHEME        (optional) override scheme name
-#   MAX_RETRIES         (optional) 0 = infinite (default 0)
-#   PREFERRED_SIM       (optional) e.g. "iPhone 16" (default)
-#   RUN_MODE            "build" (default) | "test" | "launch"
-#   FIXER_DEBUG         "1" to enable ai-fix debug logs
-#   FIXER_MAX_EXCERPT   max excerpt passed to ai-fix (default 8000)
-#   NO_MODIFY_TRIGGER   number of no-modify iterations before features mode (default 1 -> immediate)
-#   MAX_STAGNANT_ATTEMPTS (default 5)
-#   PYTHON              python binary (default python3)
+# Env controls:
+#   FIXER_SCHEME, MAX_RETRIES, PREFERRED_SIM, RUN_MODE, FIXER_DEBUG,
+#   FIXER_MAX_EXCERPT, NO_MODIFY_TRIGGER (default 1), MAX_STAGNANT_ATTEMPTS,
+#   PYTHON (default python3), EXIT_ON_COMMIT_FAIL (default 1)
 set -u
 
 PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
@@ -32,9 +26,10 @@ AI_FIX_NODE="$TOOL_DIR/ai-fix.js"
 AI_FEATURES_PY="$TOOL_DIR/ai_features.py"
 FIXER_DEBUG="${FIXER_DEBUG:-0}"
 FIXER_MAX_EXCERPT="${FIXER_MAX_EXCERPT:-8000}"
-NO_MODIFY_TRIGGER="${NO_MODIFY_TRIGGER:-1}"   # DEFAULT CHANGED: 1 => trigger features immediately on first no-modify
+NO_MODIFY_TRIGGER="${NO_MODIFY_TRIGGER:-1}"   # trigger features immediately on first no-modify
 MAX_STAGNANT_ATTEMPTS="${MAX_STAGNANT_ATTEMPTS:-5}"
 RUN_MODE="${RUN_MODE:-build}"   # allowed: build | test | launch
+EXIT_ON_COMMIT_FAIL="${EXIT_ON_COMMIT_FAIL:-1}"  # 1 = stop loop if commit fails
 
 # counters
 STAGNANT_COUNT=0
@@ -47,8 +42,9 @@ echo "Starting auto-fixer in $PROJECT_DIR"
 echo "Mode: $RUN_MODE"
 echo "Logs -> $LOG"
 echo "Ctrl-C to stop, or create $TOOL_DIR/STOP to stop."
+echo "EXIT_ON_COMMIT_FAIL=$EXIT_ON_COMMIT_FAIL"
 
-# helpers (unchanged)
+# helpers
 detect_scheme_and_build_base() {
   if [ -f "$PROJECT_DIR/Anchor.xcworkspace" ]; then
     LIST_CMD=(xcodebuild -list -workspace Anchor.xcworkspace)
@@ -122,6 +118,13 @@ fi
 
 echo "NO_MODIFY_TRIGGER=$NO_MODIFY_TRIGGER, MAX_STAGNANT_ATTEMPTS=$MAX_STAGNANT_ATTEMPTS"
 
+# Run a command and return rc (prints output)
+run_and_capture() {
+  # "$@" is the command
+  "$@" 2>&1 | tee -a "$LOG"
+  return ${PIPESTATUS[0]:-0}
+}
+
 # Main loop
 while : ; do
   if [ -f "$TOOL_DIR/STOP" ]; then
@@ -139,14 +142,16 @@ while : ; do
   echo "Attempt $ATTEMPT - $(date)"
   echo "Building..."
 
+  # run build/test (do not exit on non-zero)
   if [ "$RUN_MODE" = "test" ]; then
     "${BUILD_BASE[@]}" -scheme "$SCHEME" -sdk iphonesimulator -destination "platform=iOS Simulator,name=$SIM_NAME" test > "$LOG" 2>&1 || true
   else
     "${BUILD_BASE[@]}" -scheme "$SCHEME" -sdk iphonesimulator -destination "platform=iOS Simulator,name=$SIM_NAME" build > "$LOG" 2>&1 || true
   fi
 
+  # optional launch mode to capture runtime logs for a short window
   if [ "$RUN_MODE" = "launch" ]; then
-    echo "Gathering build settings to locate built .app..."
+    echo "Gathering build settings to locate built .app..." | tee -a "$LOG"
     TMPSETTINGS="$TOOL_DIR/build_settings.txt"
     "${BUILD_BASE[@]}" -scheme "$SCHEME" -sdk iphonesimulator -destination "platform=iOS Simulator,name=$SIM_NAME" -showBuildSettings > "$TMPSETTINGS" 2>&1 || true
     BUILT_PRODUCTS_DIR=$(grep -m1 "BUILT_PRODUCTS_DIR" "$TMPSETTINGS" | awk -F'= ' '{print $2}' || true)
@@ -157,11 +162,11 @@ while : ; do
     fi
 
     if [ -n "$APP_PATH" ] && [ -d "$APP_PATH" ]; then
-      echo "Installing app to simulator..."
+      echo "Installing app to simulator..." | tee -a "$LOG"
       xcrun simctl install "$SIM_UDID" "$APP_PATH" >> "$LOG" 2>&1 || true
       BUNDLE_ID=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$APP_PATH/Info.plist" 2>/dev/null || true)
       if [ -n "$BUNDLE_ID" ]; then
-        echo "Launching $BUNDLE_ID on simulator (capturing console for 5s)..."
+        echo "Launching $BUNDLE_ID on simulator (capturing console for 5s)..." | tee -a "$LOG"
         if xcrun simctl launch --help 2>&1 | grep -q -- '--console'; then
           xcrun simctl launch --console "$SIM_UDID" "$BUNDLE_ID" >> "$LOG" 2>&1 &
           LAUNCH_PID=$!
@@ -175,99 +180,75 @@ while : ; do
           kill ${LOG_STREAM_PID} >/dev/null 2>&1 || true
         fi
       else
-        echo "Could not read CFBundleIdentifier; skipping launch."
+        echo "Could not read CFBundleIdentifier; skipping launch." | tee -a "$LOG"
       fi
     else
-      echo "No built .app found; skipping install/launch."
+      echo "No built .app found; skipping install/launch." | tee -a "$LOG"
     fi
   fi
 
+  # if build had no "error:" lines, consider it successful for this iteration
   if ! grep -q "error:" "$LOG"; then
-    echo "✅ Build succeeded (or no 'error:' lines) on attempt $ATTEMPT"
+    echo "✅ Build succeeded (or no 'error:' lines) on attempt $ATTEMPT" | tee -a "$LOG"
   else
-    echo "❌ Build failed — parsing build log and running AI fixer (dry-run first)..."
+    echo "❌ Build failed — parsing build log and running AI fixer (apply mode)..." | tee -a "$LOG"
     AI_ARGS="$(build_ai_fix_args)"
-    echo "Invoking ai-fix (dry-run): $PYTHON $AI_FIX_PY $LOG $AI_ARGS --dry-run"
+    echo "Invoking ai-fix (apply): $PYTHON $AI_FIX_PY $LOG $AI_ARGS --commit" | tee -a "$LOG"
+
     if [ -f "$AI_FIX_PY" ]; then
-      $PYTHON "$AI_FIX_PY" "$LOG" $AI_ARGS --dry-run || echo "(ai-fix dry-run returned non-zero; continuing)"
+      run_and_capture $PYTHON "$AI_FIX_PY" "$LOG" $AI_ARGS --commit
+      RC_AI_FIX=$?
     else
-      node "$AI_FIX_NODE" "$LOG" --dry-run || echo "(node ai-fix dry-run returned non-zero; continuing)"
+      run_and_capture node "$AI_FIX_NODE" "$LOG" --commit
+      RC_AI_FIX=$?
     fi
 
-    ISSUES_DB="$HOME/.ai-fix-issues/issues.json"
-    PROPOSED=0
-    if [ -f "$ISSUES_DB" ] && [ -s "$ISSUES_DB" ]; then
-      if python3 - <<PY >/dev/null 2>&1
-import json,sys
-try:
-  d=json.load(open("$ISSUES_DB"))
-  sys.exit(0 if (d and len(d.keys())>0) else 1)
-except Exception:
-  sys.exit(1)
-PY
-      then
-        PROPOSED=1
-      fi
-    fi
+    echo "ai-fix exit code: $RC_AI_FIX" | tee -a "$LOG"
 
-    if [ "$PROPOSED" -eq 1 ]; then
-      echo "AI produced proposals (dry-run). Now applying fixes (real run)..."
-      if [ -f "$AI_FIX_PY" ]; then
-        $PYTHON "$AI_FIX_PY" "$LOG" $AI_ARGS --commit || echo "(ai-fix apply returned non-zero; continuing)"
+    # if ai-fix wrote files, check commit status
+    if ! git diff --quiet --exit-code; then
+      CHANGED=$(git --no-pager diff --name-only)
+      echo "🧾 Git changes detected after ai-fix (raw):" | tee -a "$LOG"
+      echo "$CHANGED" | tee -a "$LOG"
+
+      CHANGED_USER=$(echo "$CHANGED" | grep -Ev '^Tools/' || true)
+
+      if [ -n "$CHANGED_USER" ]; then
+        echo "Committing user-code changes:" | tee -a "$LOG"
+        echo "$CHANGED_USER" | tee -a "$LOG"
+        git add $CHANGED_USER >/dev/null 2>&1 || git add -A
+        if git commit -m "Auto-fixer: attempt $ATTEMPT" >/dev/null 2>&1; then
+          echo "Committed fixes (attempt $ATTEMPT)." | tee -a "$LOG"
+          STAGNANT_COUNT=0
+          NO_MODIFY_COUNT=0
+        else
+          echo "(commit failed or no changes staged for user files)" | tee -a "$LOG"
+          if [ "$EXIT_ON_COMMIT_FAIL" = "1" ]; then
+            echo "Exiting loop due to commit failure (EXIT_ON_COMMIT_FAIL=1)." | tee -a "$LOG"
+            exit 2
+          fi
+        fi
+        PREV_LOG_HASH="$(hash_log)"
+        echo "$PREV_LOG_HASH" > "$LAST_HASH_FILE"
       else
-        node "$AI_FIX_NODE" "$LOG" --commit || echo "(node ai-fix apply returned non-zero; continuing)"
+        echo "Only tool/build-log changes detected (Tools/, build.log, or .last_build_hash). Skipping commit." | tee -a "$LOG"
+        PREV_LOG_HASH="$(hash_log)"
+        echo "$PREV_LOG_HASH" > "$LAST_HASH_FILE"
+        NO_MODIFY_COUNT=$((NO_MODIFY_COUNT+1))
+        echo "No-modify count (tool-only changes): $NO_MODIFY_COUNT / $NO_MODIFY_TRIGGER" | tee -a "$LOG"
       fi
     else
-      echo "AI dry-run produced no proposals; nothing to apply."
-    fi
-  fi
-
-  CUR_LOG_HASH="$(hash_log)"
-  if ! git diff --quiet --exit-code; then
-    CHANGED=$(git --no-pager diff --name-only)
-    echo "🧾 Git changes detected (raw):"
-    echo "$CHANGED"
-
-    CHANGED_USER=$(echo "$CHANGED" | grep -Ev '^Tools/' || true)
-
-    if [ -n "$CHANGED_USER" ]; then
-      echo "Committing user-code changes:"
-      echo "$CHANGED_USER"
-      git add $CHANGED_USER >/dev/null 2>&1 || git add -A
-      if git commit -m "Auto-fixer: attempt $ATTEMPT" >/dev/null 2>&1; then
-        echo "Committed fixes (attempt $ATTEMPT)."
-        STAGNANT_COUNT=0
-        NO_MODIFY_COUNT=0
-      else
-        echo "(commit failed or no changes staged for user files)"
-      fi
-      PREV_LOG_HASH="$CUR_LOG_HASH"
-      echo "$PREV_LOG_HASH" > "$LAST_HASH_FILE"
-    else
-      echo "Only tool/build-log changes detected (Tools/, build.log, or .last_build_hash). Skipping commit."
-      PREV_LOG_HASH="$CUR_LOG_HASH"
-      echo "$PREV_LOG_HASH" > "$LAST_HASH_FILE"
+      echo "No file changes made by ai-fix." | tee -a "$LOG"
       NO_MODIFY_COUNT=$((NO_MODIFY_COUNT+1))
-      echo "No-modify count (tool-only changes): $NO_MODIFY_COUNT / $NO_MODIFY_TRIGGER"
+      echo "No-modify count: $NO_MODIFY_COUNT / $NO_MODIFY_TRIGGER" | tee -a "$LOG"
+      PREV_LOG_HASH="$(hash_log)"
+      echo "$PREV_LOG_HASH" > "$LAST_HASH_FILE"
     fi
-  else
-    echo "No file changes made by AI."
-    NO_MODIFY_COUNT=$((NO_MODIFY_COUNT+1))
-    echo "No-modify count: $NO_MODIFY_COUNT / $NO_MODIFY_TRIGGER"
-
-    if [ -n "$CUR_LOG_HASH" ] && [ "$CUR_LOG_HASH" = "$PREV_LOG_HASH" ]; then
-      STAGNANT_COUNT=$((STAGNANT_COUNT+1))
-      echo "Log repeated; stagnant count $STAGNANT_COUNT / $MAX_STAGNANT_ATTEMPTS"
-    else
-      STAGNANT_COUNT=0
-    fi
-    PREV_LOG_HASH="$CUR_LOG_HASH"
-    echo "$PREV_LOG_HASH" > "$LAST_HASH_FILE"
   fi
 
   # --- Feature mode trigger (now immediate when NO_MODIFY_COUNT >= NO_MODIFY_TRIGGER)
   if [ "$NO_MODIFY_COUNT" -ge "$NO_MODIFY_TRIGGER" ]; then
-    echo "📌 No modifications for $NO_MODIFY_COUNT iterations — switching to feature-add dry-run."
+    echo "📌 No modifications for $NO_MODIFY_COUNT iterations — switching to feature-add (apply)..." | tee -a "$LOG"
     if [ -f "$AI_FEATURES_PY" ]; then
       FEAT_ARGS=()
       if [ "${FIXER_DEBUG:-0}" = "1" ]; then
@@ -280,40 +261,58 @@ PY
         FEAT_PREVIEW=""
       fi
 
-      echo "Invoking ai_features (dry-run): $PYTHON $AI_FEATURES_PY --dry-run${FEAT_PREVIEW}"
+      echo "Invoking ai_features (apply): $PYTHON $AI_FEATURES_PY --commit${FEAT_PREVIEW}" | tee -a "$LOG"
       if [ "${#FEAT_ARGS[@]}" -gt 0 ]; then
-        OUT_FEAT=$($PYTHON "$AI_FEATURES_PY" --dry-run "${FEAT_ARGS[@]}" 2>&1 || true)
+        run_and_capture $PYTHON "$AI_FEATURES_PY" --commit "${FEAT_ARGS[@]}"
+        RC_AI_FEAT=$?
       else
-        OUT_FEAT=$($PYTHON "$AI_FEATURES_PY" --dry-run 2>&1 || true)
+        run_and_capture $PYTHON "$AI_FEATURES_PY" --commit
+        RC_AI_FEAT=$?
       fi
-      echo "$OUT_FEAT"
 
-      if echo "$OUT_FEAT" | grep -Ei "(would (create|write|modify|add|change)|Will create|Will write|\[dry-run\])" >/dev/null 2>&1; then
-        echo "ai_features dry-run indicates actions. Applying feature changes now..."
-        if [ "${#FEAT_ARGS[@]}" -gt 0 ]; then
-          $PYTHON "$AI_FEATURES_PY" --commit "${FEAT_ARGS[@]}" 2>&1 || echo "(ai_features apply returned non-zero; continuing)"
+      echo "ai_features exit code: $RC_AI_FEAT" | tee -a "$LOG"
+
+      # if ai_features changed files, attempt commit
+      if ! git diff --quiet --exit-code; then
+        CHANGED=$(git --no-pager diff --name-only)
+        echo "🧾 Git changes detected after ai_features (raw):" | tee -a "$LOG"
+        echo "$CHANGED" | tee -a "$LOG"
+        CHANGED_USER=$(echo "$CHANGED" | grep -Ev '^Tools/' || true)
+        if [ -n "$CHANGED_USER" ]; then
+          git add $CHANGED_USER >/dev/null 2>&1 || git add -A
+          if git commit -m "AI-features: add features (attempt $ATTEMPT)" >/dev/null 2>&1; then
+            echo "Committed feature additions." | tee -a "$LOG"
+            NO_MODIFY_COUNT=0
+            STAGNANT_COUNT=0
+          else
+            echo "(feature commit failed)" | tee -a "$LOG"
+            if [ "$EXIT_ON_COMMIT_FAIL" = "1" ]; then
+              echo "Exiting loop due to commit failure (EXIT_ON_COMMIT_FAIL=1)." | tee -a "$LOG"
+              exit 3
+            fi
+          fi
         else
-          $PYTHON "$AI_FEATURES_PY" --commit 2>&1 || echo "(ai_features apply returned non-zero; continuing)"
+          echo "Only tool/build changes after ai_features; skipping commit." | tee -a "$LOG"
+          NO_MODIFY_COUNT=0
         fi
-        # reset no-modify counter so we don't immediately re-trigger
-        NO_MODIFY_COUNT=0
       else
-        echo "ai_features dry-run indicated no actions or nothing to add."
+        echo "No file changes made by ai_features." | tee -a "$LOG"
         NO_MODIFY_COUNT=0
       fi
+
     else
-      echo "ai_features script not found at $AI_FEATURES_PY"
+      echo "ai_features script not found at $AI_FEATURES_PY" | tee -a "$LOG"
       NO_MODIFY_COUNT=0
     fi
     sleep 1
   fi
 
   if [ "$STAGNANT_COUNT" -ge "$MAX_STAGNANT_ATTEMPTS" ] && [ "$MAX_STAGNANT_ATTEMPTS" -gt 0 ]; then
-    echo "⚠️ No progress after $STAGNANT_COUNT repeats; stopping loop for manual inspection."
+    echo "⚠️ No progress after $STAGNANT_COUNT repeats; stopping loop for manual inspection." | tee -a "$LOG"
     exit 2
   fi
 
   ATTEMPT=$((ATTEMPT+1))
-  echo "Sleeping $SLEEP_BETWEEN seconds..."
+  echo "Sleeping $SLEEP_BETWEEN seconds..." | tee -a "$LOG"
   sleep "$SLEEP_BETWEEN"
 done
