@@ -8,7 +8,7 @@ TOOLS="$ROOT/Tools"
 
 PYTHON="${PYTHON:-python3}"
 AI_FEATURES="$TOOLS/ai_features.py"
-IMPROVER="$TOOLS/improve_features.py"
+IMPROVER="$TOOLS/improve_features_v2.py"
 IMPROVER_ARGS="${IMPROVER_ARGS:-"--debug --batch 10 --force"}"
 BATCH="${BATCH:-8}"
 SLEEP="${SLEEP:-1}"

@@ -1,0 +1,3 @@
+# MoodTrackingInterfaceViewModel
+
+Auto-generated docs for MoodTrackingInterfaceViewModel

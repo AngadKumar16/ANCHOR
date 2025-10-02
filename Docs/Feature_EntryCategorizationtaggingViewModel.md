@@ -1,0 +1,3 @@
+# EntryCategorizationtaggingViewModel
+
+Auto-generated docs for EntryCategorizationtaggingViewModel

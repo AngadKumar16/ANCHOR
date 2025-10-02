@@ -1,0 +1,35 @@
+*** Begin Patch
+*** Update File: Tools/improve_features_v2.py
+@@
+ def atomic_write(path: Path, contents: str, debug: bool = False, dry: bool = False) -> bool:
+     """
+     Write only if different. Uses a persistent written_hashes file to avoid toggles.
+     When AGGRESSIVE is True the function will not respect the written_hash cache and
+     will attempt to write/overwrite existing files (still avoids rewrite when on-disk
+     content already exactly matches).
+     Returns True if written.
+     """
+     # In dry mode only print candidate
+     if dry:
+         log(f"[dry-run] would write {path}", debug)
+         return True
++
++    # Safety guard: avoid accidental writes to suspicious short filenames like "py"
++    # which often indicate a bug where only an extension or suffix got used as a full path.
++    try:
++        bad_names = {"py", "tmp", "tmpfile", ""}
++        suspicious_short = len(path.name) <= 3 and path.suffix == "" and path.name.isalpha()
++        if path.name in bad_names or suspicious_short:
++            log(f"SKIP writing suspicious filename {path} (possible bug).", True)
++            try:
++                import traceback
++                tb = "".join(traceback.format_stack(limit=6))
++                with open(LOG_FILE, "a", encoding="utf8") as f:
++                    f.write(f"{now()} suspicious atomic_write target: {path}\n{tb}\n")
++            except Exception:
++                pass
++            return False
++    except Exception:
++        # If guard fails for any reason, fall through to normal behavior
++        pass
+*** End Patch

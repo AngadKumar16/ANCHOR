@@ -2,10 +2,11 @@
 """
 Tools/improve_features_v2.py
 
-Priority-driven, idempotent improver for Swift code + backend wiring.
+Priority-driven, idempotent (but optionally aggressive) improver for Swift code + backend wiring.
 
 Behavior:
 - Priorities:
+  0) Placeholder/stub files first (aggressively fix placeholders)
   1) Swift files with <100 lines
   2) Files under App/Features/
   3) Swift files with <200 lines (excluding processed)
@@ -15,7 +16,7 @@ Behavior:
 - Persists processed file list to ~/.ai-fix-issues/processed_files.json.
 
 Usage:
-  python3 Tools/improve_features_v2.py [--dry-run] [--debug] [--force] [--max N]
+  python3 Tools/improve_features_v2.py [--dry-run] [--debug] [--force] [--max N] [--no-aggressive]
 
 Notes:
   - Run from repo root.
@@ -32,7 +33,9 @@ from pathlib import Path
 from typing import List, Set
 import hashlib
 
-
+# -------------------------
+# Configuration & constants
+# -------------------------
 HOME = Path.home()
 LOG_DIR = HOME / ".ai-fix-issues"
 LOG_DIR.mkdir(parents=True, exist_ok=True)
@@ -40,82 +43,30 @@ LOG_FILE = LOG_DIR / "improve_v2.log"
 STATE_FILE = LOG_DIR / "processed_files.json"
 
 BACKEND_APP = Path("backend") / "app.py"
+BACKEND_REGISTRY = Path("backend") / "_registry.json"
 API_CLIENT_PATH = Path("App") / "APIClient.swift"
 FEATURE_REGISTRY = Path("App") / "FeatureRegistry.swift"
+WRITTEN_HASHES = LOG_DIR / "written_hashes.json"
 
-# --- Utilities ---
-def now(): return time.strftime("%Y-%m-%d %H:%M:%S")
+# Default: aggressive ON (per your request). CLI exposes --no-aggressive to disable.
+AGGRESSIVE = True
+
+# -------------------------
+# Utilities
+# -------------------------
+def now() -> str:
+    return time.strftime("%Y-%m-%d %H:%M:%S")
 
 def log(msg: str, debug: bool = False):
-    line = f"{now()} {msg}"
-    print(msg)
+    """Log a message; also append to debug log file if debug True."""
+    prefix = f"[improver] {msg}"
+    print(prefix)
     if debug:
         try:
             with open(LOG_FILE, "a", encoding="utf8") as f:
-                f.write(line + "\n")
+                f.write(f"{now()} {prefix}\n")
         except Exception:
             pass
-
-def atomic_write(path: Path, contents: str, debug: bool = False, dry: bool = False) -> bool:
-    """
-    Write only if different. Uses a persistent written_hashes file to avoid toggles.
-    Returns True if written.
-    """
-    # In dry mode only print candidate
-    if dry:
-        log(f"[dry-run] would write {path}", debug)
-        return True
-
-    try:
-        # compute new hash
-        new_hash = sha256_text(contents)
-        hashes = load_written_hashes()
-
-        # If file exists, compare on-disk content too (safety)
-        if path.exists():
-            try:
-                old = path.read_text(encoding="utf8")
-                old_hash = sha256_text(old)
-                if old_hash == new_hash:
-                    # file on disk already matches content — nothing to do
-                    # but ensure cache knows this
-                    if hashes.get(str(path)) != new_hash:
-                        hashes[str(path)] = new_hash
-                        save_written_hashes(hashes)
-                    log(f"no-op (identical) {path}", debug)
-                    return False
-            except Exception:
-                pass
-
-        # If we previously wrote the same content for this path, skip rewrite
-        if hashes.get(str(path)) == new_hash:
-            # the disk might have been changed externally; still check and only write if different
-            if path.exists():
-                try:
-                    if sha256_text(path.read_text(encoding="utf8")) == new_hash:
-                        log(f"no-op (cached identical) {path}", debug)
-                        return False
-                except Exception:
-                    pass
-            # else fall through to write
-
-        # Write atomically
-        path.parent.mkdir(parents=True, exist_ok=True)
-        tmp = path.with_suffix(path.suffix + ".tmp")
-        tmp.write_text(contents, encoding="utf8")
-        tmp.replace(path)
-        log(f"WROTE {path}", debug)
-
-        # persist hash
-        hashes[str(path)] = new_hash
-        save_written_hashes(hashes)
-        return True
-    except Exception as e:
-        log(f"ERROR writing {path}: {e}", True)
-        return False
-
-
-WRITTEN_HASHES = LOG_DIR / "written_hashes.json"
 
 def sha256_text(s: str) -> str:
     return hashlib.sha256(s.encode("utf8")).hexdigest()
@@ -130,9 +81,146 @@ def load_written_hashes() -> dict:
 
 def save_written_hashes(d: dict):
     try:
-        WRITTEN_HASHES.write_text(json.dumps(d, indent=2), encoding="utf8")
+        # canonical JSON: sorted keys and compact separators for stability
+        WRITTEN_HASHES.write_text(json.dumps(d, indent=2, sort_keys=True, separators=(", ", ": ")), encoding="utf8")
     except Exception:
         pass
+
+
+def normalize_text(s: str) -> str:
+    """
+    Normalize generated text for stable comparisons:
+    - unify CRLF -> LF
+    - strip trailing whitespace on each line
+    - remove repeated blank lines (optional)
+    - ensure exactly one trailing newline
+    """
+    if s is None:
+        return ""
+    # unify line endings
+    s = s.replace("\r\n", "\n").replace("\r", "\n")
+    # strip trailing whitespace on each line
+    lines = [ln.rstrip() for ln in s.split("\n")]
+    # optionally collapse repeated blank lines (keep one)
+    out_lines = []
+    prev_blank = False
+    for ln in lines:
+        is_blank = (ln == "")
+        if is_blank and prev_blank:
+            # skip duplicate blank line
+            continue
+        out_lines.append(ln)
+        prev_blank = is_blank
+    # ensure single trailing newline
+    return ("\n".join(out_lines)).rstrip() + "\n"
+
+
+def atomic_write(path: Path, contents: str, debug: bool = False, dry: bool = False) -> bool:
+    """
+    Write only if different. Uses a persistent written_hashes file to avoid toggles.
+    When AGGRESSIVE is True the function will not respect the written_hash cache and
+    will attempt to write/overwrite existing files (still avoids rewrite when on-disk
+    content already exactly matches).
+    Returns True if written.
+    """
+    # In dry mode only print candidate
+    if dry:
+        log(f"[dry-run] would write {path}", debug)
+        return True
+    
+    try:
+        # Safety guard: avoid accidental writes to suspicious short filenames like "py"
+        try:
+            bad_names = {"py", "tmp", "tmpfile", ""}
+            suspicious_short = len(path.name) <= 3 and path.suffix == "" and path.name.isalpha()
+            if path.name in bad_names or suspicious_short:
+                log(f"SKIP writing suspicious filename {path} (possible bug).", True)
+                try:
+                    import traceback
+                    tb = "".join(traceback.format_stack(limit=6))
+                    with open(LOG_FILE, "a", encoding="utf8") as f:
+                        f.write(f"{now()} suspicious atomic_write target: {path}\n{tb}\n")
+                except Exception:
+                    pass
+                return False
+        except Exception:
+            pass
+
+        # Normalize new content for deterministic comparison
+        new_norm = normalize_text(contents)
+        new_hash = sha256_text(new_norm)
+        hashes = load_written_hashes()
+
+        # If file exists, compare normalized on-disk content (safety)
+        if path.exists():
+            try:
+                old = path.read_text(encoding="utf8")
+                old_norm = normalize_text(old)
+                old_hash = sha256_text(old_norm)
+                if old_hash == new_hash:
+                    # on-disk already matches content — nothing to do
+                    # but ensure cache knows this
+                    if hashes.get(str(path)) != new_hash:
+                        hashes[str(path)] = new_hash
+                        save_written_hashes(hashes)
+                    log(f"no-op (identical) {path}", debug)
+                    return False
+            except Exception:
+                pass
+
+
+        # compute new hash
+
+        # If file exists, compare on-disk content too (safety)
+        if path.exists():
+            try:
+                old = path.read_text(encoding="utf8")
+                old_hash = sha256_text(old)
+                if old_hash == new_hash:
+                    # on-disk already matches content — nothing to do
+                    # but ensure cache knows this
+                    if hashes.get(str(path)) != new_hash:
+                        hashes[str(path)] = new_hash
+                        save_written_hashes(hashes)
+                    log(f"no-op (identical) {path}", debug)
+                    return False
+            except Exception:
+                pass
+
+        # If we previously wrote the same content for this path, normally we'd skip.
+        # In AGGRESSIVE mode, ignore the 'written hashes' cache and force a re-write
+        # when necessary (but we already checked on-disk identical case above).
+        if not AGGRESSIVE:
+            if hashes.get(str(path)) == new_hash:
+                # the disk might have been changed externally; still check and only write if different
+                if path.exists():
+                    try:
+                        if sha256_text(path.read_text(encoding="utf8")) == new_hash:
+                            log(f"no-op (cached identical) {path}", debug)
+                            return False
+                    except Exception:
+                        pass
+                # else fall through to write
+
+        # Write atomically
+        path.parent.mkdir(parents=True, exist_ok=True)
+        tmp = path.with_suffix(path.suffix + ".tmp")
+        tmp.write_text(new_norm, encoding="utf8")
+        tmp.replace(path)
+        log(f"WROTE {path}", debug)
+
+        # persist hash
+        hashes[str(path)] = new_hash
+        save_written_hashes(hashes)
+        return True
+    except Exception as e:
+        log(f"ERROR writing {path}: {e}", True)
+        return False
+
+
+# -------------------------
+# File / project helpers
+# -------------------------
 def load_state() -> Set[str]:
     try:
         if STATE_FILE.exists():
@@ -143,12 +231,16 @@ def load_state() -> Set[str]:
 
 def save_state(processed: Set[str]):
     try:
-        STATE_FILE.write_text(json.dumps(sorted(processed)), encoding="utf8")
+        try:
+            STATE_FILE.write_text(json.dumps(sorted(processed), indent=2, separators=(", ", ": ")), encoding="utf8")
+        except Exception:
+            pass
     except Exception:
         pass
 
 def list_swift_files() -> List[Path]:
-    return sorted([p for p in Path(".").rglob("*.swift") if "Pods/" not in str(p) and ".build" not in str(p)])
+    """List all Swift files in the repo excluding Pods and Xcode build dirs."""
+    return sorted([p for p in Path(".").rglob("*.swift") if "Pods/" not in str(p) and ".build" not in str(p) and "Carthage/" not in str(p)])
 
 def file_length(path: Path) -> int:
     try:
@@ -157,21 +249,23 @@ def file_length(path: Path) -> int:
         return 0
 
 def is_in_app_features(path: Path) -> bool:
-    return "App/Features" in str(path)
+    return "App/Features" in str(path).replace("\\", "/")
 
+# Prefer class/struct name if present otherwise filename stem
 def safe_feature_name_from_path(path: Path) -> str:
-    # prefer class/struct name if present, otherwise filename stem without suffix
-    txt = path.read_text(encoding="utf8")
-    m = re.search(r'(struct|class)\s+([A-Za-z0-9_]+)(View|ViewModel)?', txt)
-    if m:
-        return m.group(2)
-    # fallback to stem
+    try:
+        txt = path.read_text(encoding="utf8")
+        m = re.search(r'(?:struct|class)\s+([A-Za-z0-9_]+)(?:View|ViewModel)?', txt)
+        if m:
+            return m.group(1)
+    except Exception:
+        pass
     s = path.stem
     s = re.sub(r'View$|ViewModel$', '', s)
     return ''.join(x for x in s.title().split())
 
 def grep_repo(pattern: str) -> List[str]:
-    """Simple repository grep: search all text files for pattern."""
+    """Search across many text files for a pattern. Returns matching paths as strings."""
     out = []
     for p in list_swift_files():
         try:
@@ -180,20 +274,20 @@ def grep_repo(pattern: str) -> List[str]:
                 out.append(str(p))
         except Exception:
             pass
-    # also search other files (Objective-C, xcodeproj, SwiftPM)
+    # also search other files (Objective-C, xcodeproj, SwiftPM) – limited scanning
     for p in Path(".").rglob("*"):
         if p.is_file() and p.suffix not in (".swift",):
             try:
-                txt = p.read_text(encoding="utf8")
+                txt = p.read_text(encoding="utf8", errors="ignore")
                 if pattern in txt:
                     out.append(str(p))
             except Exception:
                 pass
     return out
 
-# --- Backend helpers ---
-BACKEND_REGISTRY = Path("backend") / "_registry.json"
-
+# -------------------------
+# Backend helpers
+# -------------------------
 def ensure_backend_scaffold(dry: bool, debug: bool) -> bool:
     """
     Ensure backend/ exists and a minimal app.py template exists. Will be regenerated from registry.
@@ -201,10 +295,10 @@ def ensure_backend_scaffold(dry: bool, debug: bool) -> bool:
     Path("backend").mkdir(parents=True, exist_ok=True)
     # create an initial registry if missing
     if not BACKEND_REGISTRY.exists():
-        if not dry:
-            BACKEND_REGISTRY.write_text(json.dumps([], indent=2), encoding="utf8")
-        else:
+        if dry:
             log("[dry-run] would create backend/_registry.json", debug)
+        else:
+            BACKEND_REGISTRY.write_text(json.dumps([], indent=2), encoding="utf8")
     # always (re)generate backend/app.py from registry (idempotent)
     return regenerate_backend_app_from_registry(dry, debug)
 
@@ -224,7 +318,7 @@ def backend_register_feature(name: str, dry: bool, debug: bool) -> bool:
     if dry:
         log(f"[dry-run] would add {name} to backend/_registry.json", debug)
         return True
-    BACKEND_REGISTRY.write_text(json.dumps(sorted(registry), indent=2), encoding="utf8")
+    BACKEND_REGISTRY.write_text(json.dumps(sorted(registry), indent=2, sort_keys=False, separators=(", ", ": ")), encoding="utf8")
     # regenerate app.py after updating registry
     regenerate_backend_app_from_registry(dry, debug)
     return True
@@ -232,6 +326,7 @@ def backend_register_feature(name: str, dry: bool, debug: bool) -> bool:
 def regenerate_backend_app_from_registry(dry: bool, debug: bool) -> bool:
     """
     Read backend/_registry.json and write a deterministic backend/app.py
+    The generated app.py contains Pydantic models and endpoints for each feature.
     """
     registry = []
     if BACKEND_REGISTRY.exists():
@@ -241,11 +336,11 @@ def regenerate_backend_app_from_registry(dry: bool, debug: bool) -> bool:
             registry = []
 
     # Build deterministic app.py content
-    parts = []
+    parts: List[str] = []
     parts.append("""from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List
-from uuid import UUID, uuid4
+from uuid import UUID
 from datetime import datetime
 
 app = FastAPI()
@@ -253,30 +348,35 @@ app = FastAPI()
 # AUTO-GENERATED endpoints (regenerated from backend/_registry.json)
 """)
     for name in sorted(set(registry)):
-        lower = name.lower()
+        # sanitize name for Python class (simple alnum)
+        pyname = re.sub(r'[^0-9A-Za-z]', '', name)
+        lower = pyname.lower()
         parts.append(f"""
-class {name}Model(BaseModel):
+class {pyname}Model(BaseModel):
     id: UUID
     title: str
     createdAt: datetime
     body: str | None = None
 
-{lower}_store = []
+{lower}_store: List[{pyname}Model] = []
 
-@app.get("/{lower}s", response_model=List[{name}Model])
+@app.get("/{lower}s", response_model=List[{pyname}Model])
 async def get_{lower}s():
     return {lower}_store
 
-@app.post("/{lower}", response_model={name}Model)
-async def post_{lower}(payload: {name}Model):
+@app.post("/{lower}", response_model={pyname}Model)
+async def post_{lower}(payload: {pyname}Model):
     {lower}_store.append(payload)
     return payload
 """)
     new_text = "\n".join(parts).strip() + "\n"
     return atomic_write(BACKEND_APP, new_text, debug, dry)
 
-
 def backend_add_feature_endpoints(name: str, dry: bool, debug: bool) -> bool:
+    """
+    Append an endpoint snippet for the feature into backend/app.py if not present.
+    This is a fallback; regenerate_backend_app_from_registry is the canonical source.
+    """
     BACKEND_APP.parent.mkdir(parents=True, exist_ok=True)
     if not BACKEND_APP.exists():
         ensure_backend_scaffold(dry, debug)
@@ -285,7 +385,7 @@ def backend_add_feature_endpoints(name: str, dry: bool, debug: bool) -> bool:
     if marker in text:
         log(f"backend: endpoints for {name} already present", debug)
         return False
-    lower = name.lower()
+    lower = re.sub(r'[^0-9A-Za-z]', '', name).lower()
     snippet = f"""
 
 # AUTO-GENERATED {name} endpoints
@@ -310,27 +410,26 @@ async def post_{lower}(payload: {name}Model):
 """
     return atomic_write(BACKEND_APP, text + snippet, debug, dry)
 
-# --- API client helper in App/APIClient.swift ---
-def ensure_api_client(dry: bool, debug: bool) -> bool:
-    if API_CLIENT_PATH.exists():
-        return False
-    contents = """import Foundation
+# -------------------------
+# API client (Swift) helpers
+# -------------------------
+API_CLIENT_TEMPLATE = """import Foundation
 
-final class APIClient {
+final class APIClient {{
     static let shared = APIClient()
-    private init() {}
+    private init() {{}}
 
-    private var baseURL: URL {
+    private var baseURL: URL {{
         return URL(string: "http://127.0.0.1:8000")!
-    }
+    }}
 
-    func get<T: Decodable>(_ path: String) async throws -> T {
+    func get<T: Decodable>(_ path: String) async throws -> T {{
         let url = baseURL.appendingPathComponent(path)
         let (data, _) = try await URLSession.shared.data(from: url)
         return try JSONDecoder().decode(T.self, from: data)
-    }
+    }}
 
-    func post<T: Decodable, U: Encodable>(_ path: String, _ payload: U) async throws -> T {
+    func post<T: Decodable, U: Encodable>(_ path: String, _ payload: U) async throws -> T {{
         let url = baseURL.appendingPathComponent(path)
         var req = URLRequest(url: url)
         req.httpMethod = "POST"
@@ -338,21 +437,104 @@ final class APIClient {
         req.httpBody = try JSONEncoder().encode(payload)
         let (data, _) = try await URLSession.shared.data(for: req)
         return try JSONDecoder().decode(T.self, from: data)
-    }
-}
+    }}
+}}
+
+/// AUTO-GENERATED API METHODS:
+{METHODS}
 """
+
+def ensure_api_client(dry: bool, debug: bool) -> bool:
+    """
+    Ensure App/APIClient.swift exists. When AGGRESSIVE is True, overwrite existing
+    API client with the template so new autogenerated methods/regeneration is reliable.
+    """
+    if API_CLIENT_PATH.exists() and not AGGRESSIVE:
+        return False
+    contents = API_CLIENT_TEMPLATE.format(METHODS="")
     return atomic_write(API_CLIENT_PATH, contents, debug, dry)
 
-# --- Feature registry to "call" views so compiler links them ---
-def ensure_feature_registry_refs(names: List[str], dry: bool, debug: bool) -> bool:
-    # registry is a small Swift file that references view types, causing them to be linked
+def make_api_snippet(name: str) -> str:
+    lower = re.sub(r'[^0-9A-Za-z]', '', name).lower()
+    return f"""
+// AUTO-GENERATED: {name} API methods
+extension APIClient {{
+    func fetch{name}s() async throws -> [{name}Model] {{
+        return try await get("/{lower}s")
+    }}
+    func post{name}(_ payload: {name}Model) async throws -> {name}Model {{
+        return try await post("/{lower}", payload)
+    }}
+}}
+"""
+
+def regenerate_api_client_from_registry(dry: bool, debug: bool) -> bool:
+    registry = []
+    if BACKEND_REGISTRY.exists():
+        try:
+            registry = json.loads(BACKEND_REGISTRY.read_text(encoding="utf8"))
+        except Exception:
+            registry = []
+    methods = []
+    for name in sorted(set(registry)):
+        # sanitize for swift type names
+        swname = re.sub(r'[^0-9A-Za-z]', '', name)
+        lower = swname.lower()
+        methods.append(f"""extension APIClient {{
+    func fetch{swname}s() async throws -> [{swname}Model] {{
+        return try await get("/{lower}s")
+    }}
+    func post{swname}(_ payload: {swname}Model) async throws -> {swname}Model {{
+        return try await post("/{lower}", payload)
+    }}
+}}""")
+    new_text = API_CLIENT_TEMPLATE.format(METHODS="\n\n".join(methods))
+    return atomic_write(API_CLIENT_PATH, new_text, debug, dry)
+
+# -------------------------
+# Feature registry (Swift linking) helpers
+# -------------------------
+def generate_registry_with_extra(*extra_names: str) -> str:
+    """
+    Read existing registry (if any) and merge with extra_names. Return the full contents.
+    """
+    existing = []
+    if FEATURE_REGISTRY.exists():
+        try:
+            txt = FEATURE_REGISTRY.read_text(encoding="utf8")
+            existing = re.findall(r'_ = ([A-Za-z0-9_]+)View\(\)', txt)
+        except Exception:
+            existing = []
+    merged = sorted(set(existing + [n for n in extra_names if n]))
     contents = "// Auto-generated FeatureRegistry to ensure views are referenced\nimport SwiftUI\n\nfunc __registerFeaturesForLinking() {\n"
-    for n in names:
+    for n in merged:
         contents += f"    _ = {n}View()\n"
     contents += "}\n"
-    return atomic_write(FEATURE_REGISTRY, contents, debug, dry)
+    return contents
 
-# --- Frontend generation helpers (create Model/Repo/ViewModel/View/Test/Docs near the file) ---
+def ensure_feature_registry_refs(names: List[str], dry: bool, debug: bool) -> bool:
+    """
+    Merge provided names with existing FeatureRegistry references and write the file.
+    If names is empty, still ensure the file exists (idempotent).
+    """
+    existing = []
+    if FEATURE_REGISTRY.exists():
+        try:
+            txt = FEATURE_REGISTRY.read_text(encoding="utf8")
+            existing = re.findall(r'_ = ([A-Za-z0-9_]+)View\(\)', txt)
+        except Exception:
+            existing = []
+    # merge
+    merged = sorted(set(existing + names))
+    contents = "// Auto-generated FeatureRegistry to ensure views are referenced\nimport SwiftUI\n\nfunc __registerFeaturesForLinking() {\n"
+    for n in merged:
+        contents += f"    _ = {n}View()\n"
+    contents += "}\n"
+    return atomic_write(FEATURE_REGISTRY, normalize_text(contents), debug, dry)
+
+# -------------------------
+# Frontend generation helpers
+# -------------------------
 def make_swift_model(name: str) -> str:
     return f"""import Foundation
 
@@ -488,22 +670,65 @@ final class {name}Tests: XCTestCase {{
 def make_docs_md(name: str) -> str:
     return f"# {name}\n\nAuto-generated docs for {name}\n"
 
-# API snippet for App/APIClient.swift
-def make_api_snippet(name: str) -> str:
-    lower = name.lower()
-    return f"""
-// AUTO-GENERATED: {name} API methods
-extension APIClient {{
-    func fetch{name}s() async throws -> [{name}Model] {{
-        return try await get("/{lower}s")
-    }}
-    func post{name}(_ payload: {name}Model) async throws -> {name}Model {{
-        return try await post("/{lower}", payload)
-    }}
-}}
-"""
+# -------------------------
+# Placeholder detection & prioritization
+# -------------------------
+def is_placeholder_file(path: Path) -> bool:
+    """
+    Heuristic: detect files that look like placeholders / stubs that should be
+    improved first. Checks filename and a few common placeholder markers inside file.
+    """
+    try:
+        name = path.name.lower()
+        if "placeholder" in name or "need_work" in name or "todo" in name or "stub" in name or "draft" in name:
+            return True
+        txt = path.read_text(encoding="utf8").lower()
+        # common markers that indicate file is a placeholder or needs work
+        markers = ["placeholder", "todo:", "tbd", "need_work", "fixme", "implement me", "pass  # placeholder", "// placeholder", "/* placeholder */"]
+        for m in markers:
+            if m in txt:
+                return True
+    except Exception:
+        # if reading fails, treat as non-placeholder
+        return False
+    return False
 
-# --- Main processing per file ---
+def collect_prioritized_files(processed: Set[str], debug: bool) -> List[Path]:
+    all_swifts = list_swift_files()
+    # exclude Tools and Pods
+    candidates = [p for p in all_swifts if not str(p).startswith("Tools/") and not "Pods/" in str(p)]
+    # First — placeholder/stub files (new behavior)
+    placeholders = sorted([p for p in candidates if is_placeholder_file(p) and str(p) not in processed])
+
+    # categorize
+    lt100 = sorted([p for p in candidates if file_length(p) < 100 and str(p) not in processed])
+in_features = sorted([p for p in candidates if is_in_app_features(p) and str(p) not in processed])
+lt200 = sorted([p for p in candidates if file_length(p) < 200 and str(p) not in processed])
+
+
+    # remove duplicates preserving order:
+    # placeholders first, then lt100, then App/Features, then lt200 (as before)
+    selected: List[Path] = []
+    def add_list(lst: List[Path]):
+        for p in lst:
+            if p not in selected:
+                selected.append(p)
+
+    add_list(placeholders)
+    add_list(lt100)
+    add_list([p for p in in_features if p not in selected])
+    add_list([p for p in lt200 if p not in selected])
+
+    if debug:
+        log((
+            f"Priority lists: placeholders={len(placeholders)}, "
+            f"lt100={len(lt100)}, features={len(in_features)}, lt200={len(lt200)}"
+        ), True)
+    return selected
+
+# -------------------------
+# Per-file processing
+# -------------------------
 def process_file(path: Path, backend: bool, debug: bool, dry: bool) -> List[str]:
     """
     Process a single swift file: create model/repo/vm/view/test/docs where appropriate
@@ -571,73 +796,38 @@ def process_file(path: Path, backend: bool, debug: bool, dry: bool) -> List[str]
         if atomic_write(doc_path, make_docs_md(name), debug, dry):
             changed.append(str(doc_path))
 
-        # ensure the view type is referenced in FeatureRegistry so it's "called"
-        if atomic_write(FEATURE_REGISTRY, generate_registry_with_extra(name), debug, dry):
-            changed.append(str(FEATURE_REGISTRY))
-
     except Exception as e:
         log(f"error processing {path}: {e}", True)
     return changed
 
-def generate_registry_with_extra(new_name: str) -> str:
-    """
-    Read existing registry (if any) and ensure the new_name is added. Return the full contents.
-    """
-    existing = []
-    if FEATURE_REGISTRY.exists():
-        try:
-            txt = FEATURE_REGISTRY.read_text(encoding="utf8")
-            existing = re.findall(r'_ = ([A-Za-z0-9_]+)View\(\)', txt)
-        except Exception:
-            existing = []
-    if new_name not in existing:
-        existing.append(new_name)
-    contents = "// Auto-generated FeatureRegistry to ensure views are referenced\nimport SwiftUI\n\nfunc __registerFeaturesForLinking() {\n"
-    for n in sorted(existing):
-        contents += f"    _ = {n}View()\n"
-    contents += "}\n"
-    return contents
-
-# --- Priority orchestration ---
-def collect_prioritized_files(processed: Set[str], debug: bool) -> List[Path]:
-    all_swifts = list_swift_files()
-    # exclude Tools and Pods
-    candidates = [p for p in all_swifts if not str(p).startswith("Tools/") and not "Pods/" in str(p)]
-    # categorize
-    lt100 = [p for p in candidates if file_length(p) < 100 and str(p) not in processed]
-    in_features = [p for p in candidates if is_in_app_features(p) and str(p) not in processed]
-    lt200 = [p for p in candidates if file_length(p) < 200 and str(p) not in processed]
-    # remove duplicates preserving order: lt100 first, then features (avoid re-adding files from lt100), then lt200 excluding already selected
-    selected = []
-    def add_list(lst):
-        for p in lst:
-            if p not in selected:
-                selected.append(p)
-    add_list(lt100)
-    add_list([p for p in in_features if p not in selected])
-    add_list([p for p in lt200 if p not in selected])
-    if debug:
-        log(f"Priority lists: lt100={len(lt100)}, features={len(in_features)}, lt200={len(lt200)}", True)
-    return selected
-
-# --- main ---
+# -------------------------
+# Main orchestration
+# -------------------------
 def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--debug", action="store_true")
     parser.add_argument("--force", action="store_true", help="reprocess even if in processed state")
     parser.add_argument("--max", type=int, default=0, help="max files to process this run (0 = unlimited)")
+    # backward-compatible alias for external callers that pass --batch
+    parser.add_argument("--batch", type=int, default=0, help="legacy alias for --max (keeps compatibility)")
+    parser.add_argument("--aggressive", dest="aggressive", action="store_true", help="be aggressive about overwriting and adding backend")
+    parser.add_argument("--no-aggressive", dest="aggressive", action="store_false", help="disable aggressive behavior")
+    parser.set_defaults(aggressive=True)
     args = parser.parse_args(argv)
 
     debug = args.debug
     dry = args.dry_run
     force = args.force
-    max_count = args.max
+    # prefer --max if provided; otherwise fall back to --batch for compatibility
+    max_count = args.max if args.max and args.max > 0 else (args.batch if args.batch and args.batch > 0 else 0)
+    global AGGRESSIVE
+    AGGRESSIVE = bool(args.aggressive)
 
     processed = load_state()
     if force:
         processed = set()  # ignore past
-    backend = Path("backend").exists()
+    backend = Path("backend").exists() or AGGRESSIVE
 
     # ensure APIClient skeleton if backend present
     if backend:
@@ -653,7 +843,7 @@ def main(argv=None):
         return 0
 
     changed_overall = []
-    names_to_register = []
+    names_to_register: List[str] = []
     for p in prioritized:
         strp = str(p)
         if strp in processed:
@@ -668,16 +858,16 @@ def main(argv=None):
         # remember the feature name for registry
         try:
             nm = safe_feature_name_from_path(p)
-            names_to_register.append(nm)
+            if nm:
+                names_to_register.append(nm)
         except Exception:
             pass
 
-    # add registry references for all names processed this run
+    # add registry references for all names processed this run (merge with existing)
     if names_to_register:
-        # generate merged registry
-        if atomic_write(FEATURE_REGISTRY, generate_registry_with_extra(None if not names_to_register else names_to_register[0]), debug, dry):
+        # Merge with existing and write
+        if ensure_feature_registry_refs(names_to_register, dry, debug):
             log("Updated feature registry", debug)
-            
 
     # ensure API snippets for processed features are appended to App/APIClient.swift if backend exists
     if backend and API_CLIENT_PATH.exists():
@@ -693,7 +883,7 @@ def main(argv=None):
 
     if changed_overall:
         log("Files changed this run:", debug)
-        for c in changed_overall:
+        for c in sorted(set(changed_overall)):
             log(f" - {c}", debug)
     else:
         log("No files were changed by the improver.", debug)
@@ -702,56 +892,3 @@ def main(argv=None):
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
-
-API_CLIENT_TEMPLATE = """import Foundation
-
-final class APIClient {{
-    static let shared = APIClient()
-    private init() {{}}
-
-    private var baseURL: URL {{
-        return URL(string: "http://127.0.0.1:8000")!
-    }}
-
-    func get<T: Decodable>(_ path: String) async throws -> T {{
-        let url = baseURL.appendingPathComponent(path)
-        let (data, _) = try await URLSession.shared.data(from: url)
-        return try JSONDecoder().decode(T.self, from: data)
-    }}
-
-    func post<T: Decodable, U: Encodable>(_ path: String, _ payload: U) async throws -> T {{
-        let url = baseURL.appendingPathComponent(path)
-        var req = URLRequest(url: url)
-        req.httpMethod = "POST"
-        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        req.httpBody = try JSONEncoder().encode(payload)
-        let (data, _) = try await URLSession.shared.data(for: req)
-        return try JSONDecoder().decode(T.self, from: data)
-    }}
-}}
-
-/// AUTO-GENERATED API METHODS:
-{METHODS}
-"""
-
-def regenerate_api_client_from_registry(dry: bool, debug: bool) -> bool:
-    registry = []
-    if BACKEND_REGISTRY.exists():
-        try:
-            registry = json.loads(BACKEND_REGISTRY.read_text(encoding="utf8"))
-        except Exception:
-            registry = []
-    methods = []
-    for name in sorted(set(registry)):
-        lower = name.lower()
-        methods.append(f"""extension APIClient {{
-    func fetch{name}s() async throws -> [{name}Model] {{
-        return try await get("/{lower}s")
-    }}
-    func post{name}(_ payload: {name}Model) async throws -> {name}Model {{
-        return try await post("/{lower}", payload)
-    }}
-}}""")
-    new_text = API_CLIENT_TEMPLATE.format(METHODS="\n\n".join(methods))
-    return atomic_write(API_CLIENT_PATH, new_text, debug, dry)
