@@ -8,7 +8,6 @@ app = FastAPI()
 
 # AUTO-GENERATED endpoints (regenerated from backend/_registry.json)
 
-
 class AIAnalysisServiceModel(BaseModel):
     id: UUID
     title: str
@@ -25,7 +24,6 @@ async def get_aianalysisservices():
 async def post_aianalysisservice(payload: AIAnalysisServiceModel):
     aianalysisservice_store.append(payload)
     return payload
-
 
 class ConflictResolutionViewModelModel(BaseModel):
     id: UUID
@@ -44,7 +42,6 @@ async def post_conflictresolutionviewmodel(payload: ConflictResolutionViewModelM
     conflictresolutionviewmodel_store.append(payload)
     return payload
 
-
 class DashboardViewModel(BaseModel):
     id: UUID
     title: str
@@ -61,7 +58,6 @@ async def get_dashboardviews():
 async def post_dashboardview(payload: DashboardViewModel):
     dashboardview_store.append(payload)
     return payload
-
 
 class EmailpasswordLoginViewModelModel(BaseModel):
     id: UUID
@@ -80,7 +76,6 @@ async def post_emailpasswordloginviewmodel(payload: EmailpasswordLoginViewModelM
     emailpasswordloginviewmodel_store.append(payload)
     return payload
 
-
 class EntryCategorizationtaggingViewModelModel(BaseModel):
     id: UUID
     title: str
@@ -97,7 +92,6 @@ async def get_entrycategorizationtaggingviewmodels():
 async def post_entrycategorizationtaggingviewmodel(payload: EntryCategorizationtaggingViewModelModel):
     entrycategorizationtaggingviewmodel_store.append(payload)
     return payload
-
 
 class ImplementBackuprestoreFunctionalityViewModelModel(BaseModel):
     id: UUID
@@ -116,7 +110,6 @@ async def post_implementbackuprestorefunctionalityviewmodel(payload: ImplementBa
     implementbackuprestorefunctionalityviewmodel_store.append(payload)
     return payload
 
-
 class ImplementUserAuthenticationServiceViewModelModel(BaseModel):
     id: UUID
     title: str
@@ -133,7 +126,6 @@ async def get_implementuserauthenticationserviceviewmodels():
 async def post_implementuserauthenticationserviceviewmodel(payload: ImplementUserAuthenticationServiceViewModelModel):
     implementuserauthenticationserviceviewmodel_store.append(payload)
     return payload
-
 
 class InitialSyncImplementationViewModelModel(BaseModel):
     id: UUID
@@ -152,7 +144,6 @@ async def post_initialsyncimplementationviewmodel(payload: InitialSyncImplementa
     initialsyncimplementationviewmodel_store.append(payload)
     return payload
 
-
 class JournalEntryViewModel(BaseModel):
     id: UUID
     title: str
@@ -170,7 +161,6 @@ async def post_journalentryview(payload: JournalEntryViewModel):
     journalentryview_store.append(payload)
     return payload
 
-
 class MoodTrackingInterfaceViewModelModel(BaseModel):
     id: UUID
     title: str
@@ -187,7 +177,3 @@ async def get_moodtrackinginterfaceviewmodels():
 async def post_moodtrackinginterfaceviewmodel(payload: MoodTrackingInterfaceViewModelModel):
     moodtrackinginterfaceviewmodel_store.append(payload)
     return payload
-
-
-from .auth import router as auth_router
-app.include_router(auth_router)
