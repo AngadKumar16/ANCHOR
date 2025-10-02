@@ -702,9 +702,8 @@ def collect_prioritized_files(processed: Set[str], debug: bool) -> List[Path]:
 
     # categorize
     lt100 = sorted([p for p in candidates if file_length(p) < 100 and str(p) not in processed])
-in_features = sorted([p for p in candidates if is_in_app_features(p) and str(p) not in processed])
-lt200 = sorted([p for p in candidates if file_length(p) < 200 and str(p) not in processed])
-
+    in_features = sorted([p for p in candidates if is_in_app_features(p) and str(p) not in processed])
+    lt200 = sorted([p for p in candidates if file_length(p) < 200 and str(p) not in processed])
 
     # remove duplicates preserving order:
     # placeholders first, then lt100, then App/Features, then lt200 (as before)
@@ -741,10 +740,12 @@ def process_file(path: Path, backend: bool, debug: bool, dry: bool) -> List[str]
         log(f"Processing {path} as feature name '{name}'", debug)
         # determine target dir: prefer path.parent for helpers, but for view files in App/Features keep same dir
         target_dir = path.parent if path.parent != Path('.') else Path("App/Features")
-        # ensure sensible default
+        # do NOT create missing target directories when not allowed to add files
         if not target_dir.exists():
-            target_dir = Path("App/Features")
-            target_dir.mkdir(parents=True, exist_ok=True)
+            log(f"Target directory {target_dir} does not exist — skipping helper writes for {path}", debug)
+            # set to None so later existence checks avoid accidental creates
+            target_dir = None
+
 
         # target file paths
         model_path = target_dir / f"{name}Model.swift"
@@ -759,15 +760,28 @@ def process_file(path: Path, backend: bool, debug: bool, dry: bool) -> List[str]
         doc_path = docs_dir / f"Feature_{name}.md"
 
         # backend first
+                # backend first — do NOT add new features to the backend registry.
+        # Only regenerate backend/app.py or API client if the registry already contains the feature.
         if backend:
-            if backend_register_feature(name, dry, debug):
-                changed.append(str(BACKEND_REGISTRY))
-                # backend/app.py regenerated
-                if BACKEND_APP.exists():
-                    changed.append(str(BACKEND_APP))
-                # regenerate API client from registry
-                if regenerate_api_client_from_registry(dry, debug):
-                    changed.append(str(API_CLIENT_PATH))
+            registry = []
+            if BACKEND_REGISTRY.exists():
+                try:
+                    registry = json.loads(BACKEND_REGISTRY.read_text(encoding="utf8"))
+                except Exception:
+                    registry = []
+
+            if name in registry:
+                # registry already declares this feature — ensure backend/app.py is regenerated
+                if regenerate_backend_app_from_registry(dry, debug):
+                    if BACKEND_APP.exists():
+                        changed.append(str(BACKEND_APP))
+                # if API client exists, regenerate it deterministically from registry
+                if API_CLIENT_PATH.exists():
+                    if regenerate_api_client_from_registry(dry, debug):
+                        changed.append(str(API_CLIENT_PATH))
+            else:
+                log(f"Skipping backend registry add for {name} (only modifying existing backend entries)", debug)
+
 
         # write API client if needed
         if backend:
@@ -782,19 +796,43 @@ def process_file(path: Path, backend: bool, debug: bool, dry: bool) -> List[str]
                     if atomic_write(API_CLIENT_PATH, new_text, debug, dry):
                         changed.append(str(API_CLIENT_PATH))
 
-        # write frontend helpers in target_dir
-        if atomic_write(model_path, make_swift_model(name), debug, dry):
-            changed.append(str(model_path))
-        if atomic_write(repo_path, make_swift_repo(name), debug, dry):
-            changed.append(str(repo_path))
-        if atomic_write(vm_path, make_swift_vm(name, backend), debug, dry):
-            changed.append(str(vm_path))
-        if atomic_write(view_path, make_swift_view(name), debug, dry):
-            changed.append(str(view_path))
-        if atomic_write(test_path, make_swift_test(name), debug, dry):
-            changed.append(str(test_path))
-        if atomic_write(doc_path, make_docs_md(name), debug, dry):
-            changed.append(str(doc_path))
+        # write frontend helpers in target_dir — ONLY update existing files; do NOT create new ones
+        if model_path.exists():
+            if atomic_write(model_path, make_swift_model(name), debug, dry):
+                changed.append(str(model_path))
+        else:
+            log(f"Skipping create of new file {model_path} (only modifying existing files)", debug)
+
+        if repo_path.exists():
+            if atomic_write(repo_path, make_swift_repo(name), debug, dry):
+                changed.append(str(repo_path))
+        else:
+            log(f"Skipping create of new file {repo_path} (only modifying existing files)", debug)
+
+        if vm_path.exists():
+            if atomic_write(vm_path, make_swift_vm(name, backend), debug, dry):
+                changed.append(str(vm_path))
+        else:
+            log(f"Skipping create of new file {vm_path} (only modifying existing files)", debug)
+
+        if view_path.exists():
+            if atomic_write(view_path, make_swift_view(name), debug, dry):
+                changed.append(str(view_path))
+        else:
+            log(f"Skipping create of new file {view_path} (only modifying existing files)", debug)
+
+        if test_path.exists():
+            if atomic_write(test_path, make_swift_test(name), debug, dry):
+                changed.append(str(test_path))
+        else:
+            log(f"Skipping create of new file {test_path} (only modifying existing files)", debug)
+
+        if doc_path.exists():
+            if atomic_write(doc_path, make_docs_md(name), debug, dry):
+                changed.append(str(doc_path))
+        else:
+            log(f"Skipping create of new file {doc_path} (only modifying existing files)", debug)
+
 
     except Exception as e:
         log(f"error processing {path}: {e}", True)
@@ -831,8 +869,12 @@ def main(argv=None):
 
     # ensure APIClient skeleton if backend present
     if backend:
-        ensure_backend_scaffold(dry, debug)
-        ensure_api_client(dry, debug)
+        if BACKEND_REGISTRY.exists():
+            # regenerate deterministic backend/app.py from existing registry (idempotent)
+            regenerate_backend_app_from_registry(dry, debug)
+        # only regenerate API client if it already exists (do not create new API client file)
+        if API_CLIENT_PATH.exists():
+            regenerate_api_client_from_registry(dry, debug)
 
     prioritized = collect_prioritized_files(processed, debug)
     if max_count and max_count > 0:
