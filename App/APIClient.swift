@@ -27,8 +27,6 @@ final class APIClient {
 
 /// AUTO-GENERATED API METHODS:
 
-
-
 // AUTO-GENERATED: MoodTrackingInterfaceViewModel API methods
 extension APIClient {
     func fetchMoodTrackingInterfaceViewModels() async throws -> [MoodTrackingInterfaceViewModelModel] {
@@ -38,7 +36,6 @@ extension APIClient {
         return try await post("/moodtrackinginterfaceviewmodel", payload)
     }
 }
-
 
 // AUTO-GENERATED: AIAnalysisService API methods
 extension APIClient {
@@ -50,7 +47,6 @@ extension APIClient {
     }
 }
 
-
 // AUTO-GENERATED: DashboardView API methods
 extension APIClient {
     func fetchDashboardViews() async throws -> [DashboardViewModel] {
@@ -60,7 +56,6 @@ extension APIClient {
         return try await post("/dashboardview", payload)
     }
 }
-
 
 // AUTO-GENERATED: JournalEntryView API methods
 extension APIClient {
@@ -72,7 +67,6 @@ extension APIClient {
     }
 }
 
-
 // AUTO-GENERATED: ConflictResolutionViewModel API methods
 extension APIClient {
     func fetchConflictResolutionViewModels() async throws -> [ConflictResolutionViewModelModel] {
@@ -82,7 +76,6 @@ extension APIClient {
         return try await post("/conflictresolutionviewmodel", payload)
     }
 }
-
 
 // AUTO-GENERATED: EmailpasswordLoginViewModel API methods
 extension APIClient {
@@ -94,7 +87,6 @@ extension APIClient {
     }
 }
 
-
 // AUTO-GENERATED: EntryCategorizationtaggingViewModel API methods
 extension APIClient {
     func fetchEntryCategorizationtaggingViewModels() async throws -> [EntryCategorizationtaggingViewModelModel] {
@@ -104,7 +96,6 @@ extension APIClient {
         return try await post("/entrycategorizationtaggingviewmodel", payload)
     }
 }
-
 
 // AUTO-GENERATED: ImplementBackuprestoreFunctionalityViewModel API methods
 extension APIClient {
@@ -116,7 +107,6 @@ extension APIClient {
     }
 }
 
-
 // AUTO-GENERATED: ImplementUserAuthenticationServiceViewModel API methods
 extension APIClient {
     func fetchImplementUserAuthenticationServiceViewModels() async throws -> [ImplementUserAuthenticationServiceViewModelModel] {
@@ -126,7 +116,6 @@ extension APIClient {
         return try await post("/implementuserauthenticationserviceviewmodel", payload)
     }
 }
-
 
 // AUTO-GENERATED: InitialSyncImplementationViewModel API methods
 extension APIClient {
