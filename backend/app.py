@@ -187,7 +187,3 @@ async def get_moodtrackinginterfaceviewmodels():
 async def post_moodtrackinginterfaceviewmodel(payload: MoodTrackingInterfaceViewModelModel):
     moodtrackinginterfaceviewmodel_store.append(payload)
     return payload
-
-
-from .auth import router as auth_router
-app.include_router(auth_router)
