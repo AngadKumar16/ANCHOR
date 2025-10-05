@@ -42,11 +42,19 @@ LOG_DIR.mkdir(parents=True, exist_ok=True)
 LOG_FILE = LOG_DIR / "improve_v2.log"
 STATE_FILE = LOG_DIR / "processed_files.json"
 
-BACKEND_APP = Path("backend") / "app.py"
-BACKEND_REGISTRY = Path("backend") / "_registry.json"
-API_CLIENT_PATH = Path("App") / "APIClient.swift"
-FEATURE_REGISTRY = Path("App") / "FeatureRegistry.swift"
+# Focus root: the nested ANCHOR directory (the second ANCHOR)
+ROOT_DIR = Path("ANCHOR")
+
+BACKEND_APP = ROOT_DIR / "backend" / "app.py"
+BACKEND_REGISTRY = ROOT_DIR / "backend" / "_registry.json"
+API_CLIENT_PATH = ROOT_DIR / "App" / "APIClient.swift"
+FEATURE_REGISTRY = ROOT_DIR / "App" / "FeatureRegistry.swift"
 WRITTEN_HASHES = LOG_DIR / "written_hashes.json"
+
+# When False, the improver will NOT create new files or directories; only update existing files.
+ALLOW_CREATE = False
+
+
 
 # Default: aggressive ON (per your request). CLI exposes --no-aggressive to disable.
 AGGRESSIVE = True
@@ -127,6 +135,18 @@ def atomic_write(path: Path, contents: str, debug: bool = False, dry: bool = Fal
     if dry:
         log(f"[dry-run] would write {path}", debug)
         return True
+
+    # If creation is disabled, do not create new files.
+    # Only allow writing if the target file already exists.
+    if not ALLOW_CREATE:
+        try:
+            if not path.exists():
+                log(f"Skipping creation of new file {path} because ALLOW_CREATE=False", debug)
+                return False
+        except Exception:
+            log(f"Skipping creation check for {path} (conservative)", debug)
+            return False
+
     
     try:
         # Safety guard: avoid accidental writes to suspicious short filenames like "py"
@@ -203,7 +223,13 @@ def atomic_write(path: Path, contents: str, debug: bool = False, dry: bool = Fal
                 # else fall through to write
 
         # Write atomically
-        path.parent.mkdir(parents=True, exist_ok=True)
+        if ALLOW_CREATE:
+            path.parent.mkdir(parents=True, exist_ok=True)
+        else:
+            if not path.parent.exists():
+                log(f"Parent directory {path.parent} missing for {path}; ALLOW_CREATE=False -> skipping write", debug)
+                return False
+
         tmp = path.with_suffix(path.suffix + ".tmp")
         tmp.write_text(new_norm, encoding="utf8")
         tmp.replace(path)
@@ -239,8 +265,37 @@ def save_state(processed: Set[str]):
         pass
 
 def list_swift_files() -> List[Path]:
-    """List all Swift files in the repo excluding Pods and Xcode build dirs."""
-    return sorted([p for p in Path(".").rglob("*.swift") if "Pods/" not in str(p) and ".build" not in str(p) and "Carthage/" not in str(p)])
+    """List all Swift files under the nested ROOT_DIR (ANCHOR/ANCHOR) 
+    excluding Pods, Carthage, Xcode build dirs, and already improved files.
+    """
+    base = ROOT_DIR
+    if not base.exists():
+        return []
+
+    files = []
+    for p in base.rglob("*.swift"):
+        sp = str(p)
+        if "Pods/" in sp:
+            print("[skip: Pods]    ", sp)
+            continue
+        if ".build" in sp:
+            print("[skip: .build]  ", sp)
+            continue
+        if "Carthage/" in sp:
+            print("[skip: Carthage]", sp)
+            continue
+
+        text = p.read_text(errors="ignore")
+        if "// [improved]" in text:
+            print(f"[skip already improved] {p}")
+            continue
+
+        print("[keep]          ", sp)
+        files.append(p)
+
+    return sorted(files)
+
+
 
 def file_length(path: Path) -> int:
     try:
@@ -265,8 +320,12 @@ def safe_feature_name_from_path(path: Path) -> str:
     return ''.join(x for x in s.title().split())
 
 def grep_repo(pattern: str) -> List[str]:
-    """Search across many text files for a pattern. Returns matching paths as strings."""
+    """Search text files under ROOT_DIR (nested ANCHOR) for a pattern and return matching paths."""
     out = []
+    base = ROOT_DIR
+    if not base.exists():
+        return out
+    # search Swift files (scoped) first
     for p in list_swift_files():
         try:
             txt = p.read_text(encoding="utf8")
@@ -274,8 +333,8 @@ def grep_repo(pattern: str) -> List[str]:
                 out.append(str(p))
         except Exception:
             pass
-    # also search other files (Objective-C, xcodeproj, SwiftPM) – limited scanning
-    for p in Path(".").rglob("*"):
+    # also search other non-Swift files under ROOT_DIR (limited)
+    for p in base.rglob("*"):
         if p.is_file() and p.suffix not in (".swift",):
             try:
                 txt = p.read_text(encoding="utf8", errors="ignore")
@@ -284,6 +343,8 @@ def grep_repo(pattern: str) -> List[str]:
             except Exception:
                 pass
     return out
+
+
 
 # -------------------------
 # Backend helpers
@@ -695,18 +756,19 @@ def is_placeholder_file(path: Path) -> bool:
 
 def collect_prioritized_files(processed: Set[str], debug: bool) -> List[Path]:
     all_swifts = list_swift_files()
-    # exclude Tools and Pods
-    candidates = [p for p in all_swifts if not str(p).startswith("Tools/") and not "Pods/" in str(p)]
-    # First — placeholder/stub files (new behavior)
+    # Only consider files inside ANCHOR/ANCHOR
+    candidates = [p for p in all_swifts if str(p).startswith("ANCHOR/")]
+
+
+    # First — placeholder/stub files
     placeholders = sorted([p for p in candidates if is_placeholder_file(p) and str(p) not in processed])
 
     # categorize
     lt100 = sorted([p for p in candidates if file_length(p) < 100 and str(p) not in processed])
-    in_features = sorted([p for p in candidates if is_in_app_features(p) and str(p) not in processed])
+    in_anchor = sorted([p for p in candidates if str(p).startswith("ANCHOR/ANCHOR") and str(p) not in processed])
     lt200 = sorted([p for p in candidates if file_length(p) < 200 and str(p) not in processed])
 
     # remove duplicates preserving order:
-    # placeholders first, then lt100, then App/Features, then lt200 (as before)
     selected: List[Path] = []
     def add_list(lst: List[Path]):
         for p in lst:
@@ -715,53 +777,60 @@ def collect_prioritized_files(processed: Set[str], debug: bool) -> List[Path]:
 
     add_list(placeholders)
     add_list(lt100)
-    add_list([p for p in in_features if p not in selected])
+    add_list([p for p in in_anchor if p not in selected])
     add_list([p for p in lt200 if p not in selected])
 
     if debug:
         log((
             f"Priority lists: placeholders={len(placeholders)}, "
-            f"lt100={len(lt100)}, features={len(in_features)}, lt200={len(lt200)}"
+            f"lt100={len(lt100)}, anchor={len(in_anchor)}, lt200={len(lt200)}"
         ), True)
     return selected
+
 
 # -------------------------
 # Per-file processing
 # -------------------------
 def process_file(path: Path, backend: bool, debug: bool, dry: bool) -> List[str]:
     """
-    Process a single swift file: create model/repo/vm/view/test/docs where appropriate
-    placed in the same directory as the file (or App/Features when file is inside there).
+    Process a single Swift file: update model/repo/vm/view/test/docs if they exist.
+    Only modifies files inside nested ANCHOR/ANCHOR; no new files are created.
     Returns list of changed paths (strings).
     """
     changed = []
+
+    # Skip files not in nested ANCHOR/ANCHOR
+    try:
+        nested_anchor = ROOT_DIR / "ANCHOR"
+        try:
+            path.resolve().relative_to(nested_anchor.resolve())
+        except ValueError:
+            log(f"Skipping {path} — not in nested ANCHOR/ANCHOR", debug)
+            return changed
+    except Exception:
+        log(f"Skipping {path} — path resolution failed", debug)
+        return changed
+
     try:
         name = safe_feature_name_from_path(path)
         log(f"Processing {path} as feature name '{name}'", debug)
-        # determine target dir: prefer path.parent for helpers, but for view files in App/Features keep same dir
-        target_dir = path.parent if path.parent != Path('.') else Path("App/Features")
-        # do NOT create missing target directories when not allowed to add files
+
+        target_dir = path.parent
+
+        # Only proceed if target_dir exists
         if not target_dir.exists():
-            log(f"Target directory {target_dir} does not exist — skipping helper writes for {path}", debug)
-            # set to None so later existence checks avoid accidental creates
+            log(f"Target directory {target_dir} does not exist — skipping helpers for {path}", debug)
             target_dir = None
 
+        # Compute helper paths only if directory exists
+        model_path = target_dir / f"{name}Model.swift" if target_dir else None
+        repo_path = target_dir / f"{name}Repository.swift" if target_dir else None
+        vm_path = target_dir / f"{name}ViewModel.swift" if target_dir else None
+        view_path = target_dir / f"{name}View.swift" if target_dir else None
+        test_path = target_dir / f"{name}Tests.swift" if target_dir else None
+        doc_path = target_dir / f"{name}.md" if target_dir else None
 
-        # target file paths
-        model_path = target_dir / f"{name}Model.swift"
-        repo_path = target_dir / f"{name}Repository.swift"
-        vm_path = target_dir / f"{name}ViewModel.swift"
-        view_path = target_dir / f"{name}View.swift"
-        test_dir = Path("Tests") / "Features"
-        test_dir.mkdir(parents=True, exist_ok=True)
-        test_path = test_dir / f"{name}Tests.swift"
-        docs_dir = Path("Docs")
-        docs_dir.mkdir(parents=True, exist_ok=True)
-        doc_path = docs_dir / f"Feature_{name}.md"
-
-        # backend first
-                # backend first — do NOT add new features to the backend registry.
-        # Only regenerate backend/app.py or API client if the registry already contains the feature.
+        # Backend updates
         if backend:
             registry = []
             if BACKEND_REGISTRY.exists():
@@ -771,23 +840,14 @@ def process_file(path: Path, backend: bool, debug: bool, dry: bool) -> List[str]
                     registry = []
 
             if name in registry:
-                # registry already declares this feature — ensure backend/app.py is regenerated
-                if regenerate_backend_app_from_registry(dry, debug):
-                    if BACKEND_APP.exists():
-                        changed.append(str(BACKEND_APP))
-                # if API client exists, regenerate it deterministically from registry
-                if API_CLIENT_PATH.exists():
-                    if regenerate_api_client_from_registry(dry, debug):
-                        changed.append(str(API_CLIENT_PATH))
+                if regenerate_backend_app_from_registry(dry, debug) and BACKEND_APP.exists():
+                    changed.append(str(BACKEND_APP))
+                if API_CLIENT_PATH.exists() and regenerate_api_client_from_registry(dry, debug):
+                    changed.append(str(API_CLIENT_PATH))
             else:
                 log(f"Skipping backend registry add for {name} (only modifying existing backend entries)", debug)
 
-
-        # write API client if needed
-        if backend:
-            if ensure_api_client(dry, debug):
-                changed.append(str(API_CLIENT_PATH))
-            # append snippet to APIClient.swift if missing marker
+            # Append API snippet only if marker missing
             if API_CLIENT_PATH.exists():
                 api_text = API_CLIENT_PATH.read_text(encoding="utf8")
                 marker = f"// AUTO-GENERATED: {name} API methods"
@@ -796,47 +856,26 @@ def process_file(path: Path, backend: bool, debug: bool, dry: bool) -> List[str]
                     if atomic_write(API_CLIENT_PATH, new_text, debug, dry):
                         changed.append(str(API_CLIENT_PATH))
 
-        # write frontend helpers in target_dir — ONLY update existing files; do NOT create new ones
-        if model_path.exists():
-            if atomic_write(model_path, make_swift_model(name), debug, dry):
-                changed.append(str(model_path))
-        else:
-            log(f"Skipping create of new file {model_path} (only modifying existing files)", debug)
-
-        if repo_path.exists():
-            if atomic_write(repo_path, make_swift_repo(name), debug, dry):
-                changed.append(str(repo_path))
-        else:
-            log(f"Skipping create of new file {repo_path} (only modifying existing files)", debug)
-
-        if vm_path.exists():
-            if atomic_write(vm_path, make_swift_vm(name, backend), debug, dry):
-                changed.append(str(vm_path))
-        else:
-            log(f"Skipping create of new file {vm_path} (only modifying existing files)", debug)
-
-        if view_path.exists():
-            if atomic_write(view_path, make_swift_view(name), debug, dry):
-                changed.append(str(view_path))
-        else:
-            log(f"Skipping create of new file {view_path} (only modifying existing files)", debug)
-
-        if test_path.exists():
-            if atomic_write(test_path, make_swift_test(name), debug, dry):
-                changed.append(str(test_path))
-        else:
-            log(f"Skipping create of new file {test_path} (only modifying existing files)", debug)
-
-        if doc_path.exists():
-            if atomic_write(doc_path, make_docs_md(name), debug, dry):
-                changed.append(str(doc_path))
-        else:
-            log(f"Skipping create of new file {doc_path} (only modifying existing files)", debug)
-
+        # Update frontend helpers — only existing files
+        for helper_path, make_func in [
+            (model_path, make_swift_model),
+            (repo_path, make_swift_repo),
+            (vm_path, lambda n: make_swift_vm(n, backend)),
+            (view_path, make_swift_view),
+            (test_path, make_swift_test),
+            (doc_path, make_docs_md),
+        ]:
+            if helper_path and helper_path.exists():
+                if atomic_write(helper_path, make_func(name), debug, dry):
+                    changed.append(str(helper_path))
+            elif helper_path:
+                log(f"Skipping creation of new file {helper_path} (only modifying existing files)", debug)
 
     except Exception as e:
-        log(f"error processing {path}: {e}", True)
+        log(f"Error processing {path}: {e}", True)
+
     return changed
+
 
 # -------------------------
 # Main orchestration
@@ -865,7 +904,8 @@ def main(argv=None):
     processed = load_state()
     if force:
         processed = set()  # ignore past
-    backend = Path("backend").exists() or AGGRESSIVE
+    backend = (ROOT_DIR / "backend").exists() or AGGRESSIVE
+
 
     # ensure APIClient skeleton if backend present
     if backend:
