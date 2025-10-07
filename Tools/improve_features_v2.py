@@ -30,7 +30,7 @@ import re
 import sys
 import time
 from pathlib import Path
-from typing import List, Set
+from typing import List, Set, Dict, Optional
 import hashlib
 
 # -------------------------
@@ -62,24 +62,29 @@ AGGRESSIVE = True
 # -------------------------
 # Utilities
 # -------------------------
-<<<<<<< Updated upstream
-=======
+
 def relpath_to_project(path: Path) -> str:
+    """
+    Return a repo-relative path for `path`. If `path` is outside the project root,
+    normalize by removing an initial '../' when possible.
+    """
     try:
         rel = str(Path(path).relative_to(PROJECT_ROOT))
     except Exception:
         rel = os.path.relpath(str(path), str(PROJECT_ROOT))
-    # Normalize away "../"
+    # Normalize away an initial "../" for nicer paths
     if rel.startswith("../"):
         rel = rel[3:]
     return rel
 
 def canonicalize_feat(name: str) -> str:
-    """Return a CamelCase canonicalized version of a feature name."""
-    return ''.join(word.capitalize() for word in re.split(r'[^A-Za-z0-9]+', name) if word)
+    """
+    Return a CamelCase canonicalized version of a feature name.
+    Keeps only alphanumerics and capitalizes parts.
+    """
+    parts = [p for p in re.split(r'[^A-Za-z0-9]+', name) if p]
+    return ''.join(part.capitalize() for part in parts)
 
-
->>>>>>> Stashed changes
 def now() -> str:
     return time.strftime("%Y-%m-%d %H:%M:%S")
 
@@ -367,7 +372,6 @@ def grep_repo(pattern: str) -> List[str]:
 # -------------------------
 # Backend helpers
 # -------------------------
-<<<<<<< Updated upstream
 def ensure_backend_scaffold(dry: bool, debug: bool) -> bool:
     """
     Ensure backend/ exists and a minimal app.py template exists. Will be regenerated from registry.
@@ -615,14 +619,7 @@ def ensure_feature_registry_refs(names: List[str], dry: bool, debug: bool) -> bo
 # -------------------------
 # Frontend generation helpers
 # -------------------------
-=======
 # Normalize feature name into proper CamelCase
-def canonicalize_feat(name: str) -> str:
-    import re
-    parts = re.findall(r"[A-Za-z0-9]+", name)
-    return "".join(p[0].upper() + p[1:] for p in parts if p)
-
-# v
 def ai_propose_changes(
     feature: str,
     state: Dict[str, Path],
@@ -696,7 +693,6 @@ def ai_propose_changes(
 
 
 # Reuse make_* templates from previous code (simple, safe templates)
->>>>>>> Stashed changes
 def make_swift_model(name: str) -> str:
     return f"""import Foundation
 
@@ -1028,92 +1024,18 @@ def main(argv=None):
         log("No prioritized files to process.", debug)
         return 0
 
-<<<<<<< Updated upstream
-    changed_overall = []
-    names_to_register: List[str] = []
-    for p in prioritized:
-        strp = str(p)
-        if strp in processed:
-            log(f"Skipping already processed: {p}", debug)
-            continue
-        changed = process_file(p, backend, debug, dry)
-        if changed:
-            changed_overall.extend(changed)
-        # persist processed immediately so we won't re-run on crash
-        processed.add(strp)
-=======
-    all_written = []
-    all_skipped = []
-    backend_names_added = []
 
-    for feat in to_process:
-        log(f"=== Processing feature: {feat} ===", debug)
-        state = project_state.get(feat, {})
-        proposals_passes: list[Dict[str, str]] = []
-        prev = None
-        for pass_no in range(args.think):
-            step = ai_propose_changes(feature, state, debug=args.debug, prev=prev, pass_no=pass_no)
-            proposals_passes.append(step)
-            prev = step  # feed forward the previous result
+def relpath_to_project(path: Path) -> str:
+    """
+    Return a repo-relative path for `path`. If `path` is outside the project root,
+    normalize by removing an initial '../' when possible.
+    """
+    try:
+        rel = str(Path(path).relative_to(PROJECT_ROOT))
+    except Exception:
+        rel = os.path.relpath(str(path), str(PROJECT_ROOT))
+    # Normalize away an initial "../" for nicer paths
+    if rel.startswith("../"):
+        rel = rel[3:]
+    return rel
 
-        # Only keep files that are stable (identical across all passes)
-        stable: Dict[str, str] = {}
-        if proposals_passes:
-            first = proposals_passes[0]
-            for path, content in first.items():
-                if all(path in p and p[path] == content for p in proposals_passes[1:]):
-                    stable[path] = content
-
-        proposals = stable
-        if args.debug:
-            log(f"Stable proposals for {feature}: {len(proposals)} files after {args.think} passes", args.debug)
-
-        # collect which backend names to add (if feature wasn't in backend registry)
-        # We decide to register all planned features; backend_register_feature will be idempotent.
-        backend_names = [feat]
-
-        written, skipped = process_proposals(proposals, backend_names, debug, dry)
-        all_written.extend(written)
-        all_skipped.extend(skipped)
-        backend_names_added.extend(backend_names)
-
-        processed.add(str(feat))
->>>>>>> Stashed changes
-        save_state(processed)
-        # remember the feature name for registry
-        try:
-            nm = safe_feature_name_from_path(p)
-            if nm:
-                names_to_register.append(nm)
-        except Exception:
-            pass
-
-    # add registry references for all names processed this run (merge with existing)
-    if names_to_register:
-        # Merge with existing and write
-        if ensure_feature_registry_refs(names_to_register, dry, debug):
-            log("Updated feature registry", debug)
-
-    # ensure API snippets for processed features are appended to App/APIClient.swift if backend exists
-    if backend and API_CLIENT_PATH.exists():
-        api_text = API_CLIENT_PATH.read_text(encoding="utf8")
-        for p in prioritized:
-            name = safe_feature_name_from_path(p)
-            marker = f"// AUTO-GENERATED: {name} API methods"
-            if marker not in api_text:
-                new_api = api_text + "\n" + make_api_snippet(name)
-                if atomic_write(API_CLIENT_PATH, new_api, debug, dry):
-                    changed_overall.append(str(API_CLIENT_PATH))
-                    api_text = new_api
-
-    if changed_overall:
-        log("Files changed this run:", debug)
-        for c in sorted(set(changed_overall)):
-            log(f" - {c}", debug)
-    else:
-        log("No files were changed by the improver.", debug)
-
-    return 0
-
-if __name__ == "__main__":
-    raise SystemExit(main())
