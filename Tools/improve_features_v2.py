@@ -62,6 +62,24 @@ AGGRESSIVE = True
 # -------------------------
 # Utilities
 # -------------------------
+<<<<<<< Updated upstream
+=======
+def relpath_to_project(path: Path) -> str:
+    try:
+        rel = str(Path(path).relative_to(PROJECT_ROOT))
+    except Exception:
+        rel = os.path.relpath(str(path), str(PROJECT_ROOT))
+    # Normalize away "../"
+    if rel.startswith("../"):
+        rel = rel[3:]
+    return rel
+
+def canonicalize_feat(name: str) -> str:
+    """Return a CamelCase canonicalized version of a feature name."""
+    return ''.join(word.capitalize() for word in re.split(r'[^A-Za-z0-9]+', name) if word)
+
+
+>>>>>>> Stashed changes
 def now() -> str:
     return time.strftime("%Y-%m-%d %H:%M:%S")
 
@@ -349,6 +367,7 @@ def grep_repo(pattern: str) -> List[str]:
 # -------------------------
 # Backend helpers
 # -------------------------
+<<<<<<< Updated upstream
 def ensure_backend_scaffold(dry: bool, debug: bool) -> bool:
     """
     Ensure backend/ exists and a minimal app.py template exists. Will be regenerated from registry.
@@ -596,6 +615,88 @@ def ensure_feature_registry_refs(names: List[str], dry: bool, debug: bool) -> bo
 # -------------------------
 # Frontend generation helpers
 # -------------------------
+=======
+# Normalize feature name into proper CamelCase
+def canonicalize_feat(name: str) -> str:
+    import re
+    parts = re.findall(r"[A-Za-z0-9]+", name)
+    return "".join(p[0].upper() + p[1:] for p in parts if p)
+
+# v
+def ai_propose_changes(
+    feature: str,
+    state: Dict[str, Path],
+    debug: bool = False,
+    prev: Optional[Dict[str, str]] = None,
+    pass_no: int = 0
+) -> Dict[str, str]:
+    """
+    Given a feature name and its current state, propose files to create or modify.
+    Returns a dict: path_str -> file_contents (fully rendered).
+
+    This function is the AI integration point; replace its body with a call to an LLM
+    to produce higher-quality code. For now we use deterministic templates and heuristics.
+
+    If called multiple times (multi-pass mode), we refine previous proposals cautiously.
+    """
+
+    # --- THINKING PHASE PATCH START ---
+    if prev is not None:
+        # Conservative refinement: only keep entries that persist or converge.
+        refined = {}
+        for path, content in prev.items():
+            # If the same file already proposed, keep it.
+            refined[path] = content
+        if debug:
+            log(f"[think:{pass_no}] refining {len(refined)} files", debug)
+        return refined
+    # --- THINKING PHASE PATCH END ---
+
+    proposals: Dict[str, str] = {}
+    feat = canonicalize_feat(feature)
+    features_dir = PROJECT_ROOT / "App" / "Features"
+    view_path = features_dir / f"{feat}View.swift"
+    vm_path = features_dir / f"{feat}ViewModel.swift"
+    repo_path = features_dir / f"{feat}Repository.swift"
+    model_path = PROJECT_ROOT / "Models" / f"{feat}Model.swift"
+    test_path = PROJECT_ROOT / "Tests" / "Features" / f"{feat}Tests.swift"
+    plan_path = PROJECT_ROOT / "plan.md"
+
+    # === Generation logic ===
+    if not state.get("view"):
+        proposals[str(view_path)] = make_swift_view(feat)
+    if not state.get("viewmodel"):
+        proposals[str(vm_path)] = make_swift_vm(feat, backend=True)
+    if not any(m.name.endswith(f"{feat}Model.swift") for m in state.get("models", [])):
+        proposals[str(model_path)] = make_swift_model(feat)
+    if not state.get("repo"):
+        proposals[str(repo_path)] = make_swift_repo(feat)
+    if not state.get("tests"):
+        proposals[str(test_path)] = make_swift_test(feat)
+
+    # Add/update plan.md
+    plan_note = (
+        f"# Feature: {feat}\n\n"
+        f"Auto-generated plan for {feat}\n\n"
+        "- Implement UI (View & ViewModel)\n"
+        "- Implement Repository & Model\n"
+        "- Add backend endpoints and API client methods\n"
+        "- Add tests\n\n"
+    )
+    existing_plan = read_text_safe(plan_path)
+    if plan_note.strip() not in existing_plan:
+        proposals[str(plan_path)] = (
+            existing_plan + "\n\n" + plan_note if existing_plan else plan_note
+        )
+
+    if debug:
+        log(f"ai_propose_changes({feature}): proposing {len(proposals)} files", debug)
+
+    return proposals
+
+
+# Reuse make_* templates from previous code (simple, safe templates)
+>>>>>>> Stashed changes
 def make_swift_model(name: str) -> str:
     return f"""import Foundation
 
@@ -890,6 +991,9 @@ def main(argv=None):
     parser.add_argument("--batch", type=int, default=0, help="legacy alias for --max (keeps compatibility)")
     parser.add_argument("--aggressive", dest="aggressive", action="store_true", help="be aggressive about overwriting and adding backend")
     parser.add_argument("--no-aggressive", dest="aggressive", action="store_false", help="disable aggressive behavior")
+    parser.add_argument("--think", type=int, default=10, help="number of internal passes for deep thinking per feature (default: 10)")
+
+
     parser.set_defaults(aggressive=True)
     args = parser.parse_args(argv)
 
@@ -924,6 +1028,7 @@ def main(argv=None):
         log("No prioritized files to process.", debug)
         return 0
 
+<<<<<<< Updated upstream
     changed_overall = []
     names_to_register: List[str] = []
     for p in prioritized:
@@ -936,6 +1041,44 @@ def main(argv=None):
             changed_overall.extend(changed)
         # persist processed immediately so we won't re-run on crash
         processed.add(strp)
+=======
+    all_written = []
+    all_skipped = []
+    backend_names_added = []
+
+    for feat in to_process:
+        log(f"=== Processing feature: {feat} ===", debug)
+        state = project_state.get(feat, {})
+        proposals_passes: list[Dict[str, str]] = []
+        prev = None
+        for pass_no in range(args.think):
+            step = ai_propose_changes(feature, state, debug=args.debug, prev=prev, pass_no=pass_no)
+            proposals_passes.append(step)
+            prev = step  # feed forward the previous result
+
+        # Only keep files that are stable (identical across all passes)
+        stable: Dict[str, str] = {}
+        if proposals_passes:
+            first = proposals_passes[0]
+            for path, content in first.items():
+                if all(path in p and p[path] == content for p in proposals_passes[1:]):
+                    stable[path] = content
+
+        proposals = stable
+        if args.debug:
+            log(f"Stable proposals for {feature}: {len(proposals)} files after {args.think} passes", args.debug)
+
+        # collect which backend names to add (if feature wasn't in backend registry)
+        # We decide to register all planned features; backend_register_feature will be idempotent.
+        backend_names = [feat]
+
+        written, skipped = process_proposals(proposals, backend_names, debug, dry)
+        all_written.extend(written)
+        all_skipped.extend(skipped)
+        backend_names_added.extend(backend_names)
+
+        processed.add(str(feat))
+>>>>>>> Stashed changes
         save_state(processed)
         # remember the feature name for registry
         try:
