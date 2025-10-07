@@ -3,6 +3,8 @@
 # Feature loop: run ai_features, iteratively improve, commit edits only (no new placeholders)
 
 set -u
+export GEMINI_CMD='gemini cli chat --stdin'
+
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 TOOLS="$ROOT/Tools"
 

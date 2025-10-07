@@ -78,12 +78,111 @@ def relpath_to_project(path: Path) -> str:
     return rel
 
 def canonicalize_feat(name: str) -> str:
+    """Turn an arbitrary feature identifier into a clean CamelCase token suitable for filenames.
+    Strips checklist markers like '[x]' or '- ' and non-alphanumeric characters.
     """
-    Return a CamelCase canonicalized version of a feature name.
-    Keeps only alphanumerics and capitalizes parts.
+    import re
+    if not name:
+        return name
+    # Remove common checklist markers at start like "[x] ", "[ ] ", "- ", "* ", "1. "
+    s = re.sub(r'^\s*(?:\[[ xX]\]\s*|\-\s+|\*\s+|\d+\.\s+)+', '', name).strip()
+    parts = re.findall(r"[A-Za-z0-9]+", s)
+    if not parts:
+        return ''.join(ch for ch in s if ch.isalnum())
+    def cap(p):
+        return p[0].upper() + p[1:] if len(p) > 1 else p.upper()
+    return "".join(cap(p) for p in parts)
+
+def _extract_first_json(s: str):
+    """Try to extract the first JSON object from s by matching braces."""
+    try:
+        i = s.find('{')
+        if i == -1:
+            return None
+        depth = 0
+        for j in range(i, len(s)):
+            if s[j] == '{':
+                depth += 1
+            elif s[j] == '}':
+                depth -= 1
+                if depth == 0:
+                    chunk = s[i:j+1]
+                    try:
+                        return json.loads(chunk)
+                    except Exception:
+                        return None
+        return None
+    except Exception:
+        return None
+
+def refine_with_llm(feature: str, proposals: dict, state: dict, pass_no: int = 0, debug: bool = False) -> dict:
+    """Attempt to refine 'proposals' using the local Gemini CLI (if configured).
+    - Set GEMINI_CMD env var to your gemini command (for example:
+      export GEMINI_CMD='gemini cli chat --stdin')
+    - The model should return a JSON object mapping path -> full file content.
+    - If the CLI is not configured or the call fails, returns 'proposals' unchanged.
     """
-    parts = [p for p in re.split(r'[^A-Za-z0-9]+', name) if p]
-    return ''.join(part.capitalize() for part in parts)
+    import os, subprocess, shlex
+    GEMINI_CMD = os.environ.get('GEMINI_CMD') or os.environ.get('GEMINI_CLI') or os.environ.get('GEMINI')
+    if not GEMINI_CMD:
+        if debug:
+            log("refine_with_llm: no GEMINI_CMD configured; skipping LLM refinement", True)
+        return proposals
+
+    # Build a compact prompt with previous proposals and existing file snippets
+    prompt_parts = []
+    prompt_parts.append(f"You are a careful code assistant. Refine the proposed files for feature: {feature}.")
+    prompt_parts.append("Return exactly one JSON object mapping file paths (repo-relative) to full file contents.")
+    prompt_parts.append("If nothing should change for a file, return it with its original content.")
+    prompt_parts.append("Previous proposals (path -> content snippets):")
+    for p, c in list(proposals.items())[:50]:
+        snippet = c if isinstance(c, str) else str(c)
+        if len(snippet) > 800:
+            snippet = snippet[:800] + "\n... (truncated) ..."
+        prompt_parts.append(f"PATH: {p}\nCONTENT:\n{snippet}\n-----\n")
+
+    prompt_parts.append("Existing on-disk files (path -> beginning of content):")
+    for p in list(proposals.keys())[:50]:
+        try:
+            if os.path.exists(p):
+                s = Path(p).read_text(encoding='utf8')[:1500]
+                prompt_parts.append(f"FILE: {p}\n{s}\n-----\n")
+        except Exception:
+            pass
+
+    prompt_text = "\n\n".join(prompt_parts)
+
+    # Try a few invocation forms; allow user to supply a full command in GEMINI_CMD
+    candidates = []
+    if ' ' in GEMINI_CMD.strip():
+        candidates.append(GEMINI_CMD)
+    else:
+        candidates.append(f"{GEMINI_CMD} cli chat --stdin")
+        candidates.append(f"{GEMINI_CMD} chat --stdin")
+        candidates.append(GEMINI_CMD)
+
+    last_exc = None
+    for cmd in candidates:
+        try:
+            if debug:
+                log(f"refine_with_llm: running: {cmd}", True)
+            proc = subprocess.run(cmd, input=prompt_text, text=True, capture_output=True, shell=True, timeout=120)
+            out_text = (proc.stdout or proc.stderr or "")
+            if proc.returncode == 0 and out_text:
+                parsed = _extract_first_json(out_text)
+                if parsed and isinstance(parsed, dict):
+                    if debug:
+                        log(f"refine_with_llm: parsed JSON with {len(parsed)} entries", True)
+                    return parsed
+            last_exc = RuntimeError(f"Command failed: {cmd}; rc={proc.returncode}")
+        except Exception as e:
+            last_exc = e
+            continue
+
+    if debug:
+        log(f"refine_with_llm: LLM refinement failed ({last_exc}); falling back to original proposals", True)
+    return proposals
+
 
 def now() -> str:
     return time.strftime("%Y-%m-%d %H:%M:%S")
@@ -620,34 +719,23 @@ def ensure_feature_registry_refs(names: List[str], dry: bool, debug: bool) -> bo
 # Frontend generation helpers
 # -------------------------
 # Normalize feature name into proper CamelCase
-def ai_propose_changes(
-    feature: str,
-    state: Dict[str, Path],
-    debug: bool = False,
-    prev: Optional[Dict[str, str]] = None,
-    pass_no: int = 0
-) -> Dict[str, str]:
+def ai_propose_changes(feature: str, state: Dict[str, Path], debug: bool = False, prev: Optional[Dict[str, str]] = None, pass_no: int = 0) -> Dict[str, str]:
     """
     Given a feature name and its current state, propose files to create or modify.
     Returns a dict: path_str -> file_contents (fully rendered).
 
-    This function is the AI integration point; replace its body with a call to an LLM
-    to produce higher-quality code. For now we use deterministic templates and heuristics.
-
-    If called multiple times (multi-pass mode), we refine previous proposals cautiously.
+    Behavior:
+    - If prev is provided, attempts LLM refinement of prev (so multi-pass reflection improves proposals).
+    - Otherwise builds deterministic scaffold proposals, then attempts LLM refinement if available.
     """
-
-    # --- THINKING PHASE PATCH START ---
-    if prev is not None:
-        # Conservative refinement: only keep entries that persist or converge.
-        refined = {}
-        for path, content in prev.items():
-            # If the same file already proposed, keep it.
-            refined[path] = content
-        if debug:
-            log(f"[think:{pass_no}] refining {len(refined)} files", debug)
-        return refined
-    # --- THINKING PHASE PATCH END ---
+    # If prev is provided (subsequent thinking pass), attempt LLM refinement (if available)
+    try:
+        if prev is not None:
+            refined = refine_with_llm(feature, prev, state, pass_no=pass_no, debug=debug)
+            if isinstance(refined, dict):
+                return refined
+    except Exception as e:
+        log(f"ai_propose_changes: LLM refinement failed: {e}", True)
 
     proposals: Dict[str, str] = {}
     feat = canonicalize_feat(feature)
@@ -659,7 +747,7 @@ def ai_propose_changes(
     test_path = PROJECT_ROOT / "Tests" / "Features" / f"{feat}Tests.swift"
     plan_path = PROJECT_ROOT / "plan.md"
 
-    # === Generation logic ===
+    # Generate scaffolds where missing (existing detections in state)
     if not state.get("view"):
         proposals[str(view_path)] = make_swift_view(feat)
     if not state.get("viewmodel"):
@@ -671,7 +759,7 @@ def ai_propose_changes(
     if not state.get("tests"):
         proposals[str(test_path)] = make_swift_test(feat)
 
-    # Add/update plan.md
+    # Add a short plan.md note for the feature
     plan_note = (
         f"# Feature: {feat}\n\n"
         f"Auto-generated plan for {feat}\n\n"
@@ -682,13 +770,16 @@ def ai_propose_changes(
     )
     existing_plan = read_text_safe(plan_path)
     if plan_note.strip() not in existing_plan:
-        proposals[str(plan_path)] = (
-            existing_plan + "\n\n" + plan_note if existing_plan else plan_note
-        )
+        proposals[str(plan_path)] = existing_plan + "\n\n" + plan_note if existing_plan else plan_note
+
+    # Attempt LLM refinement even for the initial pass (so we can upgrade existing files)
+    try:
+        proposals = refine_with_llm(feature, proposals, state, pass_no=pass_no, debug=debug)
+    except Exception:
+        pass
 
     if debug:
         log(f"ai_propose_changes({feature}): proposing {len(proposals)} files", debug)
-
     return proposals
 
 
@@ -888,131 +979,38 @@ def collect_prioritized_files(processed: Set[str], debug: bool) -> List[Path]:
 # -------------------------
 # Per-file processing
 # -------------------------
-def process_file(path: Path, backend: bool, debug: bool, dry: bool) -> List[str]:
-    """
-    Process a single Swift file: update model/repo/vm/view/test/docs if they exist.
-    Only modifies files inside nested ANCHOR/ANCHOR; no new files are created.
-    Returns list of changed paths (strings).
-    """
-    changed = []
-
-    # Skip files not in nested ANCHOR/ANCHOR
-    try:
-        nested_anchor = ROOT_DIR / "ANCHOR"
-        try:
-            path.resolve().relative_to(nested_anchor.resolve())
-        except ValueError:
-            log(f"Skipping {path} — not in nested ANCHOR/ANCHOR", debug)
-            return changed
-    except Exception:
-        log(f"Skipping {path} — path resolution failed", debug)
-        return changed
-
-    try:
-        name = safe_feature_name_from_path(path)
-        log(f"Processing {path} as feature name '{name}'", debug)
-
-        target_dir = path.parent
-
-        # Only proceed if target_dir exists
-        if not target_dir.exists():
-            log(f"Target directory {target_dir} does not exist — skipping helpers for {path}", debug)
-            target_dir = None
-
-        # Compute helper paths only if directory exists
-        model_path = target_dir / f"{name}Model.swift" if target_dir else None
-        repo_path = target_dir / f"{name}Repository.swift" if target_dir else None
-        vm_path = target_dir / f"{name}ViewModel.swift" if target_dir else None
-        view_path = target_dir / f"{name}View.swift" if target_dir else None
-        test_path = target_dir / f"{name}Tests.swift" if target_dir else None
-        doc_path = target_dir / f"{name}.md" if target_dir else None
-
-        # Backend updates
-        if backend:
-            registry = []
-            if BACKEND_REGISTRY.exists():
-                try:
-                    registry = json.loads(BACKEND_REGISTRY.read_text(encoding="utf8"))
-                except Exception:
-                    registry = []
-
-            if name in registry:
-                if regenerate_backend_app_from_registry(dry, debug) and BACKEND_APP.exists():
-                    changed.append(str(BACKEND_APP))
-                if API_CLIENT_PATH.exists() and regenerate_api_client_from_registry(dry, debug):
-                    changed.append(str(API_CLIENT_PATH))
-            else:
-                log(f"Skipping backend registry add for {name} (only modifying existing backend entries)", debug)
-
-            # Append API snippet only if marker missing
-            if API_CLIENT_PATH.exists():
-                api_text = API_CLIENT_PATH.read_text(encoding="utf8")
-                marker = f"// AUTO-GENERATED: {name} API methods"
-                if marker not in api_text:
-                    new_text = api_text + "\n" + make_api_snippet(name)
-                    if atomic_write(API_CLIENT_PATH, new_text, debug, dry):
-                        changed.append(str(API_CLIENT_PATH))
-
-        # Update frontend helpers — only existing files
-        for helper_path, make_func in [
-            (model_path, make_swift_model),
-            (repo_path, make_swift_repo),
-            (vm_path, lambda n: make_swift_vm(n, backend)),
-            (view_path, make_swift_view),
-            (test_path, make_swift_test),
-            (doc_path, make_docs_md),
-        ]:
-            if helper_path and helper_path.exists():
-                if atomic_write(helper_path, make_func(name), debug, dry):
-                    changed.append(str(helper_path))
-            elif helper_path:
-                log(f"Skipping creation of new file {helper_path} (only modifying existing files)", debug)
-
-    except Exception as e:
-        log(f"Error processing {path}: {e}", True)
-
-    return changed
-
-
-# -------------------------
-# Main orchestration
-# -------------------------
 def main(argv=None):
+    import argparse
+    from collections import defaultdict, Counter
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--debug", action="store_true")
     parser.add_argument("--force", action="store_true", help="reprocess even if in processed state")
     parser.add_argument("--max", type=int, default=0, help="max files to process this run (0 = unlimited)")
-    # backward-compatible alias for external callers that pass --batch
     parser.add_argument("--batch", type=int, default=0, help="legacy alias for --max (keeps compatibility)")
     parser.add_argument("--aggressive", dest="aggressive", action="store_true", help="be aggressive about overwriting and adding backend")
     parser.add_argument("--no-aggressive", dest="aggressive", action="store_false", help="disable aggressive behavior")
     parser.add_argument("--think", type=int, default=10, help="number of internal passes for deep thinking per feature (default: 10)")
-
-
     parser.set_defaults(aggressive=True)
     args = parser.parse_args(argv)
 
     debug = args.debug
     dry = args.dry_run
     force = args.force
-    # prefer --max if provided; otherwise fall back to --batch for compatibility
     max_count = args.max if args.max and args.max > 0 else (args.batch if args.batch and args.batch > 0 else 0)
     global AGGRESSIVE
     AGGRESSIVE = bool(args.aggressive)
 
     processed = load_state()
     if force:
-        processed = set()  # ignore past
+        processed = set()
     backend = (ROOT_DIR / "backend").exists() or AGGRESSIVE
 
-
-    # ensure APIClient skeleton if backend present
+    # Ensure API client/registry coherence if backend present
     if backend:
         if BACKEND_REGISTRY.exists():
-            # regenerate deterministic backend/app.py from existing registry (idempotent)
             regenerate_backend_app_from_registry(dry, debug)
-        # only regenerate API client if it already exists (do not create new API client file)
         if API_CLIENT_PATH.exists():
             regenerate_api_client_from_registry(dry, debug)
 
@@ -1023,6 +1021,53 @@ def main(argv=None):
     if not prioritized:
         log("No prioritized files to process.", debug)
         return 0
+
+    for feature in prioritized:
+        log(f"Processing feature: {feature}", debug)
+
+        # Multi-pass deep thinking phase
+        proposals_passes = []
+        for pass_no in range(args.think):
+            proposals = ai_propose_changes(feature, load_feature_state(feature), debug)
+            proposals_passes.append(proposals)
+            log(f"  Pass {pass_no+1}/{args.think}: proposed {len(proposals)} files", debug)
+
+        # === Acceptance rule: majority OR last-two-equal ===
+        accepted_proposals = {}
+        if proposals_passes:
+            num = len(proposals_passes)
+            contents = defaultdict(list)
+            for p in proposals_passes:
+                for k, v in p.items():
+                    contents[k].append(v)
+
+            for k, vals in contents.items():
+                counter = Counter(vals)
+                top, cnt = counter.most_common(1)[0]
+                if cnt > num / 2:
+                    accepted_proposals[k] = top
+                else:
+                    # accept if last two passes agree
+                    if num >= 2:
+                        last = proposals_passes[-1].get(k)
+                        prevlast = proposals_passes[-2].get(k)
+                        if last is not None and last == prevlast:
+                            accepted_proposals[k] = last
+
+        if not accepted_proposals:
+            log(f"No stable proposals for {feature}; skipping.", debug)
+            continue
+
+        # Apply accepted proposals
+        for path, content in accepted_proposals.items():
+            write_file(path, content, dry=dry, debug=debug)
+
+        mark_processed(feature, processed)
+        save_state(processed)
+        log(f"Accepted {len(accepted_proposals)} files for {feature}", debug)
+
+    return 0
+
 
 
 def relpath_to_project(path: Path) -> str:
