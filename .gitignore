@@ -25,3 +25,4 @@ fastlane/Preview.html
 .env.*
 Tools/build.log
 Tools/.last_build_hash
+Tools/*.log
