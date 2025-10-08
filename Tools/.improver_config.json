@@ -1,0 +1,26 @@
+{
+    "__comment": "Edit values below. Leave xcode_workspace or xcode_project blank as appropriate. Keep dry_run true until you review generated patches. If you use CocoaPods set xcode_workspace to the .xcworkspace created by `pod install`.",
+    "anchor_dir": "ANCHOR",
+    "small_file_line_threshold": 100,
+    "iterations_before_run": 5,
+    "max_iterations": 200,
+    "backup_dir": ".improver_backups",
+    "dry_run": true,
+    "auto_apply": false,
+    "confidence_threshold": 0.85,
+  
+    "xcode_workspace": "./ANCHOR.xcodeproj/project.xcworkspace",
+    "xcode_project": "",
+    "xcode_scheme": "ANCHOR",
+    "__note_find_scheme": "Run the xcodebuild -list command (see chat) and paste the scheme name here or into the repo config before running the improver.",
+    "simulator_name": "iPhone 16",
+"simulator_os": "18.4",
+  
+    "gemini_cli": "gemini",
+    "gh_cli": "gh",
+  
+    "cocoapods": true,
+  
+    "notes": "Replace MyApp.xcworkspace and MyAppTests with your actual workspace/scheme. Set dry_run=false only after you inspect suggested patches."
+  }
+  
