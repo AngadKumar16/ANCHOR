@@ -57,14 +57,10 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
 
 # Load local/open-source LLM
-MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.1"  # Or local path
-tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-model = AutoModelForCausalLM.from_pretrained(
-    MODEL_NAME,
-    device_map="auto",          # GPU if available, else CPU
-    torch_dtype=torch.float16,  # Saves memory
-    low_cpu_mem_usage=True
-)
+MODEL_NAME = "TheBloke/WizardLM-7B-uncensored-GPTQ"  # Or local path
+tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, local_files_only=True)
+model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, local_files_only=True, device_map="auto", torch_dtype=torch.float16)
+
 
 
 # ---------------------- Default configuration ----------------------------

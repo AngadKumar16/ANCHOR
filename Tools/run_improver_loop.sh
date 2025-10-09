@@ -8,9 +8,12 @@ ITERATIONS_BEFORE_RUN=5
 COUNTER=0
 WORKSPACE="./ANCHOR.xcodeproj/project.xcworkspace"
 SCHEME="ANCHOR"
-DESTINATION="platform=iOS Simulator,name=iPhone 14,OS=17.0"
+DESTINATION="platform=iOS Simulator,name=iPhone 16,OS=18.4"
 LOG_DIR="Tools/logs"
 BACKEND_DIR="backend"
+
+#!/bin/bash
+set -euo pipefail
 
 mkdir -p "$LOG_DIR"
 
@@ -75,7 +78,9 @@ while true; do
         fi
 
         echo "✅ Build succeeded. Launching simulator..."
-        xcrun simctl boot "iPhone 14" || true
+        if ! xcrun simctl list | grep -q "Booted.*iPhone 16"; then
+            xcrun simctl boot "iPhone 16"
+        fi
         open -a Simulator
         xcrun simctl install booted build/Release-iphonesimulator/ANCHOR.app 2>&1 | tee -a "$LOGFILE"
         xcrun simctl launch booted com.yourcompany.ANCHOR 2>&1 | tee -a "$LOGFILE"
