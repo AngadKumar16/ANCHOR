@@ -52,6 +52,21 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
+# imrover_loop.py (top of file)
+from transformers import AutoModelForCausalLM, AutoTokenizer
+import torch
+
+# Load local/open-source LLM
+MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.1"  # Or local path
+tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+model = AutoModelForCausalLM.from_pretrained(
+    MODEL_NAME,
+    device_map="auto",          # GPU if available, else CPU
+    torch_dtype=torch.float16,  # Saves memory
+    low_cpu_mem_usage=True
+)
+
+
 # ---------------------- Default configuration ----------------------------
 DEFAULT_CONFIG = {
     "anchor_dir": "ANCHOR",
@@ -96,6 +111,13 @@ def run_cmd(cmd: str, cwd: str = '.', timeout: int = 600) -> Tuple[int, str, str
     out = proc.stdout.decode('utf-8', errors='ignore')
     err = proc.stderr.decode('utf-8', errors='ignore')
     return proc.returncode, out, err
+
+def run_local_model(prompt: str, max_tokens: int = 200) -> str:
+    """Run the local Mistral model to generate a patch suggestion."""
+    inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+    outputs = model.generate(**inputs, max_new_tokens=max_tokens)
+    return tokenizer.decode(outputs[0], skip_special_tokens=True)
+
 
 
 # ---------------------- Repository indexing -----------------------------
@@ -288,21 +310,22 @@ def analyze_and_suggest(anchor_dir: Path, cfg: Dict[str, Any]) -> List[Dict[str,
     return suggestions
 
 
-def attempt_fix_with_gemini(context_snippet: str, cfg: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+def attempt_fix_with_local_model(context_snippet: str, max_tokens: int = 200) -> Dict[str, Any]:
+    """
+    Use local Mistral 7B to propose a minimal, safe Swift patch.
+    Returns: {'patch': str, 'llm_confidence': float}
+    """
     prompt = (
         "You are an expert iOS/Swift developer. Given the following failing test output and code context, "
         "propose a minimal, safe code patch (diff) that addresses the issue. Return only the patch in unified "
-        "diff format and a short explanation. Code must be conservative and include TODO markers where uncertain."
-        "Context: " + context_snippet
+        "diff format and a short explanation. Include TODO markers where uncertain.\n\n"
+        f"Context:\n{context_snippet}"
     )
-    advice = call_gemini_advisor(prompt, cfg)
-    if not advice:
-        return None
-    text = advice.get('text', '')
-    confidence = advice.get('confidence', 0.0)
-    # heuristic: if the result includes 'diff' markers or '---' '+++' it's likely a patch
-    patch = text
-    return {'patch': patch, 'llm_confidence': confidence}
+    patch_text = run_local_model(prompt, max_tokens=max_tokens)
+    # simple heuristic: longer patch -> higher confidence
+    confidence = min(0.95, 0.2 + min(0.75, len(patch_text) / 5000.0))
+    return {'patch': patch_text, 'llm_confidence': confidence}
+
 
 
 # ---------------------- High-level loop --------------------------------
@@ -338,7 +361,7 @@ def main_loop(cfg: Dict[str, Any]):
 
         # 3) Ask Gemini for a suggested patch
         print('Requesting Gemini advisor for suggested patch...')
-        suggestion = attempt_fix_with_gemini(context_snippet, cfg)
+        suggestion = attempt_fix_with_local_model(context_snippet)
         if not suggestion:
             print('No suggestion from Gemini; creating a safe suggestion stub in ANCHOR/stubs')
             # create suggestion file with context for human devs
