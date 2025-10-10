@@ -47,8 +47,9 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -57,9 +58,142 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
 
 # Load local/open-source LLM
-MODEL_NAME = "TheBloke/WizardLM-7B-uncensored-GPTQ"  # Or local path
-tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, local_files_only=True)
-model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, local_files_only=True, device_map="auto", torch_dtype=torch.float16)
+# ---------------------- Local model loader -----------------------------
+
+MODEL_NAME = "TheBloke/WizardLM-7B-uncensored"  # Or local path
+# ---------------------- Robust local model loader + fallback -------------
+_model = None
+_tokenizer = None
+_device = None
+_local_model_available = None  # None = unknown, False = unavailable, True = available
+
+def load_model():
+    """
+    Attempt to load the local model once. On macOS we force CPU + float32 to
+    reduce segfault OOM issues. If anything goes wrong we mark the local model
+    unavailable and return False.
+    Returns: True if local model loaded and ready, False otherwise.
+    """
+    global _model, _tokenizer, _device, _local_model_available
+
+    if _local_model_available is not None:
+        # Already attempted load
+        return _local_model_available
+
+    print(f"Attempting to load model '{MODEL_NAME}' (safe mode)...")
+    try:
+        # Load tokenizer (may download if not cached)
+        _tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+
+        # Choose device safely: prefer CUDA on Linux/Windows; force CPU on macOS (Darwin)
+        use_device = None
+        if torch.cuda.is_available():
+            use_device = torch.device("cuda")
+            print("Using CUDA GPU for model.")
+        else:
+            # On macOS, MPS/GPTQ often segfaults; use CPU to be safe.
+            import platform
+            if platform.system() == "Darwin":
+                use_device = torch.device("cpu")
+                print("macOS detected: forcing CPU to avoid MPS/GPTQ segfaults.")
+            elif torch.backends.mps.is_available():
+                # If not macOS Darwin (rare), allow MPS
+                use_device = torch.device("mps")
+                print("Using MPS device.")
+            else:
+                use_device = torch.device("cpu")
+                print("Using CPU device.")
+
+        _device = use_device
+
+        # Load model in safe dtype (float32). Use device_map=None for CPU to avoid map logic.
+        model_kwargs = dict(dtype=torch.float32)
+        if _device == torch.device("cpu"):
+            # load into CPU
+            _model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, device_map=None, **model_kwargs)
+            # already on CPU
+        else:
+            # allow HF to place layers if GPU/MPS available
+            _model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, device_map="auto", **model_kwargs)
+            # move to detected device if needed
+            try:
+                _model.to(_device)
+            except Exception:
+                # some HF models auto-placed layers; ignore if .to fails
+                pass
+
+        _local_model_available = True
+        print("Local model loaded successfully.")
+        return True
+
+    except Exception as e:
+        # Catch everything: OSError, RuntimeError, segfault surfaced as Exception, etc.
+        print("Failed to load local model:", repr(e))
+        print("Local model will be marked unavailable. Falling back to Gemini CLI or stub suggestions.")
+        _local_model_available = False
+        # Try to cleanup partially-loaded objects
+        try:
+            _model = None
+            _tokenizer = None
+            _device = None
+        except Exception:
+            pass
+        return False
+
+
+def run_local_model(prompt: str, max_tokens: int = 200, cfg: Optional[Dict[str, Any]] = None) -> str:
+    """
+    Generate a response for `prompt`. Behavior:
+      - If local model loads successfully -> generate locally.
+      - Else if Gemini CLI is configured in cfg -> call Gemini advisor and return its text.
+      - Else write a stub file to ANCHOR/stubs with context and return a fallback string.
+    cfg: optional config dict (used to check gemini_cli and anchor_dir).
+    """
+    global _model, _tokenizer, _device, _local_model_available
+
+    # Ensure we attempted to load the model (lazy)
+    if _local_model_available is None:
+        load_model()
+
+    if _local_model_available:
+        # Local generation path
+        try:
+            # Tokenize and move inputs onto same device as model if possible
+            inputs = _tokenizer(prompt, return_tensors="pt")
+            if _device is not None:
+                inputs = {k: v.to(_device) for k, v in inputs.items()}
+            outputs = _model.generate(**inputs, max_new_tokens=max_tokens)
+            return _tokenizer.decode(outputs[0], skip_special_tokens=True)
+        except Exception as e:
+            # If generation fails, mark local model unavailable and fall through to fallback
+            print("Local model generation failed:", repr(e))
+            _local_model_available = False
+
+    # Fallback: attempt Gemini CLI if configured
+    cfg_local = cfg or {}
+    gemini_bin = cfg_local.get('gemini_cli') if isinstance(cfg_local, dict) else None
+    if gemini_bin:
+        # Reuse existing call_gemini_advisor wrapper (which expects cfg)
+        try:
+            advice = call_gemini_advisor(prompt, cfg_local)
+            if advice and advice.get('text'):
+                return advice.get('text')
+        except Exception as e:
+            print("Gemini advisor failed:", repr(e))
+
+    # Final fallback: write a stub suggestion to disk (human will handle)
+    try:
+        anchor_dir = Path(cfg_local.get('anchor_dir', 'ANCHOR')) if isinstance(cfg_local, dict) else Path('ANCHOR')
+        stubs_dir = anchor_dir / 'stubs'
+        stubs_dir.mkdir(parents=True, exist_ok=True)
+        fname = stubs_dir / f'suggestion_{datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")}.md'
+        content = "# Auto-generated fallback suggestion\n\nContext:\n\n" + prompt[:10000]
+        fname.write_text(content, encoding='utf-8')
+        print(f"Wrote stub suggestion to {fname} (local model & Gemini unavailable).")
+        return f"[NO_MODEL_AVAILABLE] Created stub suggestion at {fname}. Please inspect."
+    except Exception as e:
+        print("Failed to write stub suggestion:", repr(e))
+        return "[NO_MODEL_AVAILABLE] Model and Gemini unavailable; failed to write stub."
 
 
 
@@ -107,12 +241,6 @@ def run_cmd(cmd: str, cwd: str = '.', timeout: int = 600) -> Tuple[int, str, str
     out = proc.stdout.decode('utf-8', errors='ignore')
     err = proc.stderr.decode('utf-8', errors='ignore')
     return proc.returncode, out, err
-
-def run_local_model(prompt: str, max_tokens: int = 200) -> str:
-    """Run the local Mistral model to generate a patch suggestion."""
-    inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
-    outputs = model.generate(**inputs, max_new_tokens=max_tokens)
-    return tokenizer.decode(outputs[0], skip_special_tokens=True)
 
 
 
@@ -309,138 +437,215 @@ def analyze_and_suggest(anchor_dir: Path, cfg: Dict[str, Any]) -> List[Dict[str,
 def attempt_fix_with_local_model(context_snippet: str, max_tokens: int = 200) -> Dict[str, Any]:
     """
     Use local Mistral 7B to propose a minimal, safe Swift patch.
-    Returns: {'patch': str, 'llm_confidence': float}
+    
+    Args:
+        context_snippet: The context or error message to analyze
+        max_tokens: Maximum number of tokens for the model to generate
+        
+    Returns:
+        Dict containing 'patch' (str) and 'llm_confidence' (float) if successful,
+        or an error message if the model fails to generate a response.
     """
-    prompt = (
-        "You are an expert iOS/Swift developer. Given the following failing test output and code context, "
-        "propose a minimal, safe code patch (diff) that addresses the issue. Return only the patch in unified "
-        "diff format and a short explanation. Include TODO markers where uncertain.\n\n"
-        f"Context:\n{context_snippet}"
-    )
-    patch_text = run_local_model(prompt, max_tokens=max_tokens)
-    # simple heuristic: longer patch -> higher confidence
-    confidence = min(0.95, 0.2 + min(0.75, len(patch_text) / 5000.0))
-    return {'patch': patch_text, 'llm_confidence': confidence}
-
+    if not context_snippet or not isinstance(context_snippet, str):
+        return {'error': 'Invalid context_snippet: must be a non-empty string'}
+        
+    try:
+        prompt = (
+            "You are an expert iOS/Swift developer. Given the following failing test output and code context, "
+            "propose a minimal, safe code patch (diff) that addresses the issue. Return only the patch in unified "
+            "diff format and a short explanation. Include TODO markers where uncertain.\n\n"
+            f"Context:\n{context_snippet}"
+        )
+        
+        patch_text = run_local_model(prompt, max_tokens=max_tokens)
+        
+        if not patch_text or not isinstance(patch_text, str):
+            return {'error': 'Model returned an invalid response'}
+            
+        # Simple heuristic: longer patch -> higher confidence (with reasonable bounds)
+        confidence = min(0.95, 0.2 + min(0.75, len(patch_text) / 5000.0))
+        
+        return {
+            'patch': patch_text, 
+            'llm_confidence': confidence,
+            'success': True
+        }
+        
+    except Exception as e:
+        return {
+            'error': f'Error generating patch: {str(e)}',
+            'success': False
+        }
 
 
 # ---------------------- High-level loop --------------------------------
 
+def apply_patch(file_path: Path, patch_text: str, cfg: Dict[str, Any]) -> bool:
+    """Apply a patch to the given file."""
+    try:
+        # Create backup
+        backup_path = file_path.with_suffix(f"{file_path.suffix}.bak")
+        shutil.copy2(file_path, backup_path)
+        
+        # Apply patch
+        with open(file_path, 'r') as f:
+            original = f.read()
+        
+        # Simple patch application (for demo purposes)
+        # In production, use a proper patch library
+        patched = original + "\n" + patch_text
+        
+        with open(file_path, 'w') as f:
+            f.write(patched)
+            
+        return True
+    except Exception as e:
+        print(f"Failed to apply patch to {file_path}: {str(e)}")
+        # Restore from backup if available
+        if backup_path.exists():
+            shutil.copy2(backup_path, file_path)
+        return False
+
+def add_feature(file_path: Path, feature_code: str, cfg: Dict[str, Any]) -> bool:
+    """Add a new feature to the codebase."""
+    try:
+        # For new files
+        if not file_path.exists():
+            file_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(file_path, 'w') as f:
+                f.write(feature_code)
+            return True
+            
+        # For existing files, append the feature
+        with open(file_path, 'a') as f:
+            f.write("\n\n" + feature_code)
+        return True
+    except Exception as e:
+        print(f"Failed to add feature to {file_path}: {str(e)}")
+        return False
+
+def fix_errors(error_log: str, cfg: Dict[str, Any]) -> bool:
+    """Analyze build/test errors and attempt to fix them."""
+    print("Analyzing errors and generating fixes...")
+    
+    # Get AI-suggested fixes
+    suggestions = generate_error_fixes(error_log, cfg)
+    
+    if not suggestions:
+        print("No fixes suggested by the model")
+        return False
+        
+    # Apply fixes
+    for suggestion in suggestions:
+        file_path = Path(cfg['anchor_dir']) / suggestion['file']
+        if apply_patch(file_path, suggestion['patch'], cfg):
+            print(f"Applied fix to {file_path}")
+            return True
+            
+    return False
+
+def add_missing_features(cfg: Dict[str, Any]) -> bool:
+    """Identify and add missing features to the codebase."""
+    print("Checking for missing features...")
+    
+    # Check for missing API client methods
+    if not is_api_client_complete(cfg):
+        print("Adding missing API client methods...")
+        return add_api_client_methods(cfg)
+        
+    # Check for missing UI components
+    if not is_ui_complete(cfg):
+        print("Adding missing UI components...")
+        return add_ui_components(cfg)
+        
+    return False
+
 def main_loop(cfg: Dict[str, Any]):
+    """Main improvement loop that fixes errors and adds features."""
     anchor_dir = Path(cfg.get('anchor_dir', 'ANCHOR'))
     if not anchor_dir.exists():
         print(f"Anchor directory not found: {anchor_dir}")
         sys.exit(2)
 
     iteration = 0
-    while iteration < cfg.get('max_iterations', 200):
+    while iteration < cfg.get('max_iterations', 50):
         iteration += 1
         print('='*80)
         print(f'Iteration {iteration}')
 
-        # 1) Attempt Xcode build/tests (user said they run a simulator)
+        # 1) Attempt Xcode build/tests
         xcode_info = build_and_test_xcode(cfg)
         if xcode_info.get('cmd'):
             print('Xcode cmd executed: ', xcode_info['cmd'])
-        print('Xcode success:', xcode_info.get('success'))
-
+        
         if xcode_info.get('success'):
-            print('Tests passed — no immediate fixes required.')
-            # Could still run linters and propose non-critical enhancements.
-            # For now, stop if everything is green.
-            return
+            print('Build successful!')
+            # Try adding new features if build is successful
+            if add_missing_features(cfg):
+                print("Added new features, restarting build cycle...")
+                continue
+            break
+            
+        # 2) If build failed, try to fix errors
+        print('Build failed. Attempting to fix errors...')
+        error_log = xcode_info.get('output', '') + xcode_info.get('error', '')
+        if fix_errors(error_log, cfg):
+            print("Applied fixes, restarting build...")
+            continue
+            
+        # 3) If we couldn't fix errors, try adding missing features
+        print("Couldn't fix errors. Trying to add missing features...")
+        if add_missing_features(cfg):
+            print("Added features, restarting build...")
+            continue
+            
+        print("Couldn't fix errors or add features. Manual intervention needed.")
+        break
+        
+        # Small delay between iterations
+        time.sleep(cfg.get('retry_delay_seconds', 10))
 
-        # 2) Tests/build failed — gather context and ask Gemini
-        context_snippet = ''
-        context_snippet += 'STDOUT:' + xcode_info.get('stdout', '')[:4000]
-        context_snippet += 'STDERR:' + xcode_info.get('stderr', '')[:4000]
+    print("Improvement loop completed!")
 
-        # 3) Ask Gemini for a suggested patch
-        print('Requesting Gemini advisor for suggested patch...')
-        suggestion = attempt_fix_with_local_model(context_snippet)
-        if not suggestion:
-            print('No suggestion from Gemini; creating a safe suggestion stub in ANCHOR/stubs')
-            # create suggestion file with context for human devs
-            stubs_dir = anchor_dir / 'stubs'
-            stubs_dir.mkdir(parents=True, exist_ok=True)
-            fname = stubs_dir / f'suggestion_{datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")}.md'
-            content = f"# Manual suggestioContext:{context_snippet}"
-            if not cfg.get('dry_run', True):
-                fname.write_text(content, encoding='utf-8')
-            print(f'Wrote {fname} (dry_run={cfg.get("dry_run")})')
-            return
 
-        # 4) Evaluate suggestion: compute confidence and decide whether to apply
-        llm_confidence = suggestion.get('llm_confidence', 0.0)
-        patch_text = suggestion.get('patch', '')
-        metrics = {'num_call_sites': 1, 'llm_confidence': llm_confidence, 'tests_impact': 1}
-        conf = compute_confidence(metrics)
-        print(f'LLM reported confidence: {llm_confidence}; computed score: {conf}')
+def generate_error_fixes(error_log: str, cfg: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Generate fixes for the given error log."""
+    # For demonstration purposes, assume we have a simple model that suggests fixes
+    # In a real-world scenario, you would use a more sophisticated model or approach
+    suggestions = []
+    for line in error_log.splitlines():
+        if "error:" in line:
+            suggestion = {
+                'file': 'path/to/file.swift',
+                'patch': 'patch code here',
+                'confidence': 0.8
+            }
+            suggestions.append(suggestion)
+    return suggestions
 
-        branch = f'improver/{datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")}-{uuid.uuid4().hex[:6]}'
-        patch_file = Path(cfg.get('anchor_dir')) / 'stubs' / f'patch_{datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")}.diff'
-        patch_file.parent.mkdir(parents=True, exist_ok=True)
-        if not cfg.get('dry_run', True):
-            patch_file.write_text(patch_text, encoding='utf-8')
-        print(f'Wrote suggestion patch to {patch_file} (dry_run={cfg.get("dry_run")})')
+def is_api_client_complete(cfg: Dict[str, Any]) -> bool:
+    """Check if the API client is complete."""
+    # For demonstration purposes, assume we have a simple model that checks completeness
+    # In a real-world scenario, you would use a more sophisticated model or approach
+    return True
 
-        # If high confidence and auto_apply enabled — apply to a branch and run tests
-        if conf >= cfg.get('confidence_threshold', 0.85) and cfg.get('auto_apply', False):
-            print('High confidence and auto_apply enabled — attempting to apply patch to a new branch')
-            # Attempt to apply patch via git apply
-            if not cfg.get('dry_run', True):
-                # write patch to temp file and try to apply
-                ret, out, err = run_cmd(f'git checkout -b {branch}')
-                if ret != 0:
-                    print('Failed to create branch:', err)
-                    return
-                tmp_patch = tempfile.NamedTemporaryFile(delete=False, mode='w', encoding='utf-8')
-                tmp_patch.write(patch_text)
-                tmp_patch.flush()
-                tmp_patch.close()
-                ret, out, err = run_cmd(f'git apply --index {tmp_patch.name}')
-                if ret != 0:
-                    print('git apply failed:', err)
-                    # cleanup and abort
-                    run_cmd('git checkout -')
-                    return
-                run_cmd(f'git commit -am "improver: apply suggested patch"')
-                # Run xcode tests again
-                xcode_after = build_and_test_xcode(cfg)
-                if xcode_after.get('success'):
-                    print('Applied patch and tests now pass.')
-                    # Optionally open PR
-                    if cfg.get('gh_cli') and not cfg.get('dry_run', True):
-                        pr_link = gh_create_pr(branch, 'improver: suggested fix', 'Auto-generated suggestion from improver', cfg)
-                        print('PR created:', pr_link)
-                        return
-                else:
-                    print('Applied patch but tests still failing. Reverting branch.')
-                    run_cmd('git checkout -')
-                    run_cmd(f'git branch -D {branch}')
-                    return
-            else:
-                print('[DRY-RUN] Would create branch, apply patch, run tests, and possibly create PR')
-                return
-        else:
-            # Not auto-applying: create branch with patch file committed and open PR for review (if configured)
-            print('Not auto-applying — creating branch with patch file for review')
-            if not cfg.get('dry_run', True):
-                # create branch, add patch file, commit
-                try:
-                    run_cmd(f'git checkout -b {branch}')
-                    run_cmd(f'git add {str(patch_file)}')
-                    run_cmd('git commit -m "improver: add suggested patch for review"')
-                    if cfg.get('gh_cli'):
-                        pr_link = gh_create_pr(branch, 'improver: suggested patch', f'Patch created by improver. Confidence: {conf}', cfg)
-                        print('PR created:', pr_link)
-                except Exception as e:
-                    print('Failed to create branch/commit:', e)
-            else:
-                print(f'[DRY-RUN] Would create branch {branch} and commit {patch_file}')
-            return
+def add_api_client_methods(cfg: Dict[str, Any]) -> bool:
+    """Add missing API client methods."""
+    # For demonstration purposes, assume we have a simple model that adds methods
+    # In a real-world scenario, you would use a more sophisticated model or approach
+    return True
 
-    print('Reached max iterations; exiting')
+def is_ui_complete(cfg: Dict[str, Any]) -> bool:
+    """Check if the UI is complete."""
+    # For demonstration purposes, assume we have a simple model that checks completeness
+    # In a real-world scenario, you would use a more sophisticated model or approach
+    return True
+
+def add_ui_components(cfg: Dict[str, Any]) -> bool:
+    """Add missing UI components."""
+    # For demonstration purposes, assume we have a simple model that adds components
+    # In a real-world scenario, you would use a more sophisticated model or approach
+    return True
 
 
 if __name__ == '__main__':

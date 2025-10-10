@@ -18,21 +18,21 @@ set -euo pipefail
 mkdir -p "$LOG_DIR"
 
 run_improver() {
-    echo "🧠 Running improver..."
+    echo " Running improver..."
     python3 Tools/improver_loop.py --config "$CONFIG"
     return $?
 }
 
 run_backend_fix() {
-    echo "🧩 Running backend repair mode..."
+    echo " Running backend repair mode..."
     python3 Tools/improver_loop.py --config "$CONFIG" --path "$BACKEND_DIR" --focus backend
 }
 
 check_backend_errors() {
     LOGFILE="$1"
-    echo "🔍 Checking for backend-related errors..."
+    echo " Checking for backend-related errors..."
     if grep -q -E "connection refused|backend unavailable|Network error|failed to fetch" "$LOGFILE"; then
-        echo "❌ Backend seems offline or missing API routes."
+        echo " Backend seems offline or missing API routes."
         run_backend_fix
         return 1
     fi
@@ -47,7 +47,7 @@ while true; do
     run_improver
     STATUS=$?
     if [ $STATUS -ne 0 ]; then
-        echo "❌ Improver exited with code $STATUS. Retrying..."
+        echo " Improver exited with code $STATUS. Retrying..."
         sleep 10
         continue
     fi
@@ -71,13 +71,13 @@ while true; do
         BUILD_STATUS=${PIPESTATUS[0]}
 
         if [ $BUILD_STATUS -ne 0 ]; then
-            echo "❌ Build failed — running improver again to fix errors..."
+            echo " Build failed — running improver again to fix errors..."
             COUNTER=0
             sleep 10
             continue
         fi
 
-        echo "✅ Build succeeded. Launching simulator..."
+        echo " Build succeeded. Launching simulator..."
         if ! xcrun simctl list | grep -q "Booted.*iPhone 16"; then
             xcrun simctl boot "iPhone 16"
         fi
@@ -89,13 +89,13 @@ while true; do
         BACKEND_STATUS=$?
 
         if [ $BACKEND_STATUS -eq 1 ]; then
-            echo "⚙️ Backend repair triggered. Restarting loop..."
+            echo " Backend repair triggered. Restarting loop..."
             COUNTER=0
             sleep 10
             continue
         fi
 
-        echo "✅ App launch verified. Resetting iteration counter."
+        echo " App launch verified. Resetting iteration counter."
         COUNTER=0
     fi
 
