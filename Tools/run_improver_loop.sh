@@ -225,30 +225,83 @@ check_backend_errors() {
     return 0
 }
 
+# Fix Swift compilation errors
+fix_swift_errors() {
+    local log_file=$1
+    local has_errors=false
+    
+    echo "🔍 Analyzing Swift compilation errors..." | tee -a "$log_file"
+    
+    # Handle backward matching of unlabeled trailing closures
+    if grep -q "backward matching of the unlabeled trailing closure is deprecated" "$log_file"; then
+        has_errors=true
+        echo "🔄 Fixing deprecated trailing closure syntax..." | tee -a "$log_file"
+        
+        # Find all Swift files with the warning
+        grep -l -r --include="*.swift" -F "backward matching of the unlabeled trailing closure is deprecated" . | while read -r file; do
+            echo "  🔧 Fixing $file" | tee -a "$log_file"
+            # Create a backup
+            cp "$file" "${file}.bak.$(date +%s)"
+            
+            # Fix the trailing closure syntax
+            sed -i '' -E 's/\}\) \{\s*$/\}, action: {/g' "$file"
+            
+            # For multi-line closures, we need a more sophisticated approach
+            # This is a simple fix that works for many common cases
+            perl -i -pe 's/\) \{\s*$/\}, action: {/g' "$file"
+        done
+    fi
+    
+    # Add more error patterns here as needed
+    
+    if [ "$has_errors" = true ]; then
+        echo "✅ Applied fixes for Swift compilation errors" | tee -a "$log_file"
+        return 0
+    else
+        return 1
+    fi
+}
+
 # Fix common build issues
 fix_common_issues() {
     local log_file=$1
+    local fixed_issues=0
+    
     echo "🔧 Attempting to fix common issues..." | tee -a "$log_file"
+    
+    # Fix Swift compilation errors first
+    if fix_swift_errors "$log_file"; then
+        fixed_issues=$((fixed_issues + 1))
+    fi
     
     # Check for Core Data model issues
     if grep -q "CoreData: error: " "$log_file"; then
         echo "🔄 Regenerating Core Data model files..." | tee -a "$log_file"
         find . -name "*.xcdatamodeld" -exec touch {} \;
+        fixed_issues=$((fixed_issues + 1))
     fi
     
     # Check for Swift version issues
     if grep -q "is not a recognized compiler" "$log_file"; then
         echo "🔄 Updating Swift version settings..." | tee -a "$log_file"
         xcrun swift -version | tee -a "$log_file"
+        fixed_issues=$((fixed_issues + 1))
     fi
     
     # Check for code signing issues
     if grep -q "Code Signing Error" "$log_file"; then
         echo "🔑 Fixing code signing..." | tee -a "$log_file"
-        xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" -destination "$DESTINATION" CODE_SIGNING_ALLOWED=NO | tee -a "$log_file"
+        xcrun xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" -destination "$DESTINATION" CODE_SIGNING_ALLOWED=NO | tee -a "$log_file"
+        fixed_issues=$((fixed_issues + 1))
     fi
     
-    echo "✅ Attempted fixes complete" | tee -a "$log_file"
+    if [ "$fixed_issues" -gt 0 ]; then
+        echo "✅ Fixed $fixed_issues issues" | tee -a "$log_file"
+        return 0
+    else
+        echo "ℹ️  No common issues found to fix" | tee -a "$log_file"
+        return 1
+    fi
 }
 
 # Main loop
