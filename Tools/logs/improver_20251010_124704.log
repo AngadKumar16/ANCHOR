@@ -1,0 +1,815 @@
+🚀 Running improver...
+📝 Logging to: Tools/logs/improver_20251010_124704.log
+🧹 Cleaning build artifacts...
+✅ Removed derived data
+🧹 Cleaning backup files...
+✅ Removed backup files
+🧹 Clean complete!
+🏗️  Building project...
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild clean -workspace ./ANCHOR.xcodeproj/project.xcworkspace -scheme ANCHOR -destination "platform=iOS Simulator,name=iPhone 16,OS=18.4"
+
+2025-10-10 12:47:05.019 xcodebuild[92538:15228568] [MT] IDERunDestination: Supported platforms for the buildables in the current scheme is empty.
+--- xcodebuild: WARNING: Using the first of multiple matching destinations:
+{ platform:iOS Simulator, arch:arm64, id:E081CE49-21F7-4B0F-82FD-8CAF85655EC6, OS:18.4, name:iPhone 16 }
+{ platform:iOS Simulator, arch:x86_64, id:E081CE49-21F7-4B0F-82FD-8CAF85655EC6, OS:18.4, name:iPhone 16 }
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+** CLEAN SUCCEEDED **
+
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild test -workspace ./ANCHOR.xcodeproj/project.xcworkspace -scheme ANCHOR -destination "platform=iOS Simulator,name=iPhone 16,OS=18.4" -resultBundlePath Tools/logs/xcresults_20251010_124704/TestResults -enableCodeCoverage YES
+
+2025-10-10 12:47:05.633 xcodebuild[92542:15228644] [MT] IDERunDestination: Supported platforms for the buildables in the current scheme is empty.
+Writing result bundle at path:
+	/Users/angadkumar16ak/Projects/ANCHOR/Tools/logs/xcresults_20251010_124704/TestResults
+
+--- xcodebuild: WARNING: Using the first of multiple matching destinations:
+{ platform:iOS Simulator, arch:arm64, id:E081CE49-21F7-4B0F-82FD-8CAF85655EC6, OS:18.4, name:iPhone 16 }
+{ platform:iOS Simulator, arch:x86_64, id:E081CE49-21F7-4B0F-82FD-8CAF85655EC6, OS:18.4, name:iPhone 16 }
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (3 targets)
+    Target 'ANCHORTests' in project 'ANCHOR'
+        ➜ Explicit dependency on target 'ANCHOR' in project 'ANCHOR'
+    Target 'ANCHORUITests' in project 'ANCHOR'
+        ➜ Explicit dependency on target 'ANCHOR' in project 'ANCHOR'
+    Target 'ANCHOR' in project 'ANCHOR' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.0.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/momc --dry-run --action generate --swift-version 5.0 --sdkroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.0.sdk --iphonesimulator-deployment-target 18.4 --module ANCHOR /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ANCHOR.xcdatamodeld /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --print-asset-tag-combinations --output-format xml1 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Assets.xcassets
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: 423c95f74f81f5bcb82b9174269940b0
+Build description path: /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/XCBuildData/423c95f74f81f5bcb82b9174269940b0.xcbuilddata
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.0.sdk /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.0-23A339-26257891a6c027eb51374368541b8346.sdkstatcache
+    cd /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.0.sdk -o /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.0-23A339-26257891a6c027eb51374368541b8346.sdkstatcache
+
+CreateBuildDirectory /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products
+    cd /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR.xcodeproj
+    builtin-create-build-directory /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products
+
+CreateBuildDirectory /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex
+    cd /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR.xcodeproj
+    builtin-create-build-directory /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex
+
+CreateBuildDirectory /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+    cd /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR.xcodeproj
+    builtin-create-build-directory /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+
+CreateBuildDirectory /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ExplicitPrecompiledModules
+    cd /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR.xcodeproj
+    builtin-create-build-directory /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ExplicitPrecompiledModules
+
+CreateBuildDirectory /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator
+    cd /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR.xcodeproj
+    builtin-create-build-directory /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR-d44a0c1dc6086036a228d7932b70556a-VFS-iphonesimulator/all-product-headers.yaml
+    cd /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR.xcodeproj
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR-d44a0c1dc6086036a228d7932b70556a-VFS-iphonesimulator/all-product-headers.yaml
+
+CreateBuildDirectory /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator
+    cd /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR.xcodeproj
+    builtin-create-build-directory /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/empty-ANCHORUITests.plist (in target 'ANCHORUITests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/empty-ANCHORUITests.plist
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/ProductTypeInfoPlistAdditions.plist (in target 'ANCHORUITests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/ProductTypeInfoPlistAdditions.plist
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/ANCHORUITests-project-headers.hmap (in target 'ANCHORUITests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/ANCHORUITests-project-headers.hmap
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/ANCHORUITests-own-target-headers.hmap (in target 'ANCHORUITests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/ANCHORUITests-own-target-headers.hmap
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/ANCHORUITests.hmap (in target 'ANCHORUITests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/ANCHORUITests.hmap
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/ANCHORUITests-generated-files.hmap (in target 'ANCHORUITests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/ANCHORUITests-generated-files.hmap
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/DerivedSources/Entitlements-Simulated.plist (in target 'ANCHORUITests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/DerivedSources/Entitlements-Simulated.plist
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/Objects-normal/arm64/ANCHORUITests_const_extract_protocols.json (in target 'ANCHORUITests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/Objects-normal/arm64/ANCHORUITests_const_extract_protocols.json
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/Objects-normal/arm64/ANCHORUITests-OutputFileMap.json (in target 'ANCHORUITests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/Objects-normal/arm64/ANCHORUITests-OutputFileMap.json
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/Objects-normal/arm64/ANCHORUITests.SwiftConstValuesFileList (in target 'ANCHORUITests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/Objects-normal/arm64/ANCHORUITests.SwiftConstValuesFileList
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/Objects-normal/arm64/ANCHORUITests.LinkFileList (in target 'ANCHORUITests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/Objects-normal/arm64/ANCHORUITests.LinkFileList
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/Objects-normal/arm64/ANCHORUITests.SwiftFileList (in target 'ANCHORUITests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/Objects-normal/arm64/ANCHORUITests.SwiftFileList
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/ANCHORUITests.DependencyStaticMetadataFileList (in target 'ANCHORUITests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/ANCHORUITests.DependencyStaticMetadataFileList
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/ANCHORUITests.DependencyMetadataFileList (in target 'ANCHORUITests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/ANCHORUITests.DependencyMetadataFileList
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/ANCHORUITests-all-target-headers.hmap (in target 'ANCHORUITests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/ANCHORUITests-all-target-headers.hmap
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/ANCHORUITests-all-non-framework-target-headers.hmap (in target 'ANCHORUITests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORUITests.build/ANCHORUITests-all-non-framework-target-headers.hmap
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/empty-ANCHORTests.plist (in target 'ANCHORTests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/empty-ANCHORTests.plist
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/Objects-normal/arm64/ANCHORTests_const_extract_protocols.json (in target 'ANCHORTests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/Objects-normal/arm64/ANCHORTests_const_extract_protocols.json
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/Objects-normal/arm64/ANCHORTests.SwiftFileList (in target 'ANCHORTests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/Objects-normal/arm64/ANCHORTests.SwiftFileList
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/Objects-normal/arm64/ANCHORTests.SwiftConstValuesFileList (in target 'ANCHORTests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/Objects-normal/arm64/ANCHORTests.SwiftConstValuesFileList
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/Objects-normal/arm64/ANCHORTests.LinkFileList (in target 'ANCHORTests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/Objects-normal/arm64/ANCHORTests.LinkFileList
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/Objects-normal/arm64/ANCHORTests-OutputFileMap.json (in target 'ANCHORTests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/Objects-normal/arm64/ANCHORTests-OutputFileMap.json
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/ANCHORTests.hmap (in target 'ANCHORTests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/ANCHORTests.hmap
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/ANCHORTests.DependencyStaticMetadataFileList (in target 'ANCHORTests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/ANCHORTests.DependencyStaticMetadataFileList
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/ANCHORTests.DependencyMetadataFileList (in target 'ANCHORTests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/ANCHORTests.DependencyMetadataFileList
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/ANCHORTests-project-headers.hmap (in target 'ANCHORTests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/ANCHORTests-project-headers.hmap
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/ANCHORTests-own-target-headers.hmap (in target 'ANCHORTests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/ANCHORTests-own-target-headers.hmap
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/ANCHORTests-generated-files.hmap (in target 'ANCHORTests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/ANCHORTests-generated-files.hmap
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/ANCHORTests-all-target-headers.hmap (in target 'ANCHORTests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/ANCHORTests-all-target-headers.hmap
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/ANCHORTests-all-non-framework-target-headers.hmap (in target 'ANCHORTests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHORTests.build/ANCHORTests-all-non-framework-target-headers.hmap
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/empty-ANCHOR.plist (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/empty-ANCHOR.plist
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.SwiftConstValuesFileList (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.SwiftConstValuesFileList
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.SwiftFileList (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.SwiftFileList
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR_const_extract_protocols.json (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR_const_extract_protocols.json
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.LinkFileList (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.LinkFileList
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR-OutputFileMap.json (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR-OutputFileMap.json
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.hmap (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.hmap
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/Entitlements-Simulated.plist (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/Entitlements-Simulated.plist
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.DependencyStaticMetadataFileList (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.DependencyStaticMetadataFileList
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.DependencyMetadataFileList (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.DependencyMetadataFileList
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-project-headers.hmap (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-project-headers.hmap
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-own-target-headers.hmap (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-own-target-headers.hmap
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-generated-files.hmap (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-generated-files.hmap
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-all-target-headers.hmap (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-all-target-headers.hmap
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-all-non-framework-target-headers.hmap (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-all-non-framework-target-headers.hmap
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-DebugDylibPath-normal-arm64.txt (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-DebugDylibPath-normal-arm64.txt
+
+WriteAuxiliaryFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-DebugDylibInstallName-normal-arm64.txt (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    write-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-DebugDylibInstallName-normal-arm64.txt
+
+MkDir /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHORUITests-Runner.app/PlugIns/ANCHORUITests.xctest (in target 'ANCHORUITests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    /bin/mkdir -p /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHORUITests-Runner.app/PlugIns/ANCHORUITests.xctest
+
+MkDir /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/PlugIns/ANCHORTests.xctest (in target 'ANCHORTests' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    /bin/mkdir -p /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/PlugIns/ANCHORTests.xctest
+
+MkDir /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/PlugIns (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    /bin/mkdir -p /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/PlugIns
+
+MkDir /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/Frameworks (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    /bin/mkdir -p /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/Frameworks
+
+MkDir /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    /bin/mkdir -p /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+ProcessProductPackaging "" /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.app-Simulated.xcent (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+    Entitlements:
+    
+    {
+    "application-identifier" = "5XTU3ZWHX9.com.AngadKumar16.ANCHOR";
+}
+    
+    builtin-productPackagingUtility -entitlements -format xml -o /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.app-Simulated.xcent
+
+ProcessProductPackagingDER /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.app-Simulated.xcent /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.app-Simulated.xcent.der (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    /usr/bin/derq query -f xml -i /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.app-Simulated.xcent -o /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.app-Simulated.xcent.der --raw
+
+Ld /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/__preview.dylib normal (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios18.4-simulator -dynamiclib -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.0.sdk -O0 -L/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator -F/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator -install_name @rpath/ANCHOR.debug.dylib -dead_strip -rdynamic -Xlinker -no_deduplicate -Xlinker -objc_abi_version -Xlinker 2 -Xlinker -debug_variant -Xlinker -dependency_info -Xlinker /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR_dependency_info.dat -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __entitlements -Xlinker /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.app-Simulated.xcent -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __ents_der -Xlinker /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR.app-Simulated.xcent.der -Xlinker -no_adhoc_codesign -o /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/__preview.dylib
+
+DataModelCompile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/ /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ANCHOR.xcdatamodeld (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    /Applications/Xcode.app/Contents/Developer/usr/bin/momc --sdkroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.0.sdk --iphonesimulator-deployment-target 18.4 --module ANCHOR /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ANCHOR.xcdatamodeld /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/
+ANCHOR.xcdatamodel: note: Model ANCHOR version checksum: zUb7C/nfAVns1tg8g1s0SeoMa5J72uGlQYnCd4ggd8Q=
+
+GenerateAssetSymbols /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Assets.xcassets (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    /Applications/Xcode.app/Contents/Developer/usr/bin/actool /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Assets.xcassets --compile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app --output-format human-readable-text --notices --warnings --export-dependency-info /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_dependencies --output-partial-info-plist /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_generated_info.plist --app-icon AppIcon --accent-color AccentColor --compress-pngs --enable-on-demand-resources YES --development-region en --target-device iphone --target-device ipad --minimum-deployment-target 18.4 --platform iphonesimulator --bundle-identifier com.AngadKumar16.ANCHOR --generate-swift-asset-symbols /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/GeneratedAssetSymbols.swift --generate-objc-asset-symbols /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/GeneratedAssetSymbols.h --generate-asset-symbol-index /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/GeneratedAssetSymbols-Index.plist
+/* com.apple.actool.compilation-results */
+/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/GeneratedAssetSymbols-Index.plist
+/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/GeneratedAssetSymbols.h
+/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/GeneratedAssetSymbols.swift
+
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/patch_20251010T041609Z.diff /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/stubs/patch_20251010T041609Z.diff (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/stubs/patch_20251010T041609Z.diff /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+MkDir /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_output/thinned (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    /bin/mkdir -p /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_output/thinned
+
+MkDir /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_output/unthinned (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    /bin/mkdir -p /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_output/unthinned
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/patch_20251010T041553Z.diff /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/stubs/patch_20251010T041553Z.diff (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/stubs/patch_20251010T041553Z.diff /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/patch_20251010T041537Z.diff /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/stubs/patch_20251010T041537Z.diff (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/stubs/patch_20251010T041537Z.diff /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/patch_20251010T041522Z.diff /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/stubs/patch_20251010T041522Z.diff (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/stubs/patch_20251010T041522Z.diff /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+DataModelCodegen /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ANCHOR.xcdatamodeld (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    /Applications/Xcode.app/Contents/Developer/usr/bin/momc --action generate --swift-version 5.0 --sdkroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.0.sdk --iphonesimulator-deployment-target 18.4 --module ANCHOR /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ANCHOR.xcdatamodeld /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR
+
+CpResource /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/patch_20251010T041506Z.diff /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/stubs/patch_20251010T041506Z.diff (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/stubs/patch_20251010T041506Z.diff /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app
+
+Copy /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/Frameworks/libXCTestSwiftSupport.dylib /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestSwiftSupport.dylib (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestSwiftSupport.dylib /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/Frameworks
+
+Copy /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/Frameworks/libXCTestBundleInject.dylib /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestBundleInject.dylib (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestBundleInject.dylib /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/Frameworks
+
+Copy /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/Frameworks/XCUnit.framework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCUnit.framework (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCUnit.framework /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/Frameworks
+
+Copy /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/Frameworks/XCUIAutomation.framework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks/XCUIAutomation.framework (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks/XCUIAutomation.framework /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/Frameworks
+
+Copy /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/Frameworks/XCTestSupport.framework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTestSupport.framework (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTestSupport.framework /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/Frameworks
+
+Copy /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/Frameworks/XCTestCore.framework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTestCore.framework (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTestCore.framework /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/Frameworks
+
+Copy /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/Frameworks/XCTest.framework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks/XCTest.framework (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks/XCTest.framework /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/Frameworks
+
+Copy /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/Frameworks/XCTAutomationSupport.framework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTAutomationSupport.framework (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTAutomationSupport.framework /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/Frameworks
+
+Copy /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/Frameworks/Testing.framework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks/Testing.framework (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks/Testing.framework /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/Frameworks
+
+CompileAssetCatalogVariant thinned /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Assets.xcassets (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    /Applications/Xcode.app/Contents/Developer/usr/bin/actool /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Assets.xcassets --compile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_output/thinned --output-format human-readable-text --notices --warnings --export-dependency-info /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_dependencies_thinned --output-partial-info-plist /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_generated_info.plist_thinned --app-icon AppIcon --accent-color AccentColor --compress-pngs --enable-on-demand-resources YES --filter-for-thinning-device-configuration iPhone17,3 --filter-for-device-os-version 18.4 --development-region en --target-device iphone --target-device ipad --minimum-deployment-target 18.4 --platform iphonesimulator
+/* com.apple.actool.compilation-results */
+/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_generated_info.plist_thinned
+
+
+LinkAssetCatalog /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Assets.xcassets (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-linkAssetCatalog --thinned /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_output/thinned --thinned-dependencies /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_dependencies_thinned --thinned-info-plist-content /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_generated_info.plist_thinned --unthinned /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_output/unthinned --unthinned-dependencies /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_dependencies_unthinned --unthinned-info-plist-content /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_generated_info.plist_unthinned --output /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app --plist-output /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_generated_info.plist
+
+ProcessInfoPlistFile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/Info.plist /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/empty-ANCHOR.plist (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-infoPlistUtility /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/empty-ANCHOR.plist -producttype com.apple.product-type.application -genpkginfo /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/PkgInfo -expandbuildsettings -format binary -platform iphonesimulator -additionalcontentfile /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/assetcatalog_generated_info.plist -o /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/ANCHOR.app/Info.plist
+
+SwiftDriver ANCHOR normal arm64 com.apple.xcode.tools.swift.compiler (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name ANCHOR -Onone -enforce-exclusivity\=checked @/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.SwiftFileList -DDEBUG -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.0.sdk -target arm64-apple-ios18.4-simulator -g -module-cache-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -index-store-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator -F /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator -emit-localized-strings -emit-localized-strings-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64 -c -j12 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.0-23A339-26257891a6c027eb51374368541b8346.sdkstatcache -output-file-map /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR_const_extract_protocols.json -Xcc -iquote -Xcc /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-generated-files.hmap -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-own-target-headers.hmap -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-all-target-headers.hmap -Xcc -iquote -Xcc /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-project-headers.hmap -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources-normal/arm64 -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/arm64 -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR-Swift.h -working-directory /Users/angadkumar16ak/Projects/ANCHOR -experimental-emit-module-separately -disable-cmo
+
+SwiftCompile normal arm64 Compiling\ DailyQuoteService.swift,\ DataExportService.swift,\ EncryptionService.swift,\ KeychainHelper.swift,\ NotificationsService.swift,\ ANCHORDesign.swift,\ AppState.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DailyQuoteService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DataExportService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/EncryptionService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/KeychainHelper.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/NotificationsService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/ANCHORDesign.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/AppState.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DailyQuoteService.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DataExportService.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/EncryptionService.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/KeychainHelper.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/NotificationsService.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/ANCHORDesign.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/AppState.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 Compiling\ Color+Theme.swift,\ DateFormatter+Extensions.swift,\ Logger.swift,\ JournalViewModel.swift,\ RiskAssessmentViewModel.swift,\ UserProfileViewModel.swift,\ ANCHORButton.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Color+Theme.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/DateFormatter+Extensions.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Logger.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/JournalViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/RiskAssessmentViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/UserProfileViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORButton.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Color+Theme.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/DateFormatter+Extensions.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Logger.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/JournalViewModel.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/RiskAssessmentViewModel.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/UserProfileViewModel.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORButton.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 Compiling\ ANCHORMoodIcon.swift,\ ANCHORProgressRing.swift,\ ComponentUtilities.swift,\ GradientBackground.swift,\ JournalEntryCard.swift,\ JournalEntryCard+Models.swift,\ MonthHeaderCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORMoodIcon.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORProgressRing.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ComponentUtilities.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/GradientBackground.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/JournalEntryCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/JournalEntryCard+Models.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/MonthHeaderCard.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORMoodIcon.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORProgressRing.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ComponentUtilities.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/GradientBackground.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/JournalEntryCard.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/JournalEntryCard+Models.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/MonthHeaderCard.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 Compiling\ FinishSetupView.swift,\ OnboardingCardView.swift,\ OnboardingView.swift,\ PermissionRequestView.swift,\ PermissionsView.swift,\ PrivacyDisclaimerView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/FinishSetupView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingCardView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionRequestView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PrivacyDisclaimerView.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/FinishSetupView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingCardView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionRequestView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionsView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PrivacyDisclaimerView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 Compiling\ MoodFilterPill.swift,\ QuickActionCard.swift,\ RecoveryTipCard.swift,\ ShimmeringView.swift,\ SobrietyProgressCard.swift,\ StatCard.swift,\ JournalDetailView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/MoodFilterPill.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ShimmeringView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/SobrietyProgressCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/StatCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalDetailView.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/MoodFilterPill.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ShimmeringView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/SobrietyProgressCard.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/StatCard.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalDetailView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 Compiling\ UserProfile.swift,\ UserProfileEntity.swift,\ AIAnalysisService.swift,\ AIAnalysisServiceModel.swift,\ AIAnalysisServiceRepository.swift,\ AIAnalysisServiceView.swift,\ AIAnalysisServiceViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfile.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfileEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisServiceModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisServiceRepository.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisServiceView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisServiceViewModel.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfile.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfileEntity.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisService.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisServiceModel.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisServiceRepository.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisServiceView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisServiceViewModel.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 Compiling\ JournalEntry.swift,\ JournalEntryEntity.swift,\ ModelExtensions.swift,\ OnboardingModels.swift,\ RiskAssessment.swift,\ RiskAssessmentEntity.swift,\ SobrietyTracker.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntry.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntryEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/ModelExtensions.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/OnboardingModels.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessment.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessmentEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/SobrietyTracker.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntry.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntryEntity.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/ModelExtensions.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/OnboardingModels.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessment.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessmentEntity.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/SobrietyTracker.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 Compiling\ DashboardView.swift,\ DashboardViewModel.swift,\ DashboardViewRepository.swift,\ DashboardViewView.swift,\ DashboardViewViewModel.swift,\ MainTabView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardViewRepository.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardViewView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardViewViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/MainTabView.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardViewModel.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardViewRepository.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardViewView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardViewViewModel.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/MainTabView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ ANCHOR (in target 'ANCHOR' from project 'ANCHOR')
+Failed frontend command:
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -frontend -emit-module -experimental-skip-non-inlinable-function-bodies-without-types /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntry.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/JournalEntryEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/ModelExtensions.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/OnboardingModels.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessment.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/RiskAssessmentEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/SobrietyTracker.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfile.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Models/UserProfileEntity.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisServiceModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisServiceRepository.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisServiceView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/AIAnalysisServiceViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DailyQuoteService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/DataExportService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/EncryptionService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/KeychainHelper.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Services/NotificationsService.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/ANCHORDesign.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/AppState.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Color+Theme.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/DateFormatter+Extensions.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/Logger.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/JournalViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/RiskAssessmentViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ViewModels/UserProfileViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORButton.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORMoodIcon.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ANCHORProgressRing.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ComponentUtilities.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/GradientBackground.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/JournalEntryCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/JournalEntryCard+Models.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/MonthHeaderCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/MoodFilterPill.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/ShimmeringView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/SobrietyProgressCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/StatCard.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalDetailView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalEditorView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalEntryView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalEntryViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalEntryViewRepository.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalEntryViewView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalEntryViewViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Journal/JournalListView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/FinishSetupView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingCardView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/OnboardingView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionRequestView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PermissionsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/PrivacyDisclaimerView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/SplashScreenView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/WelcomeView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskAssessmentHistoryView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskAssessmentView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskQuestionView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskResultsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/PrivacySettingsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/SettingsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/AppRootView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/BreathingExerciseView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/CheckInView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/ContentView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardViewRepository.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardViewView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/DashboardViewViewModel.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/MainTabView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ANCHORApp.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Persistence.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataClass.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataProperties.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/ANCHOR+CoreDataModel.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/GeneratedAssetSymbols.swift -target arm64-apple-ios18.4-simulator -module-can-import-version DeveloperToolsSupport 23.0.4 23.0.4 -module-can-import-version SwiftUI 7.0.84.1 7.0.84 -module-can-import-version UIKit 9088.1.113 9088.1.113 -disable-cross-import-overlay-search -swift-module-cross-import CoreData /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/Frameworks/CoreData.framework/Modules/CoreData.swiftcrossimport/CloudKit.swiftoverlay -swift-module-cross-import CoreData /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.0.sdk/System/Library/Frameworks/CoreData.framework/Modules/CoreData.swiftcrossimport/CloudKit.swiftoverlay -swift-module-cross-import PhotosUI /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/Frameworks/PhotosUI.framework/Modules/PhotosUI.swiftcrossimport/SwiftUI.swiftoverlay -swift-module-cross-import PhotosUI /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/Frameworks/PhotosUI.framework/Modules/PhotosUI.swiftcrossimport/WidgetKit.swiftoverlay -swift-module-cross-import PhotosUI /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.0.sdk/System/Library/Frameworks/PhotosUI.framework/Modules/PhotosUI.swiftcrossimport/SwiftUI.swiftoverlay -swift-module-cross-import PhotosUI /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.0.sdk/System/Library/Frameworks/PhotosUI.framework/Modules/PhotosUI.swiftcrossimport/WidgetKit.swiftoverlay -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libFoundationMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#FoundationMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libObservationMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#ObservationMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libPreviewsMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#PreviewsMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libSwiftMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#SwiftMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libSwiftUIMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#SwiftUIMacros -disable-implicit-swift-modules -Xcc -fno-implicit-modules -Xcc -fno-implicit-module-maps -explicit-swift-module-map-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR-dependencies-1.json -Xllvm -aarch64-use-tbi -enable-objc-interop -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.0.sdk -I /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator -F /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator -no-color-diagnostics -Xcc -fno-color-diagnostics -enable-testing -g -debug-info-format\=dwarf -dwarf-version\=5 -module-cache-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -profile-generate -profile-coverage-mapping -swift-version 5 -enforce-exclusivity\=checked -Onone -D DEBUG -serialize-debugging-options -const-gather-protocols-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR_const_extract_protocols.json -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -empty-abi-descriptor -validate-clang-modules-once -clang-build-session-file /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -working-directory -Xcc /Users/angadkumar16ak/Projects/ANCHOR -enable-anonymous-context-mangled-names -file-compilation-dir /Users/angadkumar16ak/Projects/ANCHOR -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -Xcc -ivfsstatcache -Xcc /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.0-23A339-26257891a6c027eb51374368541b8346.sdkstatcache -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/swift-overrides.hmap -Xcc -iquote -Xcc /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-generated-files.hmap -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-own-target-headers.hmap -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-all-target-headers.hmap -Xcc -iquote -Xcc /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/ANCHOR-project-headers.hmap -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources-normal/arm64 -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/arm64 -Xcc -I/Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources -Xcc -DDEBUG\=1 -no-auto-bridging-header-chaining -module-name ANCHOR -frontend-parseable-output -disable-clang-spi -target-sdk-version 26.0 -target-sdk-name iphonesimulator26.0 -clang-target arm64-apple-ios26.0-simulator -in-process-plugin-server-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/libSwiftInProcPluginServer.dylib -emit-module-doc-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.swiftdoc -emit-module-source-info-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.swiftsourceinfo -emit-objc-header-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR-Swift.h -serialize-diagnostics-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR-primary-emit-module.dia -emit-dependencies-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR-primary-emit-module.d -o /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.swiftmodule -emit-abi-descriptor-path /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/Objects-normal/arm64/ANCHOR.abi.json
+
+EmitSwiftModule normal arm64 (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift:679:15: warning: backward matching of the unlabeled trailing closure is deprecated; label the argument with 'action' to suppress this warning
+            ) {
+~~~~~~~~~~~~~ ^
+, action: 
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift:68:5: note: 'init(title:subtitle:icon:style:size:iconStyle:layout:showBadge:badgeText:badgeColor:isEnabled:showProgress:progressValue:customGradient:customBackground:customPadding:customCornerRadius:customShadow:animateOnAppear:bounceOnTap:hoverEffect:hapticFeedback:pulseEffect:enableAnalytics:enableCache:enableKeyboardNavigation:enableAdvancedGestures:enableParticleEffects:loadingStateBinding:contextMenuActions:accessibilityLabel:accessibilityHint:accessibilityValue:onTap:onDoubleTap:onSwipeLeft:onSwipeRight:action:)' declared here
+    init(
+    ^
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift:688:15: warning: backward matching of the unlabeled trailing closure is deprecated; label the argument with 'action' to suppress this warning
+            ) {
+~~~~~~~~~~~~~ ^
+, action: 
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift:68:5: note: 'init(title:subtitle:icon:style:size:iconStyle:layout:showBadge:badgeText:badgeColor:isEnabled:showProgress:progressValue:customGradient:customBackground:customPadding:customCornerRadius:customShadow:animateOnAppear:bounceOnTap:hoverEffect:hapticFeedback:pulseEffect:enableAnalytics:enableCache:enableKeyboardNavigation:enableAdvancedGestures:enableParticleEffects:loadingStateBinding:contextMenuActions:accessibilityLabel:accessibilityHint:accessibilityValue:onTap:onDoubleTap:onSwipeLeft:onSwipeRight:action:)' declared here
+    init(
+    ^
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift:700:15: warning: backward matching of the unlabeled trailing closure is deprecated; label the argument with 'action' to suppress this warning
+            ) {
+~~~~~~~~~~~~~ ^
+, action: 
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift:68:5: note: 'init(title:subtitle:icon:style:size:iconStyle:layout:showBadge:badgeText:badgeColor:isEnabled:showProgress:progressValue:customGradient:customBackground:customPadding:customCornerRadius:customShadow:animateOnAppear:bounceOnTap:hoverEffect:hapticFeedback:pulseEffect:enableAnalytics:enableCache:enableKeyboardNavigation:enableAdvancedGestures:enableParticleEffects:loadingStateBinding:contextMenuActions:accessibilityLabel:accessibilityHint:accessibilityValue:onTap:onDoubleTap:onSwipeLeft:onSwipeRight:action:)' declared here
+    init(
+    ^
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift:712:15: warning: backward matching of the unlabeled trailing closure is deprecated; label the argument with 'action' to suppress this warning
+            ) {
+~~~~~~~~~~~~~ ^
+, action: 
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift:68:5: note: 'init(title:subtitle:icon:style:size:iconStyle:layout:showBadge:badgeText:badgeColor:isEnabled:showProgress:progressValue:customGradient:customBackground:customPadding:customCornerRadius:customShadow:animateOnAppear:bounceOnTap:hoverEffect:hapticFeedback:pulseEffect:enableAnalytics:enableCache:enableKeyboardNavigation:enableAdvancedGestures:enableParticleEffects:loadingStateBinding:contextMenuActions:accessibilityLabel:accessibilityHint:accessibilityValue:onTap:onDoubleTap:onSwipeLeft:onSwipeRight:action:)' declared here
+    init(
+    ^
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift:724:15: warning: backward matching of the unlabeled trailing closure is deprecated; label the argument with 'action' to suppress this warning
+            ) {
+~~~~~~~~~~~~~ ^
+, action: 
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift:68:5: note: 'init(title:subtitle:icon:style:size:iconStyle:layout:showBadge:badgeText:badgeColor:isEnabled:showProgress:progressValue:customGradient:customBackground:customPadding:customCornerRadius:customShadow:animateOnAppear:bounceOnTap:hoverEffect:hapticFeedback:pulseEffect:enableAnalytics:enableCache:enableKeyboardNavigation:enableAdvancedGestures:enableParticleEffects:loadingStateBinding:contextMenuActions:accessibilityLabel:accessibilityHint:accessibilityValue:onTap:onDoubleTap:onSwipeLeft:onSwipeRight:action:)' declared here
+    init(
+    ^
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift:737:15: warning: backward matching of the unlabeled trailing closure is deprecated; label the argument with 'action' to suppress this warning
+            ) {
+~~~~~~~~~~~~~ ^
+, action: 
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/QuickActionCard.swift:68:5: note: 'init(title:subtitle:icon:style:size:iconStyle:layout:showBadge:badgeText:badgeColor:isEnabled:showProgress:progressValue:customGradient:customBackground:customPadding:customCornerRadius:customShadow:animateOnAppear:bounceOnTap:hoverEffect:hapticFeedback:pulseEffect:enableAnalytics:enableCache:enableKeyboardNavigation:enableAdvancedGestures:enableParticleEffects:loadingStateBinding:contextMenuActions:accessibilityLabel:accessibilityHint:accessibilityValue:onTap:onDoubleTap:onSwipeLeft:onSwipeRight:action:)' declared here
+    init(
+    ^
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift:274:17: error: invalid redeclaration of 'cardContent'
+    private var cardContent: some View {
+                ^
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift:264:17: note: 'cardContent' previously declared here
+    private var cardContent: some View {
+                ^
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift:264:17: note: 'cardContent' previously declared here
+    private var cardContent: some View {
+                ^
+
+SwiftCompile normal arm64 Compiling\ SplashScreenView.swift,\ WelcomeView.swift,\ RiskAssessmentHistoryView.swift,\ RiskAssessmentView.swift,\ RiskQuestionView.swift,\ RiskResultsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/SplashScreenView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/WelcomeView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskAssessmentHistoryView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskAssessmentView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskQuestionView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskResultsView.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/SplashScreenView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Onboarding/WelcomeView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskAssessmentHistoryView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskAssessmentView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskQuestionView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/RiskAssessment/RiskResultsView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 Compiling\ ANCHORApp.swift,\ Persistence.swift,\ Item+CoreDataClass.swift,\ Item+CoreDataProperties.swift,\ ANCHOR+CoreDataModel.swift,\ GeneratedAssetSymbols.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ANCHORApp.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Persistence.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataClass.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataProperties.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/ANCHOR+CoreDataModel.swift /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/ANCHORApp.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Persistence.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataClass.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/Item+CoreDataProperties.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/CoreDataGenerated/ANCHOR/ANCHOR+CoreDataModel.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Library/Developer/Xcode/DerivedData/ANCHOR-auuzivatnxmjwldapwrowirofqbx/Build/Intermediates.noindex/ANCHOR.build/Debug-iphonesimulator/ANCHOR.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 Compiling\ PrivacySettingsView.swift,\ SettingsView.swift,\ AppRootView.swift,\ BreathingExerciseView.swift,\ CheckInView.swift,\ ContentView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/PrivacySettingsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/SettingsView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/AppRootView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/BreathingExerciseView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/CheckInView.swift /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/ContentView.swift (in target 'ANCHOR' from project 'ANCHOR')
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/PrivacySettingsView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Settings/SettingsView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/AppRootView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/BreathingExerciseView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/CheckInView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+SwiftCompile normal arm64 /Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/ContentView.swift (in target 'ANCHOR' from project 'ANCHOR')
+    cd /Users/angadkumar16ak/Projects/ANCHOR
+    
+
+
+Test session results, code coverage, and logs:
+	/Users/angadkumar16ak/Projects/ANCHOR/Tools/logs/xcresults_20251010_124704/TestResults
+
+Testing failed:
+	Invalid redeclaration of 'cardContent'
+	Testing cancelled because the build failed.
+
+** TEST FAILED **
+
+
+The following build commands failed:
+	SwiftEmitModule normal arm64 Emitting\ module\ for\ ANCHOR (in target 'ANCHOR' from project 'ANCHOR')
+	EmitSwiftModule normal arm64 (in target 'ANCHOR' from project 'ANCHOR')
+	Testing workspace ANCHOR with scheme ANCHOR
+(3 failures)

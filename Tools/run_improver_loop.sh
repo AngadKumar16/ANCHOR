@@ -63,27 +63,144 @@ git_push_changes() {
     return 1
 }
 
+# Clean build artifacts and derived data
+clean_build() {
+    echo "🧹 Cleaning build artifacts..."
+    
+    # Clean derived data
+    local derived_data_path="$HOME/Library/Developer/Xcode/DerivedData/ANCHOR-*"
+    if [ -d $derived_data_path ]; then
+        rm -rf $derived_data_path
+        echo "✅ Removed derived data"
+    fi
+    
+    # Clean build directory
+    if [ -d "build" ]; then
+        rm -rf build
+        echo "✅ Removed build directory"
+    fi
+    
+    # Clean backup files
+    echo "🧹 Cleaning backup files..."
+    find . -type f \( -name "*.bak.*" -o -name "*.fixed" -o -name "*.backup" -o -name "*.patch" -o -name "*.orig" -o -name "*.rej" \) -delete
+    echo "✅ Removed backup files"
+    
+    # Clean CocoaPods if used
+    if [ -f "Podfile" ]; then
+        echo "🔧 Running pod deintegrate..."
+        pod deintegrate
+        pod cache clean --all
+        echo "✅ Cleaned CocoaPods cache"
+    fi
+    
+    echo "🧹 Clean complete!"
+}
+
+# Run xcodebuild with proper error handling
+run_xcodebuild() {
+    local log_file=$1
+    local xcresult_dir=$2
+    
+    echo "🏗️  Building project..." | tee -a "$log_file"
+    
+    # First try a clean build
+    xcodebuild clean \
+        -workspace "$WORKSPACE" \
+        -scheme "$SCHEME" \
+        -destination "$DESTINATION" \
+        2>&1 | tee -a "$log_file"
+    
+    # Then build and test
+    xcodebuild test \
+        -workspace "$WORKSPACE" \
+        -scheme "$SCHEME" \
+        -destination "$DESTINATION" \
+        -resultBundlePath "$xcresult_dir/TestResults" \
+        -enableCodeCoverage YES \
+        2>&1 | tee -a "$log_file"
+    
+    return ${PIPESTATUS[0]}
+}
+
 run_improver() {
-    local log_file status branch
+    local log_file status branch xcresult_dir
     log_file="$LOG_DIR/improver_$(date +%Y%m%d_%H%M%S).log"
+    xcresult_dir="$LOG_DIR/xcresults_$(date +%Y%m%d_%H%M%S)"
     
-    echo "🚀 Running improver..."
-    python3 Tools/improver_loop.py --config "$CONFIG" 2>&1 | tee "$log_file"
-    status=${PIPESTATUS[0]}
+    # Ensure directories exist
+    mkdir -p "$xcresult_dir"
     
-    # Check for changes and commit/push if needed
-    if [[ $status -eq 0 ]]; then
-        if [[ "$(jq -r '.auto_commit // false' "$CONFIG" 2>/dev/null)" == "true" ]]; then
-            if git_commit_changes; then
-                if [[ "$(jq -r '.auto_push // false' "$CONFIG" 2>/dev/null)" == "true" ]]; then
-                    branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
-                    git_push_changes "$branch"
-                fi
+    echo "🚀 Running improver..." | tee -a "$log_file"
+    echo "📝 Logging to: $log_file" | tee -a "$log_file"
+    
+    # Clean before building
+    clean_build | tee -a "$log_file"
+    
+    # Run xcodebuild with error handling
+    set -o pipefail
+    run_xcodebuild "$log_file" "$xcresult_dir"
+    status=$?
+    set +o pipefail
+    
+    # Save xcresult path for debugging
+    echo "📊 Test results available at: $xcresult_dir/TestResults.xcresult" >> "$log_file"
+    
+    # Handle build result
+    if [[ $status -ne 0 ]]; then
+        echo "❌ Build failed with status: $status" | tee -a "$log_file"
+        
+        # Extract error details
+        if grep -q "error: " "$log_file"; then
+            echo "🔍 Build errors found:" | tee -a "$log_file"
+            grep -A 5 -B 2 "error: " "$log_file" | tee -a "$log_file"
+        fi
+        
+        # Run diagnostics
+        run_diagnostics "$log_file"
+        
+        # Try to fix common issues
+        fix_common_issues "$log_file"
+        
+        return 1
+    fi
+    
+    # If build succeeded, handle git operations
+    if [[ "$(jq -r '.auto_commit // false' "$CONFIG" 2>/dev/null)" == "true" ]]; then
+        if git_commit_changes; then
+            if [[ "$(jq -r '.auto_push // false' "$CONFIG" 2>/dev/null)" == "true" ]]; then
+                branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
+                git_push_changes "$branch"
             fi
         fi
     fi
     
-    return $status
+    return 0
+}
+
+run_diagnostics() {
+    local log_file=$1
+    echo "🔍 Running diagnostics..." | tee -a "$log_file"
+    
+    # Check Xcode version
+    echo "\n📱 Xcode Version:" | tee -a "$log_file"
+    xcodebuild -version 2>&1 | tee -a "$log_file"
+    
+    # Check Ruby and CocoaPods versions
+    echo "\n🔧 Development Environment:" | tee -a "$log_file"
+    ruby -v 2>&1 | tee -a "$log_file"
+    pod --version 2>&1 | tee -a "$log_file"
+    
+    # Check for CocoaPods issues
+    if [ -f "Podfile" ]; then
+        echo "\n🔍 Checking CocoaPods..." | tee -a "$log_file"
+        pod env | grep -E 'CocoaPods|Ruby|Xcode' 2>&1 | tee -a "$log_file"
+    fi
+    
+    # Check for code signing issues
+    echo "\n🔑 Code Signing Status:" | tee -a "$log_file"
+    security find-identity -v -p codesigning 2>&1 | tee -a "$log_file"
+    
+    echo "\n📋 Diagnostics complete. Check the log file for details." | tee -a "$log_file"
 }
 
 run_backend_fix() {
@@ -106,6 +223,32 @@ check_backend_errors() {
         return 1
     fi
     return 0
+}
+
+# Fix common build issues
+fix_common_issues() {
+    local log_file=$1
+    echo "🔧 Attempting to fix common issues..." | tee -a "$log_file"
+    
+    # Check for Core Data model issues
+    if grep -q "CoreData: error: " "$log_file"; then
+        echo "🔄 Regenerating Core Data model files..." | tee -a "$log_file"
+        find . -name "*.xcdatamodeld" -exec touch {} \;
+    fi
+    
+    # Check for Swift version issues
+    if grep -q "is not a recognized compiler" "$log_file"; then
+        echo "🔄 Updating Swift version settings..." | tee -a "$log_file"
+        xcrun swift -version | tee -a "$log_file"
+    fi
+    
+    # Check for code signing issues
+    if grep -q "Code Signing Error" "$log_file"; then
+        echo "🔑 Fixing code signing..." | tee -a "$log_file"
+        xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" -destination "$DESTINATION" CODE_SIGNING_ALLOWED=NO | tee -a "$log_file"
+    fi
+    
+    echo "✅ Attempted fixes complete" | tee -a "$log_file"
 }
 
 # Main loop
