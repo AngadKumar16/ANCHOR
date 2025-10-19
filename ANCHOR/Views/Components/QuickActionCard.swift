@@ -675,19 +675,21 @@ extension QuickActionCard {
                 title: "New Journal",
                 subtitle: "Write your thoughts",
                 icon: "book.fill",
-                customGradient: [ANCHORDesign.Colors.primary, ANCHORDesign.Colors.primary.opacity(0.7)]
-            ) {
-                print("New Journal tapped")
-            }
+                customGradient: [ANCHORDesign.Colors.primary, ANCHORDesign.Colors.primary.opacity(0.7)],
+                action: {
+                    print("New Journal tapped")
+                }
+            )
             
             QuickActionCard(
                 title: "Breathing",
                 subtitle: "Calm your mind",
                 icon: "wind",
-                customGradient: [ANCHORDesign.Colors.accent, ANCHORDesign.Colors.accent.opacity(0.7)]
-            ) {
-                print("Breathing tapped")
-            }
+                customGradient: [ANCHORDesign.Colors.accent, ANCHORDesign.Colors.accent.opacity(0.7)],
+                action: {
+                    print("Breathing tapped")
+                }
+            )
             
             // Different styles
             QuickActionCard(
