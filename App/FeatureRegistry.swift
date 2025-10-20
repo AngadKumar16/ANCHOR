@@ -1,10 +1,11 @@
 // Auto-generated FeatureRegistry to ensure views are referenced
 import SwiftUI
+import ANCHORFeatures_Dashboard
 
 func __registerFeaturesForLinking() {
     _ = AIAnalysisServiceView()
     _ = ConflictResolutionViewModelView()
-    _ = DashboardViewView()
+    _ = Dashboard.DashboardViewView()
     _ = EmailpasswordLoginViewModelView()
     _ = EntryCategorizationtaggingViewModelView()
     _ = ImplementBackuprestoreFunctionalityViewModelView()
