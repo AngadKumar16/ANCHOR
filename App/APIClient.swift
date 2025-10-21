@@ -1,5 +1,4 @@
 import Foundation
-import ANCHORFeatures_Dashboard
 
 final class APIClient {
     static let shared = APIClient()
