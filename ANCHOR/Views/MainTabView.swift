@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import ANCHORFeatures_Dashboard
 
 struct MainTabView: View {
     @StateObject private var journalViewModel = JournalViewModel()

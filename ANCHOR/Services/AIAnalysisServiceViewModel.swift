@@ -1,6 +1,8 @@
 import Foundation
 import Combine
 
+@_exported import ANCHOR
+
 final class AIAnalysisServiceViewModel: ObservableObject {
     @Published var items: [AIAnalysisServiceModel] = []
     @Published var draftTitle: String = ""
