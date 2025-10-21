@@ -16,13 +16,18 @@ final class ImplementBackuprestoreFunctionalityViewModelViewModel: ObservableObj
         do {
             try await ImplementBackuprestoreFunctionalityViewModelRepository.shared.save(m)
 
-        // attempt backend post (best-effort)
-        do {
-            let posted = try await APIClient.shared.postImplementBackuprestoreFunctionalityViewModel(m)
-            // ignore for now
-        } catch { }
+            // attempt backend post (best-effort)
+            do {
+                _ = try await APIClient.shared.postImplementBackuprestoreFunctionalityViewModel(m)
+                // ignore for now
+            } catch { }
 
-            DispatchQueue.main.async { self.items.append(m); draftTitle = ""; draftBody = "" }
+            await MainActor.run { [weak self] in
+                guard let self = self else { return }
+                self.items.append(m)
+                self.draftTitle = ""
+                self.draftBody = ""
+            }
         } catch { }
     }
 
@@ -32,13 +37,18 @@ final class ImplementBackuprestoreFunctionalityViewModelViewModel: ObservableObj
         do {
             let remote = try await APIClient.shared.fetchImplementBackuprestoreFunctionalityViewModels()
             if !remote.isEmpty {
-                DispatchQueue.main.async { self.items = remote }
+                await MainActor.run { [weak self] in
+                    self?.items = remote
+                }
                 return
             }
         } catch { }
 
         do {
-            self.items = try await ImplementBackuprestoreFunctionalityViewModelRepository.shared.fetchAll()
+            let local = try await ImplementBackuprestoreFunctionalityViewModelRepository.shared.fetchAll()
+            await MainActor.run { [weak self] in
+                self?.items = local
+            }
         } catch { }
     }
 }
