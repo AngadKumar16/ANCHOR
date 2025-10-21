@@ -1,8 +1,6 @@
 import Foundation
 import Combine
 
-@_exported import ANCHOR
-
 final class AIAnalysisServiceViewModel: ObservableObject {
     @Published var items: [AIAnalysisServiceModel] = []
     @Published var draftTitle: String = ""
@@ -24,7 +22,12 @@ final class AIAnalysisServiceViewModel: ObservableObject {
             // ignore for now
         } catch { }
 
-            DispatchQueue.main.async { self.items.append(m); draftTitle = ""; draftBody = "" }
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.items.append(m)
+                self.draftTitle = ""
+                self.draftBody = ""
+            }
         } catch { }
     }
 

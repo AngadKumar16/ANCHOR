@@ -29,9 +29,22 @@
 		2F672E6D2E47048D00B58187 /* ANCHORUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ANCHORUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		2FC0CDB72EA731990077FB54 /* Exceptions for "ANCHOR" folder in "ANCHOR" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Models/AIAnalysisServiceModel.swift,
+			);
+			target = 2F672E502E47048C00B58187 /* ANCHOR */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		2F672E532E47048C00B58187 /* ANCHOR */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				2FC0CDB72EA731990077FB54 /* Exceptions for "ANCHOR" folder in "ANCHOR" target */,
+			);
 			path = ANCHOR;
 			sourceTree = "<group>";
 		};
