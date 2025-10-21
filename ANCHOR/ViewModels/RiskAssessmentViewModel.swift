@@ -21,14 +21,26 @@ final class RiskAssessmentViewModel: ObservableObject {
         score += Double(min(triggerCount,5)) * 5.0
         score = min(max(score, 0.0), 100.0)
         let reason = "Craving: \(Int(craving)), Triggers: \(triggerCount), Mood: \(mood)"
-        do {
-            try self.ctx.performAndWait {
-                let entity = RiskAssessmentEntity.create(in: self.ctx, score: score, reason: reason)
-                try self.ctx.save()
-                self.latestResult = entity
+        
+        Task {
+            do {
+                let result = try await withCheckedThrowingContinuation { continuation in
+                    self.ctx.perform {
+                        do {
+                            let entity = RiskAssessmentEntity.create(in: self.ctx, score: score, reason: reason)
+                            try self.ctx.save()
+                            continuation.resume(returning: entity)
+                        } catch {
+                            continuation.resume(throwing: error)
+                        }
+                    }
+                }
+                await MainActor.run {
+                    self.latestResult = result
+                }
+            } catch {
+                Logger.log("Risk save failed: \(error)")
             }
-        } catch {
-            Logger.log("Risk save failed: \(error)")
         }
     }
 

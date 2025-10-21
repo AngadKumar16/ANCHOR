@@ -1,5 +1,5 @@
+@preconcurrency import CoreData
 import Foundation
-import CoreData
 import LocalAuthentication
 
 @MainActor
@@ -16,25 +16,55 @@ final class UserProfileViewModel: ObservableObject {
     }
 
     func load() {
-        let req: NSFetchRequest<UserProfileEntity> = UserProfileEntity.fetchRequest()
-        req.fetchLimit = 1
-        do {
-            let arr = try ctx.fetch(req)
-            if let first = arr.first {
-                profileEntity = first
-                displayName = first.displayName ?? ""
-            } else {
-                // create default
-                try ctx.performAndWait {
-                    let created = UserProfileEntity.createDefault(in: ctx)
-                    try ctx.save()
-                    self.profileEntity = created
-                    self.displayName = created.displayName ?? ""
+        Task {
+            do {
+                let fetchRequest = NSFetchRequest<UserProfileEntity>(entityName: "UserProfileEntity")
+                fetchRequest.fetchLimit = 1
+                
+                let arr = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<[UserProfileEntity], Error>) in
+                    ctx.perform {
+                        do {
+                            let result = try self.ctx.fetch(fetchRequest)
+                            continuation.resume(returning: result)
+                        } catch {
+                            continuation.resume(throwing: error)
+                        }
+                    }
                 }
+                
+                if let first = arr.first {
+                    await MainActor.run {
+                        self.profileEntity = first
+                        self.displayName = first.displayName ?? ""
+                    }
+                } else {
+                    // create default
+                    let created = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<UserProfileEntity, Error>) in
+                        ctx.perform {
+                            do {
+                                let created = UserProfileEntity.createDefault(in: self.ctx)
+                                try self.ctx.save()
+                                continuation.resume(returning: created)
+                            } catch {
+                                continuation.resume(throwing: error)
+                            }
+                        }
+                    }
+                    
+                    await MainActor.run {
+                        self.profileEntity = created
+                        self.displayName = created.displayName ?? ""
+                    }
+                }
+                
+                let isBiometricEnabled = UserDefaults.standard.bool(forKey: "anchor.biometricEnabled")
+                await MainActor.run {
+                    self.biometricEnabled = isBiometricEnabled
+                }
+                
+            } catch {
+                Logger.log("UserProfile load error: \(error)")
             }
-            biometricEnabled = UserDefaults.standard.bool(forKey: "anchor.biometricEnabled")
-        } catch {
-            Logger.log("UserProfile load error: \(error)")
         }
     }
 

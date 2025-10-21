@@ -69,13 +69,13 @@ struct RiskQuestionView: View {
             craving = viewModel.craving
             triggersText = viewModel.triggersText
         }
-        .onChange(of: mood) { newValue in
+        .onChange(of: mood) { oldValue, newValue in
             viewModel.mood = newValue
         }
-        .onChange(of: craving) { newValue in
+        .onChange(of: craving) { oldValue, newValue in
             viewModel.craving = newValue
         }
-        .onChange(of: triggersText) { newValue in
+        .onChange(of: triggersText) { oldValue, newValue in
             viewModel.triggersText = newValue
         }
     }

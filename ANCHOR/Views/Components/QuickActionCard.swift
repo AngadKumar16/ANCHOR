@@ -698,10 +698,11 @@ extension QuickActionCard {
                 icon: "heart.fill",
                 style: .glassmorphism,
                 showBadge: true,
-                customGradient: [ANCHORDesign.Colors.moodHappy, ANCHORDesign.Colors.moodVeryHappy]
-            ) {
-                print("Check-In tapped")
-            }
+                customGradient: [ANCHORDesign.Colors.moodHappy, ANCHORDesign.Colors.moodVeryHappy],
+                action: {
+                    print("Check-In tapped")
+                }
+            )
             
             QuickActionCard(
                 title: "Progress",
@@ -710,10 +711,11 @@ extension QuickActionCard {
                 style: .outlined,
                 showProgress: true,
                 progressValue: 0.7,
-                customGradient: [ANCHORDesign.Colors.warning, ANCHORDesign.Colors.moodNeutral]
-            ) {
-                print("Progress tapped")
-            }
+                customGradient: [ANCHORDesign.Colors.warning, ANCHORDesign.Colors.moodNeutral],
+                action: {
+                    print("Progress tapped")
+                }
+            )
             
             // Different sizes and layouts
             QuickActionCard(
@@ -723,9 +725,10 @@ extension QuickActionCard {
                 size: .small,
                 iconStyle: .minimal,
                 layout: .compact,
-            ) {
-                print("Settings tapped")
-            }
+                action: {
+                    print("Settings tapped")
+                }
+            )
             
             QuickActionCard(
                 title: "Emergency",
@@ -736,9 +739,10 @@ extension QuickActionCard {
                 badgeColor: ANCHORDesign.Colors.error,
                 customGradient: [ANCHORDesign.Colors.error, Color.red],
                 pulseEffect: true,
-            ) {
-                print("Emergency tapped")
-            }
+                action: {
+                    print("Emergency tapped")
+                }
+            )
         }
         .padding()
     }

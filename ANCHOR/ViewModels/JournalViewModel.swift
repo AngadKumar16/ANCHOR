@@ -61,15 +61,27 @@ final class JournalViewModel: ObservableObject {
     }
 
     func delete(at offsets: IndexSet) async {
-        try? await self.ctx.perform {
-            // map offsets to current entries
-            let ids = offsets.map { self.entries[$0].id }
-            let req: NSFetchRequest<JournalEntryEntity> = JournalEntryEntity.fetchRequest()
-            req.predicate = NSPredicate(format: "id IN %@", ids)
-            let results = try self.ctx.fetch(req)
-            for r in results { self.ctx.delete(r) }
-            try self.ctx.save()
+        let entriesToDelete = offsets.map { self.entries[$0] }
+        let ids = entriesToDelete.map { $0.id }
+        
+        do {
+            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+                self.ctx.perform {
+                    do {
+                        let req: NSFetchRequest<JournalEntryEntity> = JournalEntryEntity.fetchRequest()
+                        req.predicate = NSPredicate(format: "id IN %@", ids)
+                        let results = try self.ctx.fetch(req)
+                        for r in results { self.ctx.delete(r) }
+                        try self.ctx.save()
+                        continuation.resume()
+                    } catch {
+                        continuation.resume(throwing: error)
+                    }
+                }
+            }
+            await load()
+        } catch {
+            Logger.log("Failed to delete journal entries: \(error)")
         }
-        await load()
     }
 }

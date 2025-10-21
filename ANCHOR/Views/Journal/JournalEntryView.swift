@@ -318,7 +318,7 @@ struct JournalEntryView: View {
         .onAppear {
             setupInitialValues()
         }
-        .onChange(of: selectedPhotos) { newPhotos in
+        .onChange(of: selectedPhotos) { oldValue, newPhotos in
             loadSelectedPhotos(newPhotos)
         }
         .sheet(isPresented: $showingShareSheet) {

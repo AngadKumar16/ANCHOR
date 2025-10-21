@@ -7,6 +7,15 @@
 
 import SwiftUI
 
+// Add this at the top of the file or in a separate ButtonStyles.swift file
+struct ScaleButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+            .animation(.easeInOut, value: configuration.isPressed)
+    }
+}
+
 struct RecoveryTipCard: View {
     // MARK: - Core Properties
     let icon: String
@@ -259,23 +268,19 @@ struct RecoveryTipCard: View {
         Color.clear
     }
     
-    // MARK: - Background Content
-    @ViewBuilder
-    private var cardContent: some View {
-        if customBackground != nil {
-            mainContentWithCustomBackground
-        } else {
-            mainContentWithDefaultBackground
-        }
-    }
-    
     // MARK: - Card Content
     @ViewBuilder
     private var cardContent: some View {
-        ZStack {
-            backgroundLayer
-            mainContentWrapper
-            overlayViews
+        if let customBackground = customBackground {
+            mainContent
+                .padding(cardPadding)
+                .background(customBackground)
+        } else {
+            ZStack {
+                backgroundLayer
+                mainContentWrapper
+                overlayViews
+            }
         }
     }
     
@@ -300,7 +305,7 @@ struct RecoveryTipCard: View {
             )
     }
     
-@ViewBuilder
+    @ViewBuilder
     private var backgroundContent: some View {
         // Background layer is now handled directly in cardContent
         EmptyView()

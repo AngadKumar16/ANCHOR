@@ -11,7 +11,7 @@ struct DashboardViewView: View {
                 TextField("Title", text: $vm.draftTitle).textFieldStyle(.roundedBorder).padding()
                 TextEditor(text: $vm.draftBody).frame(minHeight:120).padding()
                 HStack {
-                    Button("Save") { Task { await vm.saveDraft() } }.buttonStyle(.borderedProminent())
+                    Button("Save") { Task { await vm.saveDraft() } }.buttonStyle(BorderedProminentButtonStyle())
                     Button("Reload") { Task { await vm.loadAll() } }
                 }
                 List(vm.items, id: \.id) { it in
