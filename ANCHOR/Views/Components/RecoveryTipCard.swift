@@ -211,10 +211,8 @@ struct RecoveryTipCard: View {
     
     // MARK: - Content Wrappers
     @ViewBuilder
-    private var mainContentWrapper: some View {
-        if hasTapAction {
-            tapableCard
-        } else if customBackground != nil {
+/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift:247:13 Cannot find 'tapableCard' in scope
+        if customBackground != nil {
             mainContentWithCustomBackground
         } else {
             mainContentWithDefaultBackground
@@ -222,22 +220,34 @@ struct RecoveryTipCard: View {
     }
     
     @ViewBuilder
-    private var tapableCard: some View {
-        Button(action: handleTap) {
+    private var mainContentWithCustomBackground: some View {
+        mainContent
+            .padding(cardPadding)
+            .background(customBackground)
+            .cornerRadius(cardCornerRadius)
+    }
+    
+    @ViewBuilder
+    private var mainContentWithDefaultBackground: some View {
+        mainContent
+            .padding(cardPadding)
+            .background(cardBackground)
+            .cornerRadius(cardCornerRadius)
+            .shadow(
+                color: cardShadow.color,
+                radius: cardShadow.radius,
+                x: cardShadow.x,
+                y: cardShadow.y
+            )
+    }
+
+    @ViewBuilder
+    private var mainContentWrapper: some View {
+        if hasTapAction {
+            tapableCard
+        } else {
             cardContent
-                .scaleEffect(scaleOnPress && isPressed ? 0.98 : 1.0)
-                .opacity(scaleOnPress && isPressed ? 0.9 : 1.0)
         }
-        .buttonStyle(ScaleButtonStyle())
-        .onLongPressGesture(minimumDuration: 0.3, pressing: { pressing in
-            if hapticFeedback && pressing {
-                let impact = UIImpactFeedbackGenerator(style: .medium)
-                impact.impactOccurred()
-            }
-            isPressed = pressing
-        }, perform: {
-            onLongPress?()
-        })
     }
     
     // MARK: - Helper Properties
@@ -266,49 +276,6 @@ struct RecoveryTipCard: View {
     private var backgroundLayer: some View {
         // Background layer is intentionally empty as backgrounds are handled by main content views
         Color.clear
-    }
-    
-    // MARK: - Card Content
-    @ViewBuilder
-    private var cardContent: some View {
-        if let customBackground = customBackground {
-            mainContent
-                .padding(cardPadding)
-                .background(customBackground)
-        } else {
-            ZStack {
-                backgroundLayer
-                mainContentWrapper
-                overlayViews
-            }
-        }
-    }
-    
-    @ViewBuilder
-    private var mainContentWithCustomBackground: some View {
-        mainContent
-            .padding(cardPadding)
-            .background(customBackground)
-    }
-    
-    @ViewBuilder
-    private var mainContentWithDefaultBackground: some View {
-        mainContent
-            .padding(cardPadding)
-            .background(cardBackground)
-            .cornerRadius(cardCornerRadius)
-            .shadow(
-                color: cardShadow.color,
-                radius: cardShadow.radius,
-                x: cardShadow.x,
-                y: cardShadow.y
-            )
-    }
-    
-    @ViewBuilder
-    private var backgroundContent: some View {
-        // Background layer is now handled directly in cardContent
-        EmptyView()
     }
     
     @ViewBuilder
