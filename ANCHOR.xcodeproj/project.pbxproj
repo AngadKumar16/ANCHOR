@@ -416,8 +416,8 @@
 				DEVELOPMENT_TEAM = 5XTU3ZWHX9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "ANCHOR needs read access to your health data";
-				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "ANCHOR needs write access to save health data";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "ANCHOR would like to read your mindful minutes to help track your progress and provide personalized insights. Your data stays private and secure.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "ANCHOR would like to save your mindful minutes to Health. This helps you keep all your wellness data in one place and track your progress over time.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -447,8 +447,8 @@
 				DEVELOPMENT_TEAM = 5XTU3ZWHX9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "ANCHOR needs read access to your health data";
-				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "ANCHOR needs write access to save health data";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "ANCHOR would like to read your mindful minutes to help track your progress and provide personalized insights. Your data stays private and secure.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "ANCHOR would like to save your mindful minutes to Health. This helps you keep all your wellness data in one place and track your progress over time.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
