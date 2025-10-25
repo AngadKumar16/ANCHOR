@@ -13,6 +13,9 @@ struct MoodTrackingView: View {
     @State private var showingNoteField = false
     @State private var showingHistory = false
     
+    // Theme
+    @Environment(\.colorScheme) private var colorScheme
+    
     var body: some View {
         NavigationView {
             ScrollView {
@@ -27,12 +30,14 @@ struct MoodTrackingView: View {
                     Button(action: { showingHistory = true }) {
                         HStack {
                             Image(systemName: "chart.line.uptrend.xyaxis")
+                                .imageScale(.medium)
                             Text("View Mood History")
+                                .font(.headline)
                         }
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color.blue.opacity(0.1))
-                        .foregroundColor(.blue)
+                        .background(AppTheme.secondary.opacity(0.1))
+                        .foregroundColor(AppTheme.secondary)
                         .cornerRadius(12)
                     }
                     .padding(.horizontal)
@@ -43,11 +48,13 @@ struct MoodTrackingView: View {
                 .padding(.vertical)
             }
             .navigationTitle("How are you feeling?")
+            .background(AppTheme.background.ignoresSafeArea())
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     if !moods.isEmpty {
                         Button(action: { showingHistory = true }) {
                             Label("History", systemImage: "list.bullet")
+                                .labelStyle(.iconOnly)
                         }
                     }
                 }
@@ -59,77 +66,89 @@ struct MoodTrackingView: View {
     private func moodSelectionView() -> some View {
         VStack(spacing: 16) {
             Text("Select your mood")
-                .font(.headline)
+                .font(.title3)
+                .fontWeight(.semibold)
+                .foregroundColor(AppTheme.textPrimary)
                 .padding(.bottom, 8)
             
             HStack(spacing: 16) {
                 ForEach(MoodLevel.allCases) { level in
                     Button(action: {
-                        withAnimation {
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
                             selectedMood = level
                             showingNoteField = true
                         }
                     }) {
                         VStack(spacing: 8) {
                             Text(level.emoji)
-                                .font(.system(size: 40))
+                                .font(.system(size: 36))
                                 .frame(width: 60, height: 60)
-                                .background(level.color.opacity(0.2))
+                                .background(level.color.opacity(0.15))
                                 .clipShape(Circle())
+                                .overlay(
+                                    Circle()
+                                        .stroke(level.color.opacity(selectedMood == level ? 0.8 : 0), lineWidth: 3)
+                                )
                             
                             Text(level.description)
                                 .font(.caption)
-                                .foregroundColor(.primary)
+                                .fontWeight(.medium)
+                                .foregroundColor(AppTheme.textPrimary)
                         }
                     }
                     .buttonStyle(ScaleButtonStyle())
                 }
             }
             .padding()
-            .background(Color(.secondarySystemBackground))
+            .background(AppTheme.cardBackground)
             .cornerRadius(16)
+            .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
             .padding(.horizontal)
             
             if showingNoteField, let selectedMood = selectedMood {
                 VStack(spacing: 16) {
                     Text("Add a note (optional)")
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(AppTheme.textSecondary)
                     
                     TextEditor(text: $note)
-                        .frame(minHeight: 80)
+                        .frame(minHeight: 100)
                         .padding()
-                        .background(Color(.secondarySystemBackground))
+                        .background(AppTheme.cardBackground)
                         .cornerRadius(12)
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                                .stroke(AppTheme.secondary.opacity(0.2), lineWidth: 1)
                         )
                     
                     HStack(spacing: 16) {
                         Button("Cancel") {
-                            withAnimation {
+                            withAnimation(.spring()) {
                                 self.selectedMood = nil
                                 self.note = ""
                                 self.showingNoteField = false
                             }
                         }
-                        .buttonStyle(.bordered)
-                        .tint(.red)
+                        .buttonStyle(SecondaryButtonStyle())
+                        .frame(maxWidth: .infinity)
                         
                         Button("Save") {
                             saveMood(level: selectedMood, note: note.isEmpty ? nil : note)
-                            self.note = ""
-                            self.showingNoteField = false
-                            self.selectedMood = nil
+                            withAnimation(.spring()) {
+                                self.note = ""
+                                self.showingNoteField = false
+                                self.selectedMood = nil
+                            }
                         }
-                        .buttonStyle(.borderedProminent)
+                        .buttonStyle(PrimaryButtonStyle())
+                        .frame(maxWidth: .infinity)
                         .disabled(selectedMood == nil)
                     }
                 }
                 .padding()
-                .background(Color(.tertiarySystemBackground))
+                .background(AppTheme.cardBackground)
                 .cornerRadius(16)
+                .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
                 .padding(.horizontal)
                 .transition(.opacity.combined(with: .move(edge: .top)))
             }
@@ -143,36 +162,53 @@ struct MoodTrackingView: View {
                 HStack {
                     Text("Recent Moods")
                         .font(.headline)
+                        .foregroundColor(AppTheme.textPrimary)
                     Spacer()
                     if moods.count > 3 {
                         Button("See All") {
                             showingHistory = true
                         }
                         .font(.subheadline)
+                        .foregroundColor(AppTheme.primary)
                     }
                 }
                 .padding(.horizontal)
                 
                 VStack(spacing: 12) {
-                    ForEach(moods.prefix(3)) { mood in
+                    ForEach(Array(moods.prefix(3).enumerated()), id: \.element) { index, mood in
                         MoodRow(mood: mood)
                             .padding(.horizontal)
+                        
+                        if index < min(2, moods.count - 1) {
+                            Divider()
+                                .padding(.leading, 60)
+                                .padding(.horizontal)
+                        }
                     }
                 }
+                .padding(.vertical, 8)
+                .background(AppTheme.cardBackground)
+                .cornerRadius(16)
+                .padding(.horizontal)
             }
             .padding(.top, 8)
         } else {
-            VStack(spacing: 16) {
+            VStack(spacing: 20) {
                 Image(systemName: "face.smiling")
                     .font(.system(size: 50))
-                    .foregroundColor(.blue.opacity(0.5))
-                Text("No mood entries yet")
-                    .font(.headline)
-                Text("Select how you're feeling to get started")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 40)
+                    .foregroundColor(AppTheme.primary.opacity(0.3))
+                
+                VStack(spacing: 8) {
+                    Text("No mood entries yet")
+                        .font(.headline)
+                        .foregroundColor(AppTheme.textPrimary)
+                    
+                    Text("Select how you're feeling to get started")
+                        .font(.subheadline)
+                        .foregroundColor(AppTheme.textSecondary)
+                        .multilineTextAlignment(.center)
+                }
+                .padding(.horizontal, 40)
             }
             .padding(.vertical, 40)
         }
@@ -183,11 +219,14 @@ struct MoodTrackingView: View {
             let newMood = MoodEntity(context: viewContext)
             newMood.id = UUID()
             newMood.date = Date()
-            newMood.moodLevel = level
+            newMood.level = level.rawValue
             newMood.note = note
             
             do {
                 try viewContext.save()
+                // Haptic feedback
+                let generator = UINotificationFeedbackGenerator()
+                generator.notificationOccurred(.success)
             } catch {
                 Logger.persistence.error("Failed to save mood: \(error.localizedDescription)")
             }
@@ -195,70 +234,17 @@ struct MoodTrackingView: View {
     }
 }
 
-// MARK: - Subviews
-
-struct MoodRow: View {
-    let mood: MoodEntity
-    
-    private var formattedDate: String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        return formatter.string(from: mood.date)
-    }
-    
-    var body: some View {
-        HStack {
-            Text(mood.moodLevel.emoji)
-                .font(.title2)
-                .frame(width: 44, height: 44)
-                .background(mood.moodLevel.color.opacity(0.2))
-                .clipShape(Circle())
-            
-            VStack(alignment: .leading, spacing: 4) {
-                HStack {
-                    Text(mood.moodLevel.description)
-                        .font(.subheadline)
-                        .foregroundColor(mood.moodLevel.color)
-                    
-                    Spacer()
-                    
-                    Text(formattedDate)
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                }
-                
-                if let note = mood.note, !note.isEmpty {
-                    Text(note)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .lineLimit(2)
-                }
-            }
-            
-            Image(systemName: "chevron.right")
-                .foregroundColor(.secondary)
-                .opacity(0.5)
-        }
-        .padding()
-        .background(Color(.secondarySystemBackground))
-        .cornerRadius(12)
-    }
-}
-
 // MARK: - Button Style
-
 struct ScaleButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .scaleEffect(configuration.isPressed ? 0.9 : 1.0)
-            .opacity(configuration.isPressed ? 0.8 : 1.0)
+            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+            .opacity(configuration.isPressed ? 0.9 : 1.0)
             .animation(.spring(response: 0.3, dampingFraction: 0.6), value: configuration.isPressed)
     }
 }
 
 // MARK: - Previews
-
 struct MoodTrackingView_Previews: PreviewProvider {
     static var previews: some View {
         let context = PersistenceController.preview.container.viewContext
