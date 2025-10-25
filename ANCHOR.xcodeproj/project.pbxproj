@@ -95,6 +95,7 @@
 		2F672E482E47048C00B58187 = {
 			isa = PBXGroup;
 			children = (
+				2FC0D10E2EAD77E80077FB54 /* CodeData */,
 				2FC0D0E92EAD740C0077FB54 /* ANCHOR.xcdatamodeld */,
 				2F672E532E47048C00B58187 /* ANCHOR */,
 				2F672E662E47048D00B58187 /* ANCHORTests */,
@@ -111,6 +112,13 @@
 				2F672E6D2E47048D00B58187 /* ANCHORUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		2FC0D10E2EAD77E80077FB54 /* CodeData */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = CodeData;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
