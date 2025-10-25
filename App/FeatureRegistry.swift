@@ -4,6 +4,7 @@ import ANCHORFeatures_Dashboard
 
 func __registerFeaturesForLinking() {
     _ = AIAnalysisServiceView()
+    _ = CloudSyncSettings1759356720View()
     _ = ConflictResolutionViewModelView()
     _ = Dashboard.DashboardViewView()
     _ = EmailpasswordLoginViewModelView()
