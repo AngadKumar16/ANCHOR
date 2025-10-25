@@ -16,6 +16,7 @@ struct ScaleButtonStyle: ButtonStyle {
     }
 }
 
+
 struct RecoveryTipCard: View {
     // MARK: - Core Properties
     let icon: String
@@ -192,9 +193,7 @@ struct RecoveryTipCard: View {
     
     var body: some View {
         mainContentWrapper
-            .scaleEffect(getScaleEffect())
             .opacity(computedOpacity)
-            .animation(.spring(response: 0.4, dampingFraction: 0.8), value: isPressed)
             .animation(.easeOut(duration: 0.6), value: hasAppeared)
             .animation(.easeInOut(duration: 0.2), value: isHovered)
             .onAppear(perform: handleAppear)
@@ -211,7 +210,7 @@ struct RecoveryTipCard: View {
     
     // MARK: - Content Wrappers
     @ViewBuilder
-/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Views/Components/RecoveryTipCard.swift:247:13 Cannot find 'tapableCard' in scope
+    private var cardContent: some View {
         if customBackground != nil {
             mainContentWithCustomBackground
         } else {
@@ -219,6 +218,18 @@ struct RecoveryTipCard: View {
         }
     }
     
+    @ViewBuilder
+    private var mainContentWrapper: some View {
+        if hasTapAction {
+            tapableCard
+        } else if customBackground != nil {
+            mainContentWithCustomBackground
+        } else {
+            mainContentWithDefaultBackground
+        }
+    }
+    
+    // MARK: - Card Content
     @ViewBuilder
     private var mainContentWithCustomBackground: some View {
         mainContent
@@ -242,11 +253,45 @@ struct RecoveryTipCard: View {
     }
 
     @ViewBuilder
-    private var mainContentWrapper: some View {
-        if hasTapAction {
-            tapableCard
-        } else {
+    private var tapableCard: some View {
+        Button(action: handleTap) {
             cardContent
+                .scaleEffect(scaleOnPress && isPressed ? 0.98 : 1.0)
+                .opacity(scaleOnPress && isPressed ? 0.9 : 1.0)
+        }
+        .buttonStyle(ScaleButtonStyle())
+        .onLongPressGesture(minimumDuration: 0.3, pressing: { pressing in
+            if hapticFeedback && pressing {
+                let impact = UIImpactFeedbackGenerator(style: .medium)
+                impact.impactOccurred()
+            }
+            isPressed = pressing
+        }, perform: {
+            onLongPress?()
+        })
+    }
+
+    // MARK: - Main Content
+    @ViewBuilder
+    private var mainContent: some View {
+        ZStack {
+            backgroundLayer
+            content
+            overlayViews
+        }
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        switch layout {
+        case .horizontal:
+            horizontalLayout
+        case .vertical:
+            verticalLayout
+        case .compact:
+            compactLayout
+        case .featured:
+            featuredLayout
         }
     }
     
@@ -257,19 +302,6 @@ struct RecoveryTipCard: View {
     }
     
     // MARK: - View Builders
-    
-    
-    private func handleAppear() {
-        if animateOnAppear {
-            withAnimation(.easeOut(duration: 0.6).delay(Double.random(in: 0...0.3))) {
-                hasAppeared = true
-            }
-        } else {
-            hasAppeared = true
-        }
-    }
-    
-    // MARK: - Card Content Components
     
     // MARK: - Background Layer
     @ViewBuilder
@@ -294,19 +326,6 @@ struct RecoveryTipCard: View {
     }
     
     // MARK: - Layout Selection
-    @ViewBuilder
-    private var mainContent: some View {
-        switch layout {
-        case .horizontal:
-            horizontalLayout
-        case .vertical:
-            verticalLayout
-        case .compact:
-            compactLayout
-        case .featured:
-            featuredLayout
-        }
-    }
     
     // MARK: - Horizontal Layout
     @ViewBuilder
@@ -561,15 +580,13 @@ struct RecoveryTipCard: View {
     }
     
     // MARK: - Helper Methods
-    private func getScaleEffect() -> CGFloat {
-        if isPressed && scaleOnPress {
-            return 0.98
-        } else if isHovered && hoverEffect {
-            return 1.02
-        } else if hasAppeared || !animateOnAppear {
-            return 1.0
+    private func handleAppear() {
+        if animateOnAppear {
+            withAnimation(.easeOut(duration: 0.6).delay(Double.random(in: 0...0.3))) {
+                hasAppeared = true
+            }
         } else {
-            return 0.95
+            hasAppeared = true
         }
     }
     
