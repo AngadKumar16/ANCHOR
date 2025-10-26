@@ -5,7 +5,6 @@
 //  Created by Angad Kumar on 8/12/25.
 //
 
-
 import SwiftUI
 
 struct JournalEditorView: View {
@@ -16,6 +15,7 @@ struct JournalEditorView: View {
     @State private var title: String = ""
     @State private var bodyText: String = ""
     @State private var tagsText: String = ""
+    @State private var error: Error?
 
     init(entry: JournalEntry? = nil, onSave: @escaping (JournalEntry) -> Void) {
         self.entry = entry
@@ -45,15 +45,37 @@ struct JournalEditorView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") {
-                        let tags = tagsText.split(separator: ",").map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }.filter { !$0.isEmpty }
-                        var model = entry ?? JournalEntry(body: bodyText)
-                        model.title = title
-                        model.body = bodyText
-                        model.tags = tags
-                        onSave(model)
-                        presentation.wrappedValue.dismiss()
+                        let tags = Set(tagsText.split(separator: ",")
+                            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                            .filter { !$0.isEmpty })
+                        
+                        do {
+                            let entry = try JournalEntry(
+                                id: entry?.id ?? UUID(),
+                                createdAt: entry?.createdAt ?? Date(),
+                                updatedAt: Date(),
+                                title: title.isEmpty ? nil : title,
+                                body: bodyText,
+                                bodyFormat: "plain",
+                                sentiment: entry?.sentiment,
+                                tags: tags,
+                                isLocked: entry?.isLocked ?? false,
+                                version: (entry?.version ?? 0) + 1
+                            )
+                            onSave(entry)
+                            presentation.wrappedValue.dismiss()
+                        } catch {
+                            self.error = error
+                        }
                     }
                 }
+            }
+            .alert(isPresented: .constant(error != nil)) {
+                Alert(
+                    title: Text("Error"),
+                    message: Text(error?.localizedDescription ?? "An unknown error occurred"),
+                    dismissButton: .default(Text("OK")) { error = nil }
+                )
             }
         }
     }

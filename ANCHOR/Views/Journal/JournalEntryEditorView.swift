@@ -164,36 +164,6 @@ private struct EditorTagView: View {
     }
 }
 
-private struct SentimentIndicator: View {
-    let value: Double // -1.0 to 1.0
-    
-    var body: some View {
-        HStack(spacing: 4) {
-            Image(systemName: "face.smiling")
-                .foregroundColor(sentimentColor)
-            
-            ProgressView(value: (value + 1) / 2)
-                .progressViewStyle(.linear)
-                .frame(width: 100)
-            
-            Text("\(Int(abs(value) * 100))%")
-                .font(.caption)
-                .foregroundColor(.secondary)
-                .frame(width: 40, alignment: .trailing)
-        }
-    }
-    
-    private var sentimentColor: Color {
-        if value > 0.3 {
-            return .green
-        } else if value < -0.3 {
-            return .red
-        } else {
-            return .gray
-        }
-    }
-}
-
 // MARK: - Preview
 
 #Preview {

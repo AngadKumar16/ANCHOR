@@ -21,9 +21,25 @@ struct JournalDetailView: View {
         }
         .navigationBarItems(trailing: Button("Edit") { showingEdit = true })
         .sheet(isPresented: $showingEdit) {
-            JournalEditorView(entry: JournalEntry(id: entry.id, date: entry.date, title: entry.title, body: entry.body, sentiment: entry.sentiment, tags: entry.tags)) { edited in
+            JournalEditorView(entry: JournalEntry(
+                id: entry.id,
+                createdAt: entry.date,
+                updatedAt: entry.date,
+                title: entry.title,
+                body: entry.body,
+                bodyFormat: "plain",
+                sentiment: entry.sentiment,
+                tags: Set(entry.tags),
+                isLocked: false,
+                version: 1
+            )) { edited in
                 Task {
-                    try? await viewModel.update(entryId: edited.id, newTitle: edited.title, newBody: edited.body, newTags: edited.tags)
+                    try? await viewModel.updateEntry(
+                        entryId: edited.id,
+                        newTitle: edited.title,
+                        newBody: edited.body,
+                        newTags: Array(edited.tags)
+                    )
                     showingEdit = false
                 }
             }
