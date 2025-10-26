@@ -12,7 +12,7 @@ struct ANCHORApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
-    @StateObject private var persistenceController = PersistenceController.shared
+    @StateObject private var persistence = PersistenceController.shared
     
     // Add thread checking
     init() {
@@ -26,16 +26,13 @@ struct ANCHORApp: App {
         // Enable Core Data validation
         UserDefaults.standard.set(true, forKey: "-com.apple.CoreData.Validation.preserveValidationErrors")
         #endif
-        
-        // Verify Core Data stack initialization
-        _ = persistenceController.container.viewContext
     }
     
     var body: some Scene {
         WindowGroup {
             AppRootView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                .environmentObject(persistenceController)
+                .environment(\.managedObjectContext, persistence.viewContext)
+                .environmentObject(persistence)
         }
     }
 }

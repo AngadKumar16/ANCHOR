@@ -190,7 +190,8 @@ final class JournalViewModel: ObservableObject {
     }
     
     private func fetchEntries(page: Int, pageSize: Int) async throws -> [JournalEntry] {
-        try await performOnContext { context in
+        try await performOnContext { [weak self] context in
+            guard let self = self else { return [] }
             let request = JournalEntryEntity.fetchRequest()
             let offset = page * pageSize
             request.fetchLimit = pageSize
@@ -200,13 +201,13 @@ final class JournalViewModel: ObservableObject {
             // Add search and filter predicates if needed
             var predicates: [NSPredicate] = []
             
-            if !searchText.isEmpty {
+            if !self.searchText.isEmpty {
                 predicates.append(NSPredicate(format: "(title CONTAINS[cd] %@) OR (body CONTAINS[cd] %@)", 
-                                           searchText, searchText))
+                                           self.searchText, self.searchText))
             }
             
-            if !selectedTags.isEmpty {
-                predicates.append(NSPredicate(format: "ANY tags.name IN %@", Array(selectedTags)))
+            if !self.selectedTags.isEmpty {
+                predicates.append(NSPredicate(format: "ANY tags.name IN %@", Array(self.selectedTags)))
             }
             
             if !predicates.isEmpty {

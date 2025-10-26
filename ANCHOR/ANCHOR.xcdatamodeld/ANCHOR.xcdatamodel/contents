@@ -2,6 +2,7 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="24299" systemVersion="24G90" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
     <entity name="JournalEntryEntity" representedClassName=".JournalEntryEntity" syncable="YES">
         <attribute name="bodyEncrypted" optional="YES" attributeType="Binary"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="date" attributeType="Date" defaultDateTimeInterval="783180120" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="sentiment" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>

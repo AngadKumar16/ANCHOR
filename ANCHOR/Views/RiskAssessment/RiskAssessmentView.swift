@@ -12,16 +12,13 @@ struct RiskAssessmentView: View {
     @State private var showHistory = false
     @State private var showingNewAssessment = false
     @State private var selectedTab = 0
+    @State private var recentAssessments: [RiskAssessmentEntity] = []
     
     private let riskLevels: [ClosedRange<Double>: (String, Color, String)] = [
         0.0...29.9: ("Low", .green, "You're doing great! Keep up the good work."),
         30.0...69.9: ("Medium", .orange, "Be mindful of your triggers and practice healthy coping strategies."),
         70.0...100.0: ("High", .red, "Consider reaching out for support and using your coping strategies.")
     ]
-    
-    private var recentAssessments: [RiskAssessmentEntity] {
-        viewModel.fetchRecent(limit: 5)
-    }
     
     private var latestAssessment: RiskAssessmentEntity? {
         recentAssessments.first
@@ -94,6 +91,22 @@ struct RiskAssessmentView: View {
                         .environmentObject(viewModel)
                 }
             }
+            .onAppear {
+                Task {
+                    await loadRecentAssessments()
+                }
+            }
+        }
+    }
+    
+    private func loadRecentAssessments() async {
+        do {
+            let assessments = try await viewModel.fetchRecent(limit: 5)
+            await MainActor.run {
+                self.recentAssessments = assessments
+            }
+        } catch {
+            print("Failed to load recent assessments: \(error.localizedDescription)")
         }
     }
     

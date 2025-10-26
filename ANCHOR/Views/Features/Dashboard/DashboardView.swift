@@ -17,6 +17,22 @@ struct DashboardView: View {
     @State private var showingCheckIn = false
     @State private var showingRiskAssessment = false
     
+    private let recoveryTips = [
+        "Practice deep breathing for 5 minutes",
+        "Reach out to a friend today",
+        "Write down three things you're grateful for",
+        "Take a short walk outside",
+        "Try a quick meditation session"
+    ]
+    
+    private let recoveryTipIcons = [
+        "wind",
+        "person.2.fill",
+        "heart.fill",
+        "figure.walk",
+        "leaf.fill"
+    ]
+    
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -95,35 +111,30 @@ struct DashboardView: View {
     // MARK: - Welcome Header
     
     private var welcomeHeader: some View {
-        ANCHORCard(padding: ANCHORDesign.Spacing.lg) {
+        ANCHORCard.gradient(
+            Gradient(colors: [ANCHORDesign.Colors.primary, ANCHORDesign.Colors.secondary]),
+            padding: ANCHORDesign.Spacing.lg
+        ) {
             HStack {
                 VStack(alignment: .leading, spacing: ANCHORDesign.Spacing.sm) {
-                    Text("Welcome back!")
-                        .anchorTextStyle(.title1)
+                    Text("Welcome Back,")
+                        .font(.subheadline)
+                        .foregroundColor(.white.opacity(0.9))
                     
-                    Text("How are you feeling today?")
-                        .anchorTextStyle(.callout)
+                    Text("Friend")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
                 }
                 
                 Spacer()
                 
-                // Profile/Settings Button
-                Button(action: {
-                    // TODO: Navigate to settings
-                }) {
-                    ZStack {
-                        Circle()
-                            .fill(ANCHORDesign.Colors.primary.opacity(0.1))
-                            .frame(width: 44, height: 44)
-                        
-                        Image(systemName: "person.circle.fill")
-                            .font(.title2)
-                            .foregroundColor(ANCHORDesign.Colors.primary)
-                    }
-                }
+                Image(systemName: "person.circle.fill")
+                    .font(.system(size: 44))
+                    .foregroundColor(.white.opacity(0.9))
+                    .padding(.trailing, 4)
             }
         }
-        .padding(.top, ANCHORDesign.Spacing.md)
     }
     
     // MARK: - Sobriety Progress Section
@@ -145,53 +156,71 @@ struct DashboardView: View {
                 .anchorTextStyle(.title2)
                 .padding(.horizontal, ANCHORDesign.Spacing.xs)
             
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: ANCHORDesign.Spacing.md), count: 2), spacing: ANCHORDesign.Spacing.md) {
-                
-                QuickActionCard(
-                    title: "New Journal",
-                    subtitle: "Write your thoughts",
-                    icon: "book.fill",
-                    style: .gradient,
-                    customGradient: [ANCHORDesign.Colors.primary, ANCHORDesign.Colors.primaryLight],
-                    action: {
-                        showingJournalEntry = true
-                    }
+            LazyVGrid(columns: [
+                GridItem(.flexible(), spacing: ANCHORDesign.Spacing.md),
+                GridItem(.flexible(), spacing: ANCHORDesign.Spacing.md)
+            ], spacing: ANCHORDesign.Spacing.md) {
+                quickActionButton(
+                    title: "New Entry",
+                    icon: "plus.circle.fill",
+                    color: .blue,
+                    action: { showingJournalEntry = true }
                 )
                 
-                QuickActionCard(
-                    title: "Breathing",
-                    subtitle: "Calm your mind",
+                quickActionButton(
+                    title: "Breathe",
                     icon: "wind",
-                    style: .gradient,
-                    customGradient: [ANCHORDesign.Colors.accent, ANCHORDesign.Colors.accentLight],
-                    action: {
-                        showingBreathingExercise = true
-                    }
+                    color: .green,
+                    action: { showingBreathingExercise = true }
                 )
                 
-                QuickActionCard(
+                quickActionButton(
                     title: "Check-In",
-                    subtitle: "How are you?",
-                    icon: "heart.fill",
-                    style: .gradient,
-                    customGradient: [ANCHORDesign.Colors.moodHappy, ANCHORDesign.Colors.moodHappy],
-                    action: {
-                        showingCheckIn = true
-                    }
+                    icon: "checkmark.circle.fill",
+                    color: .orange,
+                    action: { showingCheckIn = true }
                 )
                 
-                QuickActionCard(
-                    title: "Risk Check",
-                    subtitle: "Assess your state",
-                    icon: "shield.fill",
-                    style: .gradient,
-                    customGradient: [ANCHORDesign.Colors.warning, ANCHORDesign.Colors.moodNeutral],
-                    action: {
-                        showingRiskAssessment = true
-                    }
+                quickActionButton(
+                    title: "Assess Risk",
+                    icon: "exclamationmark.triangle.fill",
+                    color: .red,
+                    action: { showingRiskAssessment = true }
                 )
             }
         }
+    }
+    
+    private func quickActionButton(
+        title: String,
+        icon: String,
+        color: Color,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(action: action) {
+            ANCHORCard(
+                padding: ANCHORDesign.Spacing.lg,
+                cornerRadius: ANCHORDesign.CornerRadius.medium,
+                shadowStyle: ANCHORDesign.Shadow.small,
+                backgroundColor: color.opacity(0.1),
+                showBorder: true
+            ) {
+                VStack(spacing: ANCHORDesign.Spacing.sm) {
+                    Image(systemName: icon)
+                        .font(.title2)
+                        .foregroundColor(color)
+                    
+                    Text(title)
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .foregroundColor(ANCHORDesign.Colors.textPrimary)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .padding(.vertical, ANCHORDesign.Spacing.sm)
+            }
+            .frame(height: 100)
+        }
+        .buttonStyle(ScaleButtonStyle())
     }
     
     // MARK: - Recent Journal Section
@@ -204,86 +233,74 @@ struct DashboardView: View {
                 
                 Spacer()
                 
-                NavigationLink(destination: JournalListView().environmentObject(journalVM)) {
+                NavigationLink(destination: JournalListView()) {
                     Text("View All")
-                        .anchorTextStyle(.callout)
+                        .font(.subheadline)
                         .foregroundColor(ANCHORDesign.Colors.primary)
                 }
             }
             .padding(.horizontal, ANCHORDesign.Spacing.xs)
             
             if let recentEntry = journalVM.entries.first {
-                ANCHORCard {
-                    VStack(alignment: .leading, spacing: ANCHORDesign.Spacing.sm) {
+                ANCHORCard.gradient(
+                    Gradient(colors: [ANCHORDesign.Colors.secondary.opacity(0.7), ANCHORDesign.Colors.primary.opacity(0.7)]),
+                    padding: ANCHORDesign.Spacing.lg
+                ) {
+                    VStack(alignment: .leading, spacing: ANCHORDesign.Spacing.md) {
                         HStack {
-                            ANCHORMoodIcon(mood: moodFromSentiment(recentEntry.sentiment ?? 0.0), size: 24)
-                            
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(recentEntry.title ?? "Journal Entry")
-                                    .anchorTextStyle(.bodyBold)
-                                    .lineLimit(1)
-                                
-                                Text(recentEntry.createdAt, style: .date)
-                                    .anchorTextStyle(.caption1)
-                            }
+                            Text(recentEntry.title ?? "Untitled Entry")
+                                .font(.headline)
+                                .foregroundColor(.white)
                             
                             Spacer()
                             
-                            Image(systemName: "chevron.right")
+                            Text(recentEntry.createdAt, style: .date)
                                 .font(.caption)
-                                .foregroundColor(ANCHORDesign.Colors.textTertiary)
+                                .foregroundColor(.white.opacity(0.8))
                         }
                         
-                        Text(recentEntry.body)
-                            .anchorTextStyle(.callout)
+                        Text(recentEntry.body.prefix(120) + (recentEntry.body.count > 120 ? "..." : ""))
+                            .font(.subheadline)
+                            .foregroundColor(.white.opacity(0.9))
                             .lineLimit(3)
-                            .multilineTextAlignment(.leading)
                         
-                        if !recentEntry.tags.isEmpty {
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: ANCHORDesign.Spacing.xs) {
-                                    ForEach(Array(recentEntry.tags.prefix(3).enumerated()), id: \.offset) { _, tag in
-                                        Text(tag)
-                                            .font(.system(size: 11, weight: .medium))
-                                            .padding(.horizontal, 8)
-                                            .padding(.vertical, 4)
-                                            .background(ANCHORDesign.Colors.primary.opacity(0.1))
-                                            .foregroundColor(ANCHORDesign.Colors.primary)
-                                            .cornerRadius(ANCHORDesign.CornerRadius.small)
-                                    }
-                                }
-                                .padding(.horizontal, 1)
-                            }
+                        HStack {
+                            Spacer()
+                            Text("Tap to view")
+                                .font(.caption)
+                                .foregroundColor(.white.opacity(0.8))
+                                .padding(.top, ANCHORDesign.Spacing.xs)
                         }
                     }
                 }
             } else {
-                ANCHORCard {
+                ANCHORCard(
+                    padding: ANCHORDesign.Spacing.lg,
+                    backgroundColor: ANCHORDesign.Colors.backgroundCard,
+                    showBorder: true
+                ) {
                     VStack(spacing: ANCHORDesign.Spacing.md) {
-                        Image(systemName: "book.closed")
-                            .font(.system(size: 40))
-                            .foregroundColor(ANCHORDesign.Colors.textTertiary)
+                        Image(systemName: "text.badge.plus")
+                            .font(.title2)
+                            .foregroundColor(ANCHORDesign.Colors.primary)
                         
-                        VStack(spacing: ANCHORDesign.Spacing.xs) {
-                            Text("Start Your Journey")
-                                .anchorTextStyle(.bodyBold)
-                            
-                            Text("Write your first journal entry to begin tracking your thoughts and progress.")
-                                .anchorTextStyle(.callout)
-                                .multilineTextAlignment(.center)
-                        }
+                        Text("No entries yet")
+                            .font(.subheadline)
+                            .foregroundColor(ANCHORDesign.Colors.textSecondary)
                         
                         Button(action: { showingJournalEntry = true }) {
-                            Text("Write First Entry")
-                                .font(.subheadline.bold())
-                                .foregroundColor(.white)
-                                .padding(.horizontal, 24)
-                                .padding(.vertical, 12)
-                                .background(ANCHORDesign.Colors.primary)
-                                .cornerRadius(8)
+                            Text("Create your first entry")
+                                .font(.subheadline)
+                                .foregroundColor(ANCHORDesign.Colors.primary)
+                                .padding(.vertical, ANCHORDesign.Spacing.xs)
+                                .padding(.horizontal, ANCHORDesign.Spacing.md)
+                                .background(ANCHORDesign.Colors.primary.opacity(0.1))
+                                .cornerRadius(ANCHORDesign.CornerRadius.small)
                         }
+                        .padding(.top, ANCHORDesign.Spacing.xs)
                     }
                     .frame(maxWidth: .infinity)
+                    .padding(.vertical, ANCHORDesign.Spacing.lg)
                 }
             }
         }
@@ -292,33 +309,42 @@ struct DashboardView: View {
     // MARK: - Daily Motivation Section
     
     private var dailyMotivationSection: some View {
-        ANCHORCard(
+        ANCHORCard.gradient(
+            Gradient(colors: [.purple, .pink]),
             padding: ANCHORDesign.Spacing.lg,
-            shadowStyle: ANCHORDesign.Shadow.large
+            shadowStyle: ANCHORDesign.Shadow.medium
         ) {
-            VStack(spacing: ANCHORDesign.Spacing.md) {
+            VStack(alignment: .leading, spacing: ANCHORDesign.Spacing.md) {
                 HStack {
-                    Image(systemName: "quote.bubble.fill")
-                        .font(.title2)
-                        .foregroundColor(ANCHORDesign.Colors.accent)
+                    Image(systemName: "quote.opening")
+                        .font(.title3)
+                        .foregroundColor(.white.opacity(0.8))
                     
-                    Text("Daily Inspiration")
-                        .anchorTextStyle(.title3)
+                    Text("Daily Motivation")
+                        .font(.headline)
+                        .foregroundColor(.white)
                     
                     Spacer()
                     
-                    Button(action: shareQuote) {
-                        Image(systemName: "square.and.arrow.up")
-                            .font(.title3)
-                            .foregroundColor(ANCHORDesign.Colors.primary)
+                    Button(action: {
+                        // No action needed as we're using a daily quote
+                    }) {
+                        Image(systemName: "arrow.clockwise")
+                            .font(.subheadline)
+                            .foregroundColor(.white.opacity(0.8))
                     }
                 }
                 
-                Text(dailyQuoteService.getTodaysQuote().text)
-                    .anchorTextStyle(.body)
-                    .multilineTextAlignment(.center)
-                    .italic()
-                    .padding(.vertical, ANCHORDesign.Spacing.sm)
+                let quote = DailyQuoteService.shared.getTodaysQuote()
+                Text("\\(quote.text)")
+                    .font(.body.italic())
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.leading)
+                
+                Text("- \(quote.author)")
+                    .font(.subheadline)
+                    .foregroundColor(.white.opacity(0.8))
+                    .frame(maxWidth: .infinity, alignment: .trailing)
             }
         }
     }
@@ -331,24 +357,28 @@ struct DashboardView: View {
                 .anchorTextStyle(.title2)
                 .padding(.horizontal, ANCHORDesign.Spacing.xs)
             
-            VStack(spacing: ANCHORDesign.Spacing.sm) {
-                RecoveryTipCard(
-                    title: "Practice Self-Compassion",
-                    message: "Be kind to yourself. Recovery is a journey, not a destination.",
-                    systemImage: "heart.fill"
-                )
-                
-                RecoveryTipCard(
-                    title: "Stay Connected",
-                    message: "Reach out to your support network when you need help.",
-                    systemImage: "person.2.fill"
-                )
-                
-                RecoveryTipCard(
-                    title: "Prioritize Sleep",
-                    message: "Good sleep is essential for mental health and recovery.",
-                    systemImage: "moon.fill"
-                )
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: ANCHORDesign.Spacing.md) {
+                    ForEach(0..<5) { index in
+                        ANCHORCard(
+                            padding: ANCHORDesign.Spacing.md,
+                            backgroundColor: ANCHORDesign.Colors.backgroundCard,
+                            showBorder: true
+                        ) {
+                            VStack(alignment: .leading, spacing: ANCHORDesign.Spacing.sm) {
+                                Image(systemName: recoveryTipIcons[index])
+                                    .font(.title2)
+                                    .foregroundColor(ANCHORDesign.Colors.primary)
+                                
+                                Text(recoveryTips[index])
+                                    .font(.subheadline)
+                                    .foregroundColor(ANCHORDesign.Colors.textPrimary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                            .frame(width: 150, height: 120, alignment: .topLeading)
+                        }
+                    }
+                }
             }
         }
     }

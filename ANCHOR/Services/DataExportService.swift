@@ -13,7 +13,7 @@ final class DataExportService {
         
         do {
             let results = try ctx.fetch(req)
-            // Convert to JournalEntryModel
+            
             let models = results.map { entity -> JournalEntryModel in
                 return JournalEntryModel(
                     id: entity.id,
@@ -21,24 +21,38 @@ final class DataExportService {
                     title: entity.title,
                     body: entity.body,
                     sentiment: entity.sentiment,
-                    tags: entity.tags?.components(separatedBy: ",").filter { !$0.isEmpty } ?? []
+                    tags: entity.tagsArray
                 )
             }
             
-            let data = try JSONEncoder().encode(models)
-            let tmp = FileManager.default.temporaryDirectory.appendingPathComponent("anchor_journal_export_\(Date().ISO8601Format()).json")
-            try data.write(to: tmp, options: [.atomic])
+            let encoder = JSONEncoder()
+            encoder.dateEncodingStrategy = .iso8601
+            encoder.outputFormatting = .prettyPrinted
             
+            let data = try encoder.encode(models)
+            
+            // Save the file to a temporary location
+            let tempDir = FileManager.default.temporaryDirectory
+            let fileName = "journal_export_\(Date().timeIntervalSince1970).json"
+            let fileURL = tempDir.appendingPathComponent(fileName)
+            
+            try data.write(to: fileURL)
+            
+            // Present share sheet
             DispatchQueue.main.async {
-                let av = UIActivityViewController(activityItems: [tmp], applicationActivities: nil)
-                let presenter = viewController ?? UIApplication.shared.connectedScenes
-                    .compactMap { $0 as? UIWindowScene }
-                    .flatMap { $0.windows }
-                    .first { $0.isKeyWindow }?.rootViewController
-                presenter?.present(av, animated: true)
+                let activityVC = UIActivityViewController(
+                    activityItems: [fileURL],
+                    applicationActivities: nil
+                )
+                
+                if let vc = viewController {
+                    activityVC.popoverPresentationController?.sourceView = vc.view
+                    vc.present(activityVC, animated: true)
+                }
             }
+            
         } catch {
-            print("Export failed: \(error)")
+            print("Error exporting journal entries: \(error)")
         }
     }
 }

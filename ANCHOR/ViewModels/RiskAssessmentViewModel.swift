@@ -13,69 +13,51 @@ class RiskAssessmentViewModel: ObservableObject {
     @Published var showAlert = false
     @Published var alertMessage = ""
     
-    @Published var mood: Int = 1
-    @Published var craving: Double = 0
+    // Input properties (not stored in Core Data)
+    @Published var mood: Int = 1  // 0: Low, 1: Neutral, 2: High
+    @Published var craving: Double = 0.0
     @Published var triggersText: String = ""
     
-    init(viewContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
+    init(viewContext: NSManagedObjectContext = PersistenceController.shared.viewContext) {
         self.viewContext = viewContext
-        Task {
-            await fetchLatestAssessment()
-        }
+        loadLatestAssessment()
     }
     
     // MARK: - Core Data Operations
     
-    private func performOnContext<T>(_ block: @escaping (NSManagedObjectContext) throws -> T) async throws -> T {
-        try await viewContext.perform {
-            try block(self.viewContext)
-        }
-    }
-    
-    func fetchLatestAssessment() async {
-        do {
-            let assessment = try await performOnContext { context -> RiskAssessmentEntity? in
-                let request: NSFetchRequest<RiskAssessmentEntity> = RiskAssessmentEntity.fetchRequest()
+    private func loadLatestAssessment() {
+        Task {
+            do {
+                let request = RiskAssessmentEntity.fetchRequest()
                 request.sortDescriptors = [NSSortDescriptor(keyPath: \RiskAssessmentEntity.date, ascending: false)]
                 request.fetchLimit = 1
                 
-                let results = try context.fetch(request)
-                return results.first
-            }
-            
-            if let latest = assessment {
+                let results = try await performFetch(request)
                 await MainActor.run {
-                    self.riskScore = latest.score
-                    self.riskReason = latest.reason ?? ""
-                    self.lastAssessmentDate = latest.date
+                    if let latest = results.first {
+                        self.riskScore = latest.score
+                        self.riskReason = latest.reason ?? ""
+                        self.lastAssessmentDate = latest.date
+                        // Note: mood and craving are not stored in Core Data
+                    }
                 }
-            }
-        } catch {
-            os_log("❌ Error fetching risk assessment: %{public}@", 
-                  log: logger, 
-                  type: .error, 
-                  error.localizedDescription)
-            await MainActor.run {
-                self.alertMessage = "Failed to load risk assessment: \(error.localizedDescription)"
-                self.showAlert = true
+            } catch {
+                os_log("Failed to fetch latest assessment: %{public}@", 
+                      log: self.logger, 
+                      type: .error, 
+                      error.localizedDescription)
             }
         }
     }
     
-    func fetchRecent(limit: Int = 5) async -> [RiskAssessmentEntity] {
-        do {
-            return try await performOnContext { context in
-                let request: NSFetchRequest<RiskAssessmentEntity> = RiskAssessmentEntity.fetchRequest()
-                request.sortDescriptors = [NSSortDescriptor(keyPath: \RiskAssessmentEntity.date, ascending: false)]
-                request.fetchLimit = limit
-                return try context.fetch(request)
-            }
-        } catch {
-            os_log("❌ Error fetching recent assessments: %{public}@", 
-                  log: logger, 
-                  type: .error, 
-                  error.localizedDescription)
-            return []
+    // MARK: - Data Fetching
+    
+    func fetchRecent(limit: Int = 5) async throws -> [RiskAssessmentEntity] {
+        try await performOnContext { context -> [RiskAssessmentEntity] in
+            let request = RiskAssessmentEntity.fetchRequest()
+            request.sortDescriptors = [NSSortDescriptor(keyPath: \RiskAssessmentEntity.date, ascending: false)]
+            request.fetchLimit = limit
+            return try context.fetch(request)
         }
     }
     
@@ -92,9 +74,6 @@ class RiskAssessmentViewModel: ObservableObject {
                 assessment.date = Date()
                 assessment.score = score
                 assessment.reason = reason
-                assessment.mood = Int16(self.mood)
-                assessment.craving = self.craving
-                assessment.triggers = self.triggersText
                 
                 if context.hasChanges {
                     try context.save()
@@ -107,20 +86,10 @@ class RiskAssessmentViewModel: ObservableObject {
                 self.lastAssessmentDate = Date()
                 self.alertMessage = "Risk assessment saved successfully"
                 self.showAlert = true
-                
-                // Reset form
-                self.mood = 1
-                self.craving = 0
-                self.triggersText = ""
             }
-            
         } catch {
-            os_log("❌ Error saving risk assessment: %{public}@", 
-                  log: logger, 
-                  type: .error, 
-                  error.localizedDescription)
             await MainActor.run {
-                self.alertMessage = "Failed to save risk assessment: \(error.localizedDescription)"
+                self.alertMessage = "Failed to save assessment: \(error.localizedDescription)"
                 self.showAlert = true
             }
         }
@@ -136,13 +105,33 @@ class RiskAssessmentViewModel: ObservableObject {
             return "High risk. Consider reaching out for support."
         }
     }
+    
+    // MARK: - Helper Methods
+    
+    private func performOnContext(_ action: @escaping (NSManagedObjectContext) throws -> Void) async throws {
+        try await viewContext.perform {
+            try action(self.viewContext)
+        }
+    }
+    
+    private func performOnContext<T>(_ action: @escaping (NSManagedObjectContext) throws -> T) async throws -> T {
+        try await viewContext.perform {
+            try action(self.viewContext)
+        }
+    }
+    
+    private func performFetch<T>(_ request: NSFetchRequest<T>) async throws -> [T] {
+        try await viewContext.perform {
+            try self.viewContext.fetch(request)
+        }
+    }
 }
 
 // MARK: - Preview Support
 #if DEBUG
 extension RiskAssessmentViewModel {
     static var preview: RiskAssessmentViewModel {
-        let viewModel = RiskAssessmentViewModel(viewContext: PersistenceController.preview.container.viewContext)
+        let viewModel = RiskAssessmentViewModel(viewContext: PersistenceController.preview.viewContext)
         viewModel.riskScore = 0.5
         viewModel.riskReason = "Moderate risk. Be mindful of your triggers."
         viewModel.lastAssessmentDate = Date()

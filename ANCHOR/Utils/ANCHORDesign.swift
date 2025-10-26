@@ -136,12 +136,17 @@ public struct ANCHORCard<Content: View>: View {
     let cornerRadius: CGFloat
     let shadowStyle: ANCHORDesign.Shadow
     let backgroundColor: Color
+    let gradient: Gradient?
+    let showBorder: Bool
+    @State private var isPressed = false
     
     public init(
         padding: CGFloat = ANCHORDesign.Spacing.md,
         cornerRadius: CGFloat = ANCHORDesign.CornerRadius.medium,
         shadowStyle: ANCHORDesign.Shadow = ANCHORDesign.Shadow.small,
         backgroundColor: Color = ANCHORDesign.Colors.backgroundCard,
+        gradient: Gradient? = nil,
+        showBorder: Bool = false,
         @ViewBuilder content: () -> Content
     ) {
         self.content = content()
@@ -149,18 +154,68 @@ public struct ANCHORCard<Content: View>: View {
         self.cornerRadius = cornerRadius
         self.shadowStyle = shadowStyle
         self.backgroundColor = backgroundColor
+        self.gradient = gradient
+        self.showBorder = showBorder
     }
     
     public var body: some View {
         content
             .padding(padding)
-            .background(backgroundColor)
-            .cornerRadius(cornerRadius)
-            .shadow(
-                color: shadowStyle.color,
-                radius: shadowStyle.radius,
-                x: shadowStyle.x,
-                y: shadowStyle.y
+            .background(
+                ZStack {
+                    if let gradient = gradient {
+                        LinearGradient(
+                            gradient: gradient,
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    } else {
+                        backgroundColor
+                    }
+                }
+                .cornerRadius(cornerRadius)
+                .overlay(
+                    RoundedRectangle(cornerRadius: cornerRadius)
+                        .stroke(showBorder ? ANCHORDesign.Colors.primary.opacity(0.2) : .clear, lineWidth: 1)
+                )
             )
+            .scaleEffect(isPressed ? 0.98 : 1.0)
+            .shadow(
+                color: shadowStyle.color.opacity(isPressed ? 0.3 : 1.0),
+                radius: isPressed ? shadowStyle.radius * 0.8 : shadowStyle.radius,
+                x: shadowStyle.x,
+                y: isPressed ? shadowStyle.y * 0.5 : shadowStyle.y
+            )
+            .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isPressed)
+            .onTapGesture {
+                // Haptic feedback on tap
+                let impactMed = UIImpactFeedbackGenerator(style: .medium)
+                impactMed.impactOccurred()
+            }
+            .onLongPressGesture(minimumDuration: .infinity, maximumDistance: .infinity, pressing: { pressing in
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    isPressed = pressing
+                }
+            }, perform: {})
+    }
+}
+
+// Extension for easy gradient creation
+extension ANCHORCard where Content: View {
+    public static func gradient(
+        _ gradient: Gradient,
+        padding: CGFloat = ANCHORDesign.Spacing.md,
+        cornerRadius: CGFloat = ANCHORDesign.CornerRadius.medium,
+        shadowStyle: ANCHORDesign.Shadow = ANCHORDesign.Shadow.medium,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        ANCHORCard(
+            padding: padding,
+            cornerRadius: cornerRadius,
+            shadowStyle: shadowStyle,
+            gradient: gradient,
+            showBorder: false,
+            content: content
+        )
     }
 }

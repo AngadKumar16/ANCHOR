@@ -16,19 +16,15 @@ struct AppRootView: View {
     var body: some View {
         Group {
             if showingSplash {
-                os_log("🔄 Showing splash screen", log: logger, type: .debug)
                 SplashScreenView {
-                    os_log("✅ Splash screen animation completed", log: logger, type: .debug)
                     withAnimation(.easeInOut(duration: 0.5)) {
                         showingSplash = false
                     }
                 }
             } else if !appState.hasCompletedOnboarding {
-                os_log("👋 Showing onboarding view", log: logger, type: .debug)
                 OnboardingView()
                     .environmentObject(appState)
             } else {
-                os_log("🏠 Showing main tab view", log: logger, type: .debug)
                 MainTabView()
                     .environmentObject(appState)
             }
@@ -39,7 +35,21 @@ struct AppRootView: View {
                   log: logger, 
                   type: .debug, 
                   appState.hasCompletedOnboarding ? "Completed" : "Not completed")
+            
+            if showingSplash {
+                os_log("🔄 Showing splash screen", log: logger, type: .debug)
+            } else if !appState.hasCompletedOnboarding {
+                os_log("👋 Showing onboarding view", log: logger, type: .debug)
+            } else {
+                os_log("🏠 Showing main tab view", log: logger, type: .debug)
+            }
         }
+        .onChange(of: showingSplash) { newValue in
+            if !newValue {
+                os_log("✅ Splash screen animation completed", log: logger, type: .debug)
+            }
+        }
+        .animation(.easeInOut(duration: 0.5), value: showingSplash)
         .animation(.easeInOut(duration: 0.5), value: appState.hasCompletedOnboarding)
     }
 }
