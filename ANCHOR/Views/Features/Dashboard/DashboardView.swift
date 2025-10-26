@@ -5,6 +5,7 @@
 //  Created by Angad Kumar on 8/12/25.
 //
 
+import ANCHOR
 import SwiftUI
 
 struct DashboardView: View {
@@ -13,7 +14,7 @@ struct DashboardView: View {
     @State private var showingCheckIn = false
     @State private var showingBreathingExercise = false
     @State private var showingRiskAssessment = false
-    @State private var checkInStatus: CheckInStatus = .notStarted
+    @State private var checkInStatus: Models.CheckInStatus = .notStarted
     
     @StateObject private var quoteService = DailyQuoteService.shared
     
@@ -291,11 +292,8 @@ private struct ResourceCard: View {
     }
 }
 
-// MARK: - CheckInStatus
-enum CheckInStatus {
-    case notStarted, inProgress, completed
-}
-
-#Preview {
-    DashboardView()
+struct DashboardView_Previews: PreviewProvider {
+    static var previews: some View {
+        DashboardView()
+    }
 }

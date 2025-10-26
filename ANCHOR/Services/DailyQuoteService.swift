@@ -37,7 +37,7 @@ class DailyQuoteService: ObservableObject {
         DailyQuote(text: "Take it one breath at a time.", author: "Anonymous"),
         DailyQuote(text: "You didn't come this far to only come this far.", author: "Anonymous"),
         DailyQuote(text: "Recovery is giving yourself permission to live.", author: "Anonymous"),
-        DailyQuote(text: "The only impossible journey is the one you never begin.", author: "Tony Robbins")
+        DailyQuote(text: "The only impossible journey is the one you never begin.", author: "Tony Robbins"),
         DailyQuote(text: "The wound is the place where the Light enters you.", author: "Rumi"),
         DailyQuote(text: "Healing is an art. It takes time, it takes practice. It takes love.", author: "Maza Dohta"),
         DailyQuote(text: "You are not a drop in the ocean. You are the entire ocean in a drop.", author: "Rumi"),

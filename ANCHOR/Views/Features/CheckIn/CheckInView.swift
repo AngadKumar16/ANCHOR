@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import Utils
 
 struct CheckInView: View {
     @Environment(\.dismiss) private var dismiss
-    @Binding var checkInStatus: CheckInStatus
+    @Binding var checkInStatus: Utils.CheckInStatus
     @State private var moodRating: Double = 5
     @State private var notes: String = ""
     @State private var selectedTags: Set<String> = []
@@ -104,11 +105,6 @@ struct CheckInView: View {
         
         return body
     }
-}
-
-// MARK: - Check In Status
-enum CheckInStatus {
-    case notStarted, inProgress, completed
 }
 
 #Preview {

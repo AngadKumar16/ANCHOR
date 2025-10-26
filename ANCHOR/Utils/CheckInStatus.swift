@@ -7,7 +7,8 @@
 
 import Foundation
 
-enum CheckInStatus: String, Codable {
+/// Represents the status of a user's check-in
+public enum CheckInStatus: String, Codable, CaseIterable {
     case notStarted
     case inProgress
     case completed
