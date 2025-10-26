@@ -7,38 +7,6 @@
 
 import SwiftUI
 
-// MARK: - App Theme
-enum AppTheme {
-    static let primary = Color("Primary")
-    static let secondary = Color("Secondary")
-    static let background = Color("Background")
-    static let cardBackground = Color("CardBackground")
-    static let textPrimary = Color("TextPrimary")
-    static let textSecondary = Color("TextSecondary")
-    static let accent = Color("Accent")
-    static let error = Color("Error")
-    static let success = Color("Success")
-    static let warning = Color("Warning")
-    static let shadow = Color.black.opacity(0.1)
-    
-    // Gradients
-    static let primaryGradient = LinearGradient(
-        gradient: Gradient(colors: [Color("Primary"), Color("Primary").opacity(0.8)]),
-        startPoint: .topLeading,
-        endPoint: .bottomTrailing
-    )
-    
-    static let secondaryGradient = LinearGradient(
-        gradient: Gradient(colors: [Color("Secondary"), Color("Secondary").opacity(0.7)]),
-        startPoint: .topLeading,
-        endPoint: .bottomTrailing
-    )
-    
-    // For dark/light mode support
-    static let adaptiveBackground = Color("AdaptiveBackground")
-    static let adaptiveCard = Color("AdaptiveCard")
-}
-
 // MARK: - Color Extensions
 extension Color {
     // MARK: - App Colors
@@ -59,7 +27,7 @@ extension Color {
         case 8: // ARGB (32-bit)
             (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
         default:
-            (a, r, g, b) = (1, 1, 1, 0)
+            (a, r, g, b) = (255, 0, 0, 0)
         }
         self.init(
             .sRGB,
@@ -70,43 +38,59 @@ extension Color {
         )
     }
     
-    // MARK: - UI Element Colors
-    static let lightBackground = Color(hex: "F8F9FA")
-    static let darkBackground = Color(hex: "1A1A1A")
-    
-    // MARK: - Text Colors
-    static let lightText = Color(hex: "212529")
-    static let darkText = Color(hex: "F8F9FA")
-    static let secondaryText = Color(hex: "6C757D")
-    
-    // MARK: - Status Colors
-    static let successGreen = Color(hex: "28A745")
-    static let warningYellow = Color(hex: "FFC107")
-    static let errorRed = Color(hex: "DC3545")
-    static let infoBlue = Color(hex: "17A2B8")
-    
-    // MARK: - Social Colors
-    static let twitterBlue = Color(hex: "1DA1F2")
-    static let facebookBlue = Color(hex: "4267B2")
-    static let instagramPurple = Color(hex: "E1306C")
-}
-
-// MARK: - View Modifiers for Consistent Styling
-struct CardStyle: ViewModifier {
-    var cornerRadius: CGFloat = 12
-    var shadowRadius: CGFloat = 4
-    var padding: CGFloat = 16
-    
-    func body(content: Content) -> some View {
-        content
-            .padding(padding)
-            .background(RoundedRectangle(cornerRadius: cornerRadius)
-                .fill(AppTheme.cardBackground)
-                .shadow(color: AppTheme.shadow, radius: shadowRadius, x: 0, y: 2)
-            )
+    // MARK: - Utility
+    func toHex() -> String? {
+        guard let components = UIColor(self).cgColor.components, components.count >= 3 else {
+            return nil
+        }
+        
+        let r = Float(components[0])
+        let g = Float(components[1])
+        let b = Float(components[2])
+        var a: Float = 1.0
+        
+        if components.count >= 4 {
+            a = Float(components[3])
+        }
+        
+        if a != 1.0 {
+            return String(format: "%02lX%02lX%02lX%02lX",
+                         lroundf(r * 255), lroundf(g * 255), lroundf(b * 255), lroundf(a * 255))
+        } else {
+            return String(format: "%02lX%02lX%02lX",
+                         lroundf(r * 255), lroundf(g * 255), lroundf(b * 255))
+        }
     }
 }
 
+// MARK: - View Modifiers
+extension View {
+    func cardStyle(backgroundColor: Color = ANCHORDesign.Colors.backgroundCard,
+                  cornerRadius: CGFloat = 12,
+                  shadowRadius: CGFloat = 5,
+                  padding: CGFloat = 16) -> some View {
+        self.padding(padding)
+            .background(
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .fill(backgroundColor)
+                    .shadow(color: Color.black.opacity(0.1), radius: shadowRadius, x: 0, y: 2)
+            )
+    }
+    
+    func primaryButtonStyle(isFullWidth: Bool = true, isDisabled: Bool = false) -> some View {
+        self.buttonStyle(PrimaryButtonStyle(isFullWidth: isFullWidth, isDisabled: isDisabled))
+    }
+    
+    func secondaryButtonStyle(isFullWidth: Bool = true, isDisabled: Bool = false) -> some View {
+        self.buttonStyle(SecondaryButtonStyle(isFullWidth: isFullWidth, isDisabled: isDisabled))
+    }
+    
+    func withCardAnimation<Result: Equatable>(_ animation: Animation = .easeInOut(duration: 0.3), _ body: @escaping () -> Result) -> some View {
+        return self.animation(animation, value: body())
+    }
+}
+
+// MARK: - Button Styles
 struct PrimaryButtonStyle: ButtonStyle {
     var isFullWidth: Bool = true
     var isDisabled: Bool = false
@@ -117,7 +101,7 @@ struct PrimaryButtonStyle: ButtonStyle {
             .foregroundColor(.white)
             .frame(maxWidth: isFullWidth ? .infinity : nil)
             .padding()
-            .background(AppTheme.primary.opacity(isDisabled ? 0.5 : 1.0))
+            .background(ANCHORDesign.Colors.primary.opacity(isDisabled ? 0.5 : 1.0))
             .cornerRadius(12)
             .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
             .opacity(configuration.isPressed ? 0.9 : 1.0)
@@ -126,76 +110,70 @@ struct PrimaryButtonStyle: ButtonStyle {
     }
 }
 
-// MARK: - Text Styling Extensions
+struct SecondaryButtonStyle: ButtonStyle {
+    var isFullWidth: Bool = true
+    var isDisabled: Bool = false
+    
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.headline)
+            .foregroundColor(ANCHORDesign.Colors.primary)
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(ANCHORDesign.Colors.primary, lineWidth: 2)
+            )
+            .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
+            .opacity(configuration.isPressed ? 0.8 : 1.0)
+            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
+            .disabled(isDisabled)
+    }
+}
+
+// MARK: - Text Extensions
 extension Text {
     func largeTitleStyle() -> some View {
         self
             .font(.largeTitle)
             .fontWeight(.bold)
-            .foregroundColor(AppTheme.textPrimary)
+            .foregroundColor(ANCHORDesign.Colors.textPrimary)
     }
     
     func titleStyle() -> some View {
         self
             .font(.title)
             .fontWeight(.semibold)
-            .foregroundColor(AppTheme.textPrimary)
+            .foregroundColor(ANCHORDesign.Colors.textPrimary)
     }
     
     func headlineStyle() -> some View {
         self
             .font(.headline)
-            .foregroundColor(AppTheme.textPrimary)
+            .foregroundColor(ANCHORDesign.Colors.textPrimary)
     }
     
     func subheadlineStyle() -> some View {
         self
             .font(.subheadline)
-            .foregroundColor(AppTheme.textSecondary)
+            .foregroundColor(ANCHORDesign.Colors.textSecondary)
     }
     
     func captionStyle() -> some View {
         self
             .font(.caption)
-            .foregroundColor(AppTheme.textSecondary)
-    }
-}
-
-// MARK: - View Extensions
-extension View {
-    func cardStyle(cornerRadius: CGFloat = 12, shadowRadius: CGFloat = 4, padding: CGFloat = 16) -> some View {
-        modifier(CardStyle(cornerRadius: cornerRadius, shadowRadius: shadowRadius, padding: padding))
+            .foregroundColor(ANCHORDesign.Colors.textSecondary)
     }
     
-    func primaryButton() -> some View {
-        buttonStyle(PrimaryButtonStyle())
+    func errorStyle() -> some View {
+        self
+            .font(.caption)
+            .foregroundColor(ANCHORDesign.Colors.error)
     }
     
-    func secondaryButton() -> some View {
-        buttonStyle(SecondaryButtonStyle())
-    }
-    
-    func withCardAnimation<Result>(_ animation: Animation = .easeInOut(duration: 0.3), _ body: @escaping () -> Result) -> some View {
-        return self.animation(animation, value: body())
-    }
-}
-
-// MARK: - Secondary Button Style
-struct SecondaryButtonStyle: ButtonStyle {
-    @Environment(\.colorScheme) var colorScheme
-    
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .font(.headline)
-            .foregroundColor(AppTheme.primary)
-            .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(AppTheme.primary, lineWidth: 2)
-            )
-            .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
-            .opacity(configuration.isPressed ? 0.8 : 1.0)
-            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
+    func successStyle() -> some View {
+        self
+            .font(.caption)
+            .foregroundColor(ANCHORDesign.Colors.success)
     }
 }
 
@@ -207,19 +185,19 @@ struct ColorTheme_Previews: PreviewProvider {
             VStack(spacing: 20) {
                 Text("Primary")
                     .padding()
-                    .background(AppTheme.primary)
+                    .background(ANCHORDesign.Colors.primary)
                 
                 Text("Secondary")
                     .padding()
-                    .background(AppTheme.secondary)
+                    .background(ANCHORDesign.Colors.secondary)
                 
                 Text("Background")
                     .padding()
-                    .background(AppTheme.background)
+                    .background(ANCHORDesign.Colors.background)
                 
                 Text("Card Background")
                     .padding()
-                    .background(AppTheme.cardBackground)
+                    .background(ANCHORDesign.Colors.backgroundCard)
             }
             .previewDisplayName("Light Mode")
             .preferredColorScheme(.light)
@@ -228,19 +206,19 @@ struct ColorTheme_Previews: PreviewProvider {
             VStack(spacing: 20) {
                 Text("Primary")
                     .padding()
-                    .background(AppTheme.primary)
+                    .background(ANCHORDesign.Colors.primary)
                 
                 Text("Secondary")
                     .padding()
-                    .background(AppTheme.secondary)
+                    .background(ANCHORDesign.Colors.secondary)
                 
                 Text("Background")
                     .padding()
-                    .background(AppTheme.background)
+                    .background(ANCHORDesign.Colors.background)
                 
                 Text("Card Background")
                     .padding()
-                    .background(AppTheme.cardBackground)
+                    .background(ANCHORDesign.Colors.backgroundCard)
             }
             .previewDisplayName("Dark Mode")
             .preferredColorScheme(.dark)

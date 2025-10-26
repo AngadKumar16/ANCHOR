@@ -35,13 +35,13 @@ struct MoodRow: View {
                     
                     Text(formattedDate)
                         .font(.caption2)
-                        .foregroundColor(AppTheme.textSecondary)
+                        .foregroundColor(ANCHORDesign.Colors.textSecondary)
                 }
                 
                 if let note = mood.note, !note.isEmpty {
                     Text(note)
                         .font(.caption)
-                        .foregroundColor(AppTheme.textSecondary)
+                        .foregroundColor(ANCHORDesign.Colors.textSecondary)
                         .lineLimit(2)
                         .padding(.top, 2)
                 }
@@ -50,12 +50,12 @@ struct MoodRow: View {
             // Navigation chevron
             Image(systemName: "chevron.right")
                 .font(.caption.weight(.semibold))
-                .foregroundColor(AppTheme.secondary.opacity(0.5))
+                .foregroundColor(ANCHORDesign.Colors.secondary.opacity(0.5))
                 .padding(.leading, 4)
         }
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(AppTheme.cardBackground)
+        .background(ANCHORDesign.Colors.backgroundCard)
         .cornerRadius(12)
         .shadow(color: Color.black.opacity(0.05), radius: 3, x: 0, y: 1)
     }
@@ -99,7 +99,7 @@ struct MoodRow_Previews: PreviewProvider {
             .previewDisplayName("Dark Mode")
             .preferredColorScheme(.dark)
         }
-        .background(AppTheme.background)
+        .background(ANCHORDesign.Colors.background)
         .previewLayout(.sizeThatFits)
     }
 }

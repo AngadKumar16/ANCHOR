@@ -36,11 +36,12 @@ struct MoodTrackingView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(AppTheme.secondary.opacity(0.1))
-                        .foregroundColor(AppTheme.secondary)
+                        .background(ANCHORDesign.Colors.secondary.opacity(0.1))
+                        .foregroundColor(ANCHORDesign.Colors.secondary)
                         .cornerRadius(12)
                     }
                     .padding(.horizontal)
+                    .padding(.bottom)
                     .sheet(isPresented: $showingHistory) {
                         MoodHistoryView()
                     }
@@ -48,7 +49,7 @@ struct MoodTrackingView: View {
                 .padding(.vertical)
             }
             .navigationTitle("How are you feeling?")
-            .background(AppTheme.background.ignoresSafeArea())
+            .background(ANCHORDesign.Colors.background.ignoresSafeArea())
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     if !moods.isEmpty {
@@ -68,7 +69,7 @@ struct MoodTrackingView: View {
             Text("Select your mood")
                 .font(.title3)
                 .fontWeight(.semibold)
-                .foregroundColor(AppTheme.textPrimary)
+                .foregroundColor(ANCHORDesign.Colors.textPrimary)
                 .padding(.bottom, 8)
             
             HStack(spacing: 16) {
@@ -93,14 +94,14 @@ struct MoodTrackingView: View {
                             Text(level.description)
                                 .font(.caption)
                                 .fontWeight(.medium)
-                                .foregroundColor(AppTheme.textPrimary)
+                                .foregroundColor(ANCHORDesign.Colors.textPrimary)
                         }
                     }
                     .buttonStyle(ScaleButtonStyle())
                 }
             }
             .padding()
-            .background(AppTheme.cardBackground)
+            .background(ANCHORDesign.Colors.backgroundCard)
             .cornerRadius(16)
             .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
             .padding(.horizontal)
@@ -109,16 +110,16 @@ struct MoodTrackingView: View {
                 VStack(spacing: 16) {
                     Text("Add a note (optional)")
                         .font(.subheadline)
-                        .foregroundColor(AppTheme.textSecondary)
+                        .foregroundColor(ANCHORDesign.Colors.textSecondary)
                     
                     TextEditor(text: $note)
                         .frame(minHeight: 100)
                         .padding()
-                        .background(AppTheme.cardBackground)
+                        .background(ANCHORDesign.Colors.backgroundCard)
                         .cornerRadius(12)
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
-                                .stroke(AppTheme.secondary.opacity(0.2), lineWidth: 1)
+                                .stroke(ANCHORDesign.Colors.secondary.opacity(0.2), lineWidth: 1)
                         )
                     
                     HStack(spacing: 16) {
@@ -146,7 +147,7 @@ struct MoodTrackingView: View {
                     }
                 }
                 .padding()
-                .background(AppTheme.cardBackground)
+                .background(ANCHORDesign.Colors.backgroundCard)
                 .cornerRadius(16)
                 .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
                 .padding(.horizontal)
@@ -162,14 +163,14 @@ struct MoodTrackingView: View {
                 HStack {
                     Text("Recent Moods")
                         .font(.headline)
-                        .foregroundColor(AppTheme.textPrimary)
+                        .foregroundColor(ANCHORDesign.Colors.textPrimary)
                     Spacer()
                     if moods.count > 3 {
                         Button("See All") {
                             showingHistory = true
                         }
                         .font(.subheadline)
-                        .foregroundColor(AppTheme.primary)
+                        .foregroundColor(ANCHORDesign.Colors.primary)
                     }
                 }
                 .padding(.horizontal)
@@ -187,7 +188,7 @@ struct MoodTrackingView: View {
                     }
                 }
                 .padding(.vertical, 8)
-                .background(AppTheme.cardBackground)
+                .background(ANCHORDesign.Colors.backgroundCard)
                 .cornerRadius(16)
                 .padding(.horizontal)
             }
@@ -196,16 +197,16 @@ struct MoodTrackingView: View {
             VStack(spacing: 20) {
                 Image(systemName: "face.smiling")
                     .font(.system(size: 50))
-                    .foregroundColor(AppTheme.primary.opacity(0.3))
+                    .foregroundColor(ANCHORDesign.Colors.primary.opacity(0.3))
                 
                 VStack(spacing: 8) {
                     Text("No mood entries yet")
                         .font(.headline)
-                        .foregroundColor(AppTheme.textPrimary)
+                        .foregroundColor(ANCHORDesign.Colors.textPrimary)
                     
                     Text("Select how you're feeling to get started")
                         .font(.subheadline)
-                        .foregroundColor(AppTheme.textSecondary)
+                        .foregroundColor(ANCHORDesign.Colors.textSecondary)
                         .multilineTextAlignment(.center)
                 }
                 .padding(.horizontal, 40)

@@ -73,13 +73,8 @@ final class JournalViewModel: ObservableObject {
     }
     
     /// Update specific fields of an entry
-    func updateEntry(_ entry: JournalEntry, 
-                    title: String? = nil, 
-                    body: String? = nil, 
-                    tags: Set<String>? = nil,
-                    isLocked: Bool? = nil) async throws {
+    func updateEntry(_ entry: JournalEntry, title: String? = nil, body: String? = nil, tags: Set<String>? = nil, isLocked: Bool? = nil) async throws {
         var updatedEntry = entry
-        
         if let title = title { updatedEntry.title = title }
         if let body = body { 
             updatedEntry.body = body 
@@ -202,16 +197,9 @@ final class JournalViewModel: ObservableObject {
     
     private func saveEntry(_ entry: JournalEntry) async throws {
         try await context.perform {
-            let entity = try JournalEntryEntity.updateOrCreate(from: entry, in: self.context)
-            try self.context.save()
-            
-            // Update local state
-            await MainActor.run {
-                if let index = self.entries.firstIndex(where: { $0.id == entry.id }) {
-                    self.entries[index] = entry
-                } else {
-                    self.entries.insert(entry, at: 0)
-                }
+            let _ = try JournalEntryEntity.updateOrCreate(from: entry, in: self.context)
+            if self.context.hasChanges {
+                try self.context.save()
             }
         }
     }

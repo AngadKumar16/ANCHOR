@@ -1,4 +1,5 @@
 import SwiftUI
+import CoreData
 
 struct EntryListView: View {
     @StateObject private var viewModel: JournalViewModel
@@ -90,7 +91,7 @@ struct EntryListView: View {
                 .foregroundColor(.secondary)
             
             Button(action: { showNewEntry = true }) {
-                Label("New Entry", systemImage: "plus.circle")
+                Label("New Entry", systemName: "plus.circle")
                     .padding(8)
             }
             .buttonStyle(.borderedProminent)

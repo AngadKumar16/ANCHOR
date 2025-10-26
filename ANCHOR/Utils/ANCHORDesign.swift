@@ -1,8 +1,3 @@
-/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/AppTheme.swift:4:8 Invalid redeclaration of 'AppTheme'
-
-/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/AppTheme.swift:99:8 Invalid redeclaration of 'PrimaryButtonStyle'
-
-/Users/angadkumar16ak/Projects/ANCHOR/ANCHOR/Utils/AppTheme.swift:116:8 Invalid redeclaration of 'SecondaryButtonStyle'
 //
 //  ANCHORDesign.swift
 //  ANCHOR

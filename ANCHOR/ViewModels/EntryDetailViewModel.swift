@@ -60,9 +60,12 @@ final class EntryDetailViewModel: ObservableObject {
         
         // Add metadata
         content += "---\n"
-        content += "Created: \(entry.createdAt.formatted(date: .long, time: .shortened))\n"
+        var formattedDate: String {
+            entry.createdAt.formatted(.iso8601)
+        }
+        content += "Created: \(formattedDate)\n"
         if entry.createdAt != entry.updatedAt {
-            content += "Updated: \(entry.updatedAt.formatted(date: .long, time: .shortened))\n"
+            content += "Updated: \(entry.updatedAt.formatted(.iso8601))\n"
         }
         if !entry.tags.isEmpty {
             content += "Tags: \(entry.tags.sorted().joined(separator: ", "))\n"
@@ -73,7 +76,7 @@ final class EntryDetailViewModel: ObservableObject {
         }
         
         // Create a temporary file
-        let filename = "Journal Entry - \(entry.createdAt.formatted(date: .iso8601, time: .omitted)).txt"
+        let filename = "Journal Entry - \(formattedDate).txt"
         let tempDir = FileManager.default.temporaryDirectory
         let fileURL = tempDir.appendingPathComponent(filename)
         

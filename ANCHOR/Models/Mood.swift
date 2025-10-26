@@ -1,6 +1,7 @@
 import Foundation
 import CoreData
 import SwiftUI
+import os.log
 
 enum MoodLevel: Int16, CaseIterable, Identifiable {
     case terrible = 1
@@ -77,7 +78,7 @@ extension MoodEntity {
         do {
             return try context.fetch(request)
         } catch {
-            Logger.persistence.error("Failed to fetch moods: \(error.localizedDescription)")
+            os_log("Failed to fetch moods: %{public}@", log: .default, type: .error, error.localizedDescription)
             return []
         }
     }
@@ -90,7 +91,7 @@ extension MoodEntity {
         do {
             return try context.fetch(request)
         } catch {
-            Logger.persistence.error("Failed to fetch moods for date range: \(error.localizedDescription)")
+            os_log("Failed to fetch moods for date range: %{public}@", log: .default, type: .error, error.localizedDescription)
             return []
         }
     }

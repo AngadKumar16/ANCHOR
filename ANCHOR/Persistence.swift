@@ -12,8 +12,7 @@ import os.log
 struct PersistenceController {
     static let shared = PersistenceController()
     let container: NSPersistentCloudKitContainer
-    private let logger = Logger(subsystem: "com.yourapp.ANCHOR", category: "Persistence")
-    
+    private let logger = OSLog(subsystem: "com.yourapp.ANCHOR", category: "Persistence")    
     @MainActor
     static let preview: PersistenceController = {
         let controller = PersistenceController(inMemory: true)

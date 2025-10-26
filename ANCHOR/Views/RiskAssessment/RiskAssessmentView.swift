@@ -292,10 +292,11 @@ struct RiskAssessmentView: View {
 
 #Preview {
     let viewModel = RiskAssessmentViewModel()
-    // Add sample data for preview
+    
+    // Create a test context
     let context = PersistenceController.preview.container.viewContext
     
-    // Create sample assessments
+    // Add sample data for preview
     let assessment1 = RiskAssessmentEntity(context: context)
     assessment1.id = UUID()
     assessment1.date = Date().addingTimeInterval(-86400) // Yesterday
@@ -310,7 +311,7 @@ struct RiskAssessmentView: View {
     
     try? context.save()
     
-    return RiskAssessmentView()
+    RiskAssessmentView()
         .environmentObject(viewModel)
         .environment(\.managedObjectContext, context)
 }
