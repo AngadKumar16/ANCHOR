@@ -1,11 +1,13 @@
 //
-//  Untitled.swift
+//  ModelExtensions.swift
 //  ANCHOR
 //
 //  Created by Angad Kumar on 8/12/25.
 //
 
 import Foundation
+
+// MARK: - JournalEntry Extensions
 
 extension JournalEntry {
     public var displayTitle: String {
@@ -19,38 +21,40 @@ extension JournalEntry {
     }
 
     public var isoDateString: String {
-        ISO8601DateFormatter().string(from: date)
+        ISO8601DateFormatter().string(from: createdAt)
     }
 }
+
+// MARK: - RiskAssessment Extensions
+
 extension RiskAssessment {
     public var isoDateString: String {
         ISO8601DateFormatter().string(from: date)
     }
 }
+
+// MARK: - UserProfile Extensions
+
 extension UserProfile {
     public var isoCreatedAtString: String {
         ISO8601DateFormatter().string(from: createdAt)
     }
-}
-extension UserProfile {
+    
     public var displayNameOrAnonymous: String {
         displayName?.isEmpty == false ? displayName! : "Anonymous"
     }
-}
-extension UserProfile {
+    
     public var anonymizedId: String {
         anonymousId?.isEmpty == false ? anonymousId! : "Anonymous-\(id.uuidString.prefix(8))"
     }
-}
-extension UserProfile {
+    
     public var displayNameOrAnonymizedId: String {
         if let name = displayName, !name.isEmpty {
             return name
         }
         return anonymizedId
     }
-}
-extension UserProfile {
+    
     public var displayNameOrId: String {
         if let name = displayName, !name.isEmpty {
             return name
@@ -59,23 +63,27 @@ extension UserProfile {
     }
 }
 
+// MARK: - JournalEntryModel
+
 public struct JournalEntryModel: Identifiable, Codable {
     public var id: UUID
     public var date: Date
     public var title: String?
     public var body: String
-    public var sentiment: Int
+    public var sentiment: Double
     public var tags: [String]
 }
+
+// MARK: - JournalEntryEntity Extensions
 
 public extension JournalEntryEntity {
     func toModel() -> JournalEntryModel {
         return JournalEntryModel(
             id: self.id,
-            date: self.date,
+            date: self.createdAt,
             title: self.title,
-            body: self.decryptedBody(),
-            sentiment: Int(self.sentiment),
+            body: self.body,
+            sentiment: self.sentiment,
             tags: self.tagsArray
         )
     }

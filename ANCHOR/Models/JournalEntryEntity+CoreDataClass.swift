@@ -12,10 +12,20 @@ public class JournalEntryEntity: NSManagedObject, Identifiable {
     @NSManaged public var sentiment: Double
     @NSManaged public var isLocked: Bool
     @NSManaged public var version: Int32
-    @NSManaged public var tags: Set<TagEntity>?
-    
+    @NSManaged public var tags: String?
+
     @nonobjc public class func fetchRequest() -> NSFetchRequest<JournalEntryEntity> {
         return NSFetchRequest<JournalEntryEntity>(entityName: "JournalEntryEntity")
+    }
+    
+    // Convert tags string to array
+    var tagsArray: [String] {
+        get {
+            return tags?.components(separatedBy: ",").filter { !$0.isEmpty } ?? []
+        }
+        set {
+            tags = newValue.joined(separator: ",")
+        }
     }
     
     static func create(from entry: JournalEntry, in context: NSManagedObjectContext) -> JournalEntryEntity {
@@ -29,24 +39,7 @@ public class JournalEntryEntity: NSManagedObject, Identifiable {
         entity.sentiment = entry.sentiment ?? 0
         entity.isLocked = entry.isLocked
         entity.version = Int32(entry.version)
-        
-        // Handle tags
-        if !entry.tags.isEmpty {
-            let tagEntities = entry.tags.map { tagName -> TagEntity in
-                let tagRequest: NSFetchRequest<TagEntity> = TagEntity.fetchRequest()
-                tagRequest.predicate = NSPredicate(format: "name == %@", tagName)
-                tagRequest.fetchLimit = 1
-                
-                if let existingTag = try? context.fetch(tagRequest).first {
-                    return existingTag
-                } else {
-                    let newTag = TagEntity(context: context)
-                    newTag.name = tagName
-                    return newTag
-                }
-            }
-            entity.addToTags(Set(tagEntities) as NSSet)
-        }
+        entity.tagsArray = Array(entry.tags)
         
         return entity
     }
@@ -61,39 +54,11 @@ public class JournalEntryEntity: NSManagedObject, Identifiable {
         sentiment = entry.sentiment ?? 0
         isLocked = entry.isLocked
         version = Int32(entry.version)
-        
-        // Update tags if needed
-        if let currentTags = tags?.compactMap({ ($0 as? TagEntity)?.name }) {
-            let newTags = Set(entry.tags)
-            if Set(currentTags) != newTags {
-                // Remove old tags
-                if let currentTagEntities = tags as? Set<TagEntity> {
-                    removeFromTags(currentTagEntities as NSSet)
-                }
-                
-                // Add new tags
-                let tagEntities = newTags.map { tagName -> TagEntity in
-                    let tagRequest: NSFetchRequest<TagEntity> = TagEntity.fetchRequest()
-                    tagRequest.predicate = NSPredicate(format: "name == %@", tagName)
-                    tagRequest.fetchLimit = 1
-                    
-                    if let existingTag = try? managedObjectContext?.fetch(tagRequest).first {
-                        return existingTag
-                    } else {
-                        let newTag = TagEntity(context: managedObjectContext!)
-                        newTag.name = tagName
-                        return newTag
-                    }
-                }
-                addToTags(Set(tagEntities) as NSSet)
-            }
-        }
+        tagsArray = Array(entry.tags)
     }
     
     func toModel() -> JournalEntry? {
         guard let context = managedObjectContext else { return nil }
-        
-        let tagNames = (tags as? Set<TagEntity>)?.compactMap { $0.name } ?? []
         
         return try? JournalEntry(
             id: id,
@@ -103,7 +68,7 @@ public class JournalEntryEntity: NSManagedObject, Identifiable {
             body: body,
             bodyFormat: bodyFormat,
             sentiment: sentiment,
-            tags: Set(tagNames),
+            tags: Set(tagsArray),
             isLocked: isLocked,
             version: Int(version)
         )

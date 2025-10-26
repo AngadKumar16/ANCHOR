@@ -1,98 +1,98 @@
-@preconcurrency import CoreData
 import Foundation
-import LocalAuthentication
+import CoreData
 
 @MainActor
-final class UserProfileViewModel: ObservableObject {
+class UserProfileViewModel: ObservableObject {
+    private let viewContext: NSManagedObjectContext
+    
     @Published var displayName: String = ""
-    @Published var biometricEnabled: Bool = false
-
-    private let ctx: NSManagedObjectContext
-    private var profileEntity: UserProfileEntity?
-
-    init(context: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
-        self.ctx = context
-        load()
+    @Published var anonymousId: String = ""
+    @Published var createdAt: Date = Date()
+    @Published var showAlert = false
+    @Published var alertMessage = ""
+    
+    init(viewContext: NSManagedObjectContext) {
+        self.viewContext = viewContext
+        fetchUserProfile()
     }
-
-    func load() {
-        Task {
-            do {
-                let fetchRequest = NSFetchRequest<UserProfileEntity>(entityName: "UserProfileEntity")
-                fetchRequest.fetchLimit = 1
-                
-                let arr = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<[UserProfileEntity], Error>) in
-                    ctx.perform {
-                        do {
-                            let result = try self.ctx.fetch(fetchRequest)
-                            continuation.resume(returning: result)
-                        } catch {
-                            continuation.resume(throwing: error)
-                        }
-                    }
-                }
-                
-                if let first = arr.first {
-                    await MainActor.run {
-                        self.profileEntity = first
-                        self.displayName = first.displayName ?? ""
-                    }
-                } else {
-                    // create default
-                    let created = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<UserProfileEntity, Error>) in
-                        ctx.perform {
-                            do {
-                                let created = UserProfileEntity.createDefault(in: self.ctx)
-                                try self.ctx.save()
-                                continuation.resume(returning: created)
-                            } catch {
-                                continuation.resume(throwing: error)
-                            }
-                        }
-                    }
-                    
-                    await MainActor.run {
-                        self.profileEntity = created
-                        self.displayName = created.displayName ?? ""
-                    }
-                }
-                
-                let isBiometricEnabled = UserDefaults.standard.bool(forKey: "anchor.biometricEnabled")
-                await MainActor.run {
-                    self.biometricEnabled = isBiometricEnabled
-                }
-                
-            } catch {
-                Logger.log("UserProfile load error: \(error)")
-            }
-        }
-    }
-
-    func save() {
-        guard let pe = profileEntity else { return }
-        pe.displayName = displayName
+    
+    private func fetchUserProfile() {
+        let request: NSFetchRequest<UserProfileEntity> = UserProfileEntity.fetchRequest()
+        request.fetchLimit = 1
+        
         do {
-            try ctx.save()
+            let results = try viewContext.fetch(request)
+            if let profile = results.first {
+                displayName = profile.displayName ?? ""
+                anonymousId = profile.anonymousId ?? ""
+                createdAt = profile.createdAt ?? Date()
+            } else {
+                // Create a new profile if none exists
+                createNewProfile()
+            }
         } catch {
-            Logger.log("Profile save err: \(error)")
+            print("Error fetching user profile: \(error)")
+            createNewProfile()
         }
     }
-
-    func toggleBiometric(_ enable: Bool, completion: @escaping (Bool)->Void) {
-        let ctxLA = LAContext()
-        var err: NSError?
-        if ctxLA.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &err) {
-            ctxLA.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: "Enable biometric unlock for ANCHOR") { success, _ in
-                DispatchQueue.main.async {
-                    if success {
-                        self.biometricEnabled = enable
-                        UserDefaults.standard.set(enable, forKey: "anchor.biometricEnabled")
-                    }
-                    completion(success)
-                }
+    
+    private func createNewProfile() {
+        let profile = UserProfileEntity.create(
+            in: viewContext,
+            displayName: nil,
+            anonymousId: nil
+        )
+        
+        do {
+            try viewContext.save()
+            displayName = profile.displayName ?? ""
+            anonymousId = profile.anonymousId ?? ""
+            createdAt = profile.createdAt ?? Date()
+        } catch {
+            print("Error creating user profile: \(error)")
+            showAlert = true
+            alertMessage = "Failed to create user profile"
+        }
+    }
+    
+    func updateDisplayName(_ newName: String) {
+        let request: NSFetchRequest<UserProfileEntity> = UserProfileEntity.fetchRequest()
+        request.fetchLimit = 1
+        
+        do {
+            let results = try viewContext.fetch(request)
+            if let profile = results.first {
+                profile.displayName = newName
+                try viewContext.save()
+                displayName = newName
+                showAlert = true
+                alertMessage = "Display name updated successfully"
             }
-        } else {
-            completion(false)
+        } catch {
+            print("Error updating display name: \(error)")
+            showAlert = true
+            alertMessage = "Failed to update display name"
+        }
+    }
+    
+    func resetAnonymousId() {
+        let newId = UUID().uuidString
+        let request: NSFetchRequest<UserProfileEntity> = UserProfileEntity.fetchRequest()
+        request.fetchLimit = 1
+        
+        do {
+            let results = try viewContext.fetch(request)
+            if let profile = results.first {
+                profile.anonymousId = newId
+                try viewContext.save()
+                anonymousId = newId
+                showAlert = true
+                alertMessage = "Anonymous ID reset successfully"
+            }
+        } catch {
+            print("Error resetting anonymous ID: \(error)")
+            showAlert = true
+            alertMessage = "Failed to reset anonymous ID"
         }
     }
 }

@@ -41,6 +41,10 @@ enum AppTheme {
 
 // MARK: - Color Extensions
 extension Color {
+    // MARK: - App Colors
+    static let anchorPrimary = Color(red: 0.0, green: 0.48, blue: 1.0) // Default blue
+    static let anchorAccent = Color(red: 0.0, green: 0.79, blue: 0.63) // Teal accent
+    
     // MARK: - Initializers
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)

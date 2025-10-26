@@ -2,57 +2,63 @@ import Foundation
 import CoreData
 
 @MainActor
-final class RiskAssessmentViewModel: ObservableObject {
-    @Published var mood: Int = 1
-    @Published var craving: Double = 0
-    @Published var triggersText: String = ""
-    @Published var latestResult: RiskAssessmentEntity?
-
-    private let ctx: NSManagedObjectContext
-
-    init(context: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
-        self.ctx = context
+class RiskAssessmentViewModel: ObservableObject {
+    private let viewContext: NSManagedObjectContext
+    
+    @Published var riskScore: Double = 0.0
+    @Published var riskReason: String = ""
+    @Published var lastAssessmentDate: Date?
+    @Published var showAlert = false
+    @Published var alertMessage = ""
+    
+    init(viewContext: NSManagedObjectContext) {
+        self.viewContext = viewContext
+        fetchLatestAssessment()
     }
-
-    func calculateAndSave() {
-        let triggerCount = triggersText.split(separator: ",").map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }.filter{ !$0.isEmpty }.count
-        var score = craving * 8.0
-        if mood == 2 { score += 15 } else if mood == 0 { score += 5 }
-        score += Double(min(triggerCount,5)) * 5.0
-        score = min(max(score, 0.0), 100.0)
-        let reason = "Craving: \(Int(craving)), Triggers: \(triggerCount), Mood: \(mood)"
+    
+    func fetchLatestAssessment() {
+        let request: NSFetchRequest<RiskAssessmentEntity> = RiskAssessmentEntity.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \RiskAssessmentEntity.date, ascending: false)]
+        request.fetchLimit = 1
         
-        Task {
-            do {
-                let result = try await withCheckedThrowingContinuation { continuation in
-                    self.ctx.perform {
-                        do {
-                            let entity = RiskAssessmentEntity.create(in: self.ctx, score: score, reason: reason)
-                            try self.ctx.save()
-                            continuation.resume(returning: entity)
-                        } catch {
-                            continuation.resume(throwing: error)
-                        }
-                    }
-                }
-                await MainActor.run {
-                    self.latestResult = result
-                }
-            } catch {
-                Logger.log("Risk save failed: \(error)")
+        do {
+            let results = try viewContext.fetch(request)
+            if let latest = results.first {
+                riskScore = latest.score
+                riskReason = latest.reason ?? ""
+                lastAssessmentDate = latest.date
             }
+        } catch {
+            print("Error fetching risk assessment: \(error)")
         }
     }
-
-    func fetchRecent(limit: Int = 10) -> [RiskAssessmentEntity] {
-        let req: NSFetchRequest<RiskAssessmentEntity> = RiskAssessmentEntity.fetchRequest()
-        req.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
-        req.fetchLimit = limit
+    
+    func saveAssessment(score: Double, reason: String?) {
+        let assessment = RiskAssessmentEntity.create(
+            in: viewContext,
+            date: Date(),
+            reason: reason,
+            score: score
+        )
+        
         do {
-            return try ctx.fetch(req)
+            try viewContext.save()
+            riskScore = score
+            riskReason = reason ?? ""
+            lastAssessmentDate = assessment.date
+            showAlert = true
+            alertMessage = "Risk assessment saved successfully"
         } catch {
-            Logger.log("Risk fetch failed: \(error)")
-            return []
+            print("Error saving risk assessment: \(error)")
+            showAlert = true
+            alertMessage = "Failed to save risk assessment"
         }
+    }
+    
+    func calculateRiskScore(answers: [Int]) -> Double {
+        // Simple average of answers, scaled to 0-1 range
+        let total = answers.reduce(0, +)
+        let average = Double(total) / Double(answers.count * 5) // Assuming 5-point scale
+        return min(max(average, 0), 1) // Clamp between 0 and 1
     }
 }
