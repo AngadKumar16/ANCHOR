@@ -183,63 +183,53 @@ final class JournalViewModel: ObservableObject {
         loadMore()
     }
     
+    private func performOnContext<T>(_ block: @escaping (NSManagedObjectContext) throws -> T) async throws -> T {
+        try await context.perform {
+            try block(self.context)
+        }
+    }
+    
     private func fetchEntries(page: Int, pageSize: Int) async throws -> [JournalEntry] {
-        try await withCheckedThrowingContinuation { continuation in
-            context.perform {
-                do {
-                    let request: NSFetchRequest<JournalEntryEntity> = JournalEntryEntity.fetchRequest()
-                    
-                    // Build predicate based on search and filters
-                    var predicates = [NSPredicate]()
-                    
-                    if !self.searchText.isEmpty {
-                        let searchPredicate = NSPredicate(
-                            format: "(title CONTAINS[cd] %@) OR (body CONTAINS[cd] %@)",
-                            self.searchText, self.searchText
-                        )
-                        predicates.append(searchPredicate)
-                    }
-                    
-                    if !self.selectedTags.isEmpty {
-                        let tagsPredicate = NSPredicate(
-                            format: "ANY tags IN %@", Array(self.selectedTags)
-                        )
-                        predicates.append(tagsPredicate)
-                    }
-                    
-                    if !predicates.isEmpty {
-                        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
-                    }
-                    
-                    // Configure sorting and pagination
-                    request.sortDescriptors = [NSSortDescriptor(key: "createdAt", ascending: false)]
-                    request.fetchLimit = pageSize
-                    request.fetchOffset = page * pageSize
-                    
-                    let results = try self.context.fetch(request)
-                    let entries = results.compactMap { $0.toModel() }
-                    continuation.resume(returning: entries)
-                    
-                } catch {
-                    continuation.resume(throwing: error)
-                }
+        try await performOnContext { context in
+            let request = JournalEntryEntity.fetchRequest()
+            let offset = page * pageSize
+            request.fetchLimit = pageSize
+            request.fetchOffset = offset
+            request.sortDescriptors = [NSSortDescriptor(keyPath: \JournalEntryEntity.createdAt, ascending: false)]
+            
+            // Add search and filter predicates if needed
+            var predicates: [NSPredicate] = []
+            
+            if !searchText.isEmpty {
+                predicates.append(NSPredicate(format: "(title CONTAINS[cd] %@) OR (body CONTAINS[cd] %@)", 
+                                           searchText, searchText))
+            }
+            
+            if !selectedTags.isEmpty {
+                predicates.append(NSPredicate(format: "ANY tags.name IN %@", Array(selectedTags)))
+            }
+            
+            if !predicates.isEmpty {
+                request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+            }
+            
+            let entries = try context.fetch(request)
+            return entries.compactMap { $0.toModel() }
+        }
+    }
+    
+    private func saveContext() async throws {
+        try await performOnContext { context in
+            if context.hasChanges {
+                try context.save()
             }
         }
     }
     
     private func saveEntry(_ entry: JournalEntry) async throws {
-        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-            context.perform {
-                do {
-                    _ = try JournalEntryEntity.updateOrCreate(from: entry, in: self.context)
-                    if self.context.hasChanges {
-                        try self.context.save()
-                    }
-                    continuation.resume()
-                } catch {
-                    continuation.resume(throwing: error)
-                }
-            }
+        try await saveContext()
+        try await performOnContext { context in
+            _ = try JournalEntryEntity.updateOrCreate(from: entry, in: context)
         }
     }
     

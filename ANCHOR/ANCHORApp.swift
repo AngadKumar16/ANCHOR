@@ -10,12 +10,32 @@ import SwiftUI
 @main
 struct ANCHORApp: App {
     
-    let persistenceController = PersistenceController.shared
-
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    
+    @StateObject private var persistenceController = PersistenceController.shared
+    
+    // Add thread checking
+    init() {
+        #if DEBUG
+        // Enable Core Data concurrency debugging
+        UserDefaults.standard.set(true, forKey: "-com.apple.CoreData.ConcurrencyDebug")
+        
+        // Enable Core Data SQL debug logging
+        UserDefaults.standard.set(3, forKey: "com.apple.CoreData.SQLDebug")
+        
+        // Enable Core Data validation
+        UserDefaults.standard.set(true, forKey: "-com.apple.CoreData.Validation.preserveValidationErrors")
+        #endif
+        
+        // Verify Core Data stack initialization
+        _ = persistenceController.container.viewContext
+    }
+    
     var body: some Scene {
         WindowGroup {
             AppRootView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environmentObject(persistenceController)
         }
     }
 }

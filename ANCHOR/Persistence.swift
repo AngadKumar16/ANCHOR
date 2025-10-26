@@ -16,6 +16,7 @@ final class PersistenceController {
     
     @MainActor
     static let preview: PersistenceController = {
+        os_log("🔄 Initializing preview context", log: PersistenceController().logger, type: .debug)
         let controller = PersistenceController(inMemory: true)
         let viewContext = controller.container.viewContext
         
@@ -31,27 +32,38 @@ final class PersistenceController {
         }
         
         do {
+            os_log("💾 Saving preview data", log: controller.logger, type: .debug)
             try viewContext.save()
+            os_log("✅ Preview data saved successfully", log: controller.logger, type: .debug)
         } catch {
             let nsError = error as NSError
-            os_log("Failed to save preview data: %{public}@", log: controller.logger, type: .error, nsError.localizedDescription)
+            os_log("❌ Failed to save preview data: %{public}@", 
+                  log: controller.logger, 
+                  type: .error, 
+                  nsError.localizedDescription)
             fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
         }
         return controller
     }()
     
     init(inMemory: Bool = false) {
+        os_log("🔄 Initializing PersistenceController (inMemory: %@)", 
+              log: logger, 
+              type: .debug, 
+              inMemory ? "true" : "false")
+        
         container = NSPersistentCloudKitContainer(name: "ANCHOR")
         
         // Enable history tracking and remote notifications
         guard let description = container.persistentStoreDescriptions.first else {
-            os_log("Failed to retrieve a persistent store description", log: logger, type: .error)
+            os_log("❌ Failed to retrieve a persistent store description", log: logger, type: .error)
             fatalError("###\(#function): Failed to retrieve a persistent store description.")
         }
         
         // Configure for in-memory storage if needed
         if inMemory {
             description.url = URL(fileURLWithPath: "/dev/null")
+            os_log("📦 Using in-memory store", log: logger, type: .debug)
             description.cloudKitContainerOptions = nil // Disable CloudKit for in-memory stores
         } else {
             // Configure CloudKit
@@ -59,28 +71,35 @@ final class PersistenceController {
             let options = NSPersistentCloudKitContainerOptions(containerIdentifier: cloudKitContainerIdentifier)
             description.cloudKitContainerOptions = options
             
+            os_log("📦 Setting up CloudKit container", log: logger, type: .debug)
             // Enable persistent history tracking
             description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
             description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
-        }
-        
-        // Load the persistent stores
-        container.loadPersistentStores { [weak self] storeDescription, error in
-            if let error = error as NSError? {
-                os_log("Failed to load persistent stores: %{public}@", log: self?.logger ?? .default, type: .error, error.localizedDescription)
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-            if let url = storeDescription.url {
-                os_log("Successfully loaded persistent store at %{public}@", log: self?.logger ?? .default, type: .info, url.absoluteString)
-            } else {
-                os_log("Successfully loaded persistent store", log: self?.logger ?? .default, type: .info)
-            }
         }
         
         // Configure view context
         container.viewContext.automaticallyMergesChangesFromParent = true
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         container.viewContext.automaticallyMergesChangesFromParent = true
+        
+        // Enable persistent history tracking
+        container.viewContext.transactionAuthor = "app"
+        
+        // Load persistent stores
+        container.loadPersistentStores { [weak self] storeDescription, error in
+            if let error = error as NSError? {
+                os_log("❌ Failed to load persistent store: %{public}@", 
+                      log: self?.logger ?? .default, 
+                      type: .error, 
+                      error.localizedDescription)
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            } else {
+                os_log("✅ Successfully loaded persistent store: %{public}@", 
+                      log: self?.logger ?? .default, 
+                      type: .info, 
+                      storeDescription.description)
+            }
+        }
         
         // Set up CloudKit schema and handle remote changes
         if !inMemory {

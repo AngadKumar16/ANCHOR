@@ -14,6 +14,7 @@ struct RiskQuestionView: View {
     @State private var isCalculating = false
     @State private var showError = false
     @State private var errorMessage = ""
+    @State private var isSaving = false
     
     private var isFormValid: Bool {
         !viewModel.triggersText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
@@ -60,43 +61,36 @@ struct RiskQuestionView: View {
                 .padding(.vertical, 4)
             }
             
-            Section(header: Text("Triggers"),
-                   footer: Text("List any triggers you've encountered (separate with commas)")) {
+            Section(header: Text("Triggers")) {
                 TextEditor(text: $viewModel.triggersText)
-                    .frame(minHeight: 80)
+                    .frame(minHeight: 100)
                     .overlay(
                         RoundedRectangle(cornerRadius: 8)
                             .stroke(Color.gray.opacity(0.2), lineWidth: 1)
                     )
-                    .onChange(of: viewModel.triggersText) { newValue in
-                        // Limit text length if needed
-                        if newValue.count > 200 {
-                            viewModel.triggersText = String(newValue.prefix(200))
-                        }
-                    }
             }
             
             Section {
-                Button(action: calculateRisk) {
-                    HStack {
-                        if isCalculating {
-                            ProgressView()
-                                .padding(.trailing, 8)
-                        }
-                        Text("Calculate Risk Level")
-                            .font(.headline)
+                Button(action: {
+                    Task {
+                        await calculateRisk()
                     }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(isFormValid ? Color.blue : Color.gray.opacity(0.3))
-                    .foregroundColor(isFormValid ? .white : .gray)
-                    .cornerRadius(10)
+                }) {
+                    if isSaving {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                            .frame(maxWidth: .infinity)
+                    } else {
+                        Text("Calculate Risk")
+                            .frame(maxWidth: .infinity)
+                    }
                 }
-                .disabled(!isFormValid || isCalculating)
-                .listRowInsets(EdgeInsets())
+                .buttonStyle(.borderedProminent)
+                .disabled(!isFormValid || isSaving)
                 .listRowBackground(Color.clear)
+                .listRowInsets(EdgeInsets())
+                .padding(.vertical, 8)
             }
-            .padding(.vertical, 8)
         }
         .navigationTitle("New Assessment")
         .navigationBarTitleDisplayMode(.inline)
@@ -114,22 +108,32 @@ struct RiskQuestionView: View {
         }
     }
     
-    private func calculateRisk() {
+    private func calculateRisk() async {
         guard !viewModel.triggersText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            errorMessage = "Please describe any triggers you've encountered."
-            showError = true
+            await MainActor.run {
+                errorMessage = "Please describe any triggers you've encountered."
+                showError = true
+            }
             return
         }
         
-        isCalculating = true
+        await MainActor.run {
+            isSaving = true
+        }
         
-        // Calculate and save using the view model
-        viewModel.calculateAndSave()
-        
-        // Dismiss after a short delay to allow the view model to process
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            isCalculating = false
-            dismiss()
+        do {
+            try await viewModel.calculateAndSave()
+            
+            await MainActor.run {
+                isSaving = false
+                dismiss()
+            }
+        } catch {
+            await MainActor.run {
+                isSaving = false
+                errorMessage = "Failed to save assessment: \(error.localizedDescription)"
+                showError = true
+            }
         }
     }
 }
@@ -137,6 +141,6 @@ struct RiskQuestionView: View {
 #Preview {
     NavigationView {
         RiskQuestionView()
-            .environmentObject(RiskAssessmentViewModel(viewContext: PersistenceController.preview.container.viewContext))
+            .environmentObject(RiskAssessmentViewModel.preview)
     }
 }
