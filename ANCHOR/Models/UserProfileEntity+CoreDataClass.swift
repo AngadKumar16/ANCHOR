@@ -19,14 +19,21 @@ public class UserProfileEntity: NSManagedObject {
     @NSManaged public var createdAt: Date
     @NSManaged public var displayName: String?
     @NSManaged public var id: UUID
+    @NSManaged public var biometricEnabled: Bool
     
     // Helper method to create a new instance
-    static func create(in context: NSManagedObjectContext, displayName: String? = nil, anonymousId: String? = nil) -> UserProfileEntity {
+    static func create(
+        in context: NSManagedObjectContext,
+        displayName: String? = nil,
+        anonymousId: String? = nil,
+        biometricEnabled: Bool = false
+    ) -> UserProfileEntity {
         let entity = UserProfileEntity(context: context)
         entity.id = UUID()
         entity.createdAt = Date()
         entity.displayName = displayName
         entity.anonymousId = anonymousId ?? UUID().uuidString
+        entity.biometricEnabled = biometricEnabled
         return entity
     }
 }

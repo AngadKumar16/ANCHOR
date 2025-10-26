@@ -15,6 +15,7 @@ func __registerFeaturesForLinking() {
     // Initialize view models
     let journalVM = JournalViewModel(context: context)
     let riskVM = RiskAssessmentViewModel(viewContext: context)
+    let userProfileVM = UserProfileViewModel(viewContext: context)
     
     // Register views with required parameters
     _ = AIAnalysisServiceView()
@@ -24,7 +25,8 @@ func __registerFeaturesForLinking() {
     
     // Journal related views
     _ = JournalEntryView()
-    _ = JournalEntryEditorView()
+        .environmentObject(journalVM)
+    _ = JournalEntryEditorView(entry: nil, viewModel: journalVM)
     _ = JournalListView()
         .environmentObject(journalVM)
     
@@ -42,15 +44,17 @@ func __registerFeaturesForLinking() {
     
     // Settings views
     _ = SettingsView()
+        .environmentObject(userProfileVM)
     _ = PrivacySettingsView()
     
     // Onboarding views
     _ = OnboardingView()
+        .environmentObject(AppState())
     _ = WelcomeView()
     _ = PermissionsView()
     _ = PrivacyDisclaimerView(onAccept: {}, onDecline: {})
     _ = FinishSetupView()
-    _ = SplashScreenView()
+    _ = SplashScreenView(onComplete: {})
     
     // Other feature views
     _ = BreathingExerciseView()

@@ -1,8 +1,11 @@
 import SwiftUI
 import CoreData
 import Charts
+import os.log
 
 struct MoodHistoryView: View {
+    private let log = OSLog(subsystem: "com.yourapp.ANCHOR", category: "MoodHistoryView")
+    
     @Environment(\.dismiss) private var dismiss
     @Environment(\.managedObjectContext) private var viewContext
     
@@ -22,7 +25,7 @@ struct MoodHistoryView: View {
         do {
             return try viewContext.fetch(request)
         } catch {
-            Logger.persistence.error("Failed to fetch moods: \(error.localizedDescription)")
+            os_log("Failed to fetch moods: %{public}@", log: self.log, type: .error, error.localizedDescription)
             return []
         }
     }
@@ -404,7 +407,7 @@ struct MoodDetailView: View {
             try viewContext.save()
             dismiss()
         } catch {
-            Logger.persistence.error("Failed to delete mood: \(error.localizedDescription)")
+            os_log("Failed to delete mood: %{public}@", log: OSLog(subsystem: "com.yourapp.ANCHOR", category: "MoodDetailView"), type: .error, error.localizedDescription)
         }
     }
 }

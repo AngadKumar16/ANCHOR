@@ -223,7 +223,7 @@ struct DashboardView: View {
                                     .anchorTextStyle(.bodyBold)
                                     .lineLimit(1)
                                 
-                                Text(recentEntry.date, style: .date)
+                                Text(recentEntry.createdAt, style: .date)
                                     .anchorTextStyle(.caption1)
                             }
                             
@@ -242,7 +242,7 @@ struct DashboardView: View {
                         if !recentEntry.tags.isEmpty {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: ANCHORDesign.Spacing.xs) {
-                                    ForEach(recentEntry.tags.prefix(3), id: \.self) { tag in
+                                    ForEach(Array(recentEntry.tags.prefix(3).enumerated()), id: \.offset) { _, tag in
                                         Text(tag)
                                             .font(.system(size: 11, weight: .medium))
                                             .padding(.horizontal, 8)
@@ -333,24 +333,21 @@ struct DashboardView: View {
             
             VStack(spacing: ANCHORDesign.Spacing.sm) {
                 RecoveryTipCard(
-                    icon: "heart.fill",
                     title: "Practice Self-Compassion",
-                    description: "Be kind to yourself. Recovery is a journey, not a destination.",
-                    color: ANCHORDesign.Colors.moodHappy
+                    message: "Be kind to yourself. Recovery is a journey, not a destination.",
+                    systemImage: "heart.fill"
                 )
                 
                 RecoveryTipCard(
-                    icon: "person.2.fill",
                     title: "Stay Connected",
-                    description: "Reach out to your support network when you need help.",
-                    color: ANCHORDesign.Colors.accent
+                    message: "Reach out to your support network when you need help.",
+                    systemImage: "person.2.fill"
                 )
                 
                 RecoveryTipCard(
-                    icon: "moon.fill",
                     title: "Prioritize Sleep",
-                    description: "Good sleep is essential for mental health and recovery.",
-                    color: ANCHORDesign.Colors.primary
+                    message: "Good sleep is essential for mental health and recovery.",
+                    systemImage: "moon.fill"
                 )
             }
         }

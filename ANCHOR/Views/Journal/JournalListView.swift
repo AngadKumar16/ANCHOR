@@ -7,7 +7,7 @@ struct JournalListView: View {
     @State private var searchText = ""
     @State private var selectedMoodFilter: MoodFilter = .all
     @State private var showingDeleteAlert = false
-    @State private var entryToDelete: JournalEntryModel?
+    @State private var entryToDelete: JournalEntry?
     
     enum MoodFilter: String, CaseIterable {
         case all = "All"
@@ -34,26 +34,26 @@ struct JournalListView: View {
         }
     }
     
-    var filteredEntries: [JournalEntryModel] {
+    var filteredEntries: [JournalEntry] {
         var entries = journalVM.entries
         
-        // Apply search filter
+        // Apply search text filter
         if !searchText.isEmpty {
-            entries = entries.filter { entry in
-                let titleMatch = entry.title?.localizedCaseInsensitiveContains(searchText) ?? false
-                let bodyMatch = entry.body.localizedCaseInsensitiveContains(searchText)
-                let tagsMatch = entry.tags.joined(separator: " ").localizedCaseInsensitiveContains(searchText)
-                return titleMatch || bodyMatch || tagsMatch
+            entries = entries.filter { 
+                ($0.title?.localizedCaseInsensitiveContains(searchText) ?? false) ||
+                $0.body.localizedCaseInsensitiveContains(searchText) ||
+                $0.tags.contains(where: { $0.localizedCaseInsensitiveContains(searchText) })
             }
         }
         
         // Apply mood filter
         if selectedMoodFilter != .all {
             entries = entries.filter { entry in
+                let sentiment = entry.sentiment ?? 0
                 switch selectedMoodFilter {
-                case .positive: return entry.sentiment > 0
-                case .neutral: return entry.sentiment == 0
-                case .negative: return entry.sentiment < 0
+                case .positive: return sentiment > 0
+                case .neutral: return sentiment == 0
+                case .negative: return sentiment < 0
                 case .all: return true
                 }
             }
@@ -62,22 +62,13 @@ struct JournalListView: View {
         return entries
     }
     
-    var groupedEntries: [(String, [JournalEntryModel])] {
+    var groupedEntries: [(String, [JournalEntry])] {
         let grouped = Dictionary(grouping: filteredEntries) { entry in
             let formatter = DateFormatter()
             formatter.dateFormat = "MMMM yyyy"
-            return formatter.string(from: entry.date)
+            return formatter.string(from: entry.createdAt)
         }
-        
-        return grouped.sorted { first, second in
-            let formatter = DateFormatter()
-            formatter.dateFormat = "MMMM yyyy"
-            let firstDate = formatter.date(from: first.key) ?? Date.distantPast
-            let secondDate = formatter.date(from: second.key) ?? Date.distantPast
-            return firstDate > secondDate
-        }.map { (key, value) in
-            (key, value.sorted { $0.date > $1.date })
-        }
+        return grouped.sorted { $0.key > $1.key }
     }
     
     var body: some View {
@@ -347,7 +338,7 @@ struct JournalListView: View {
     
     // MARK: - Context Menu
     
-    private func contextMenuForEntry(_ entry: JournalEntryModel) -> some View {
+    private func contextMenuForEntry(_ entry: JournalEntry) -> some View {
         Group {
             Button(action: {
                 shareEntry(entry)
@@ -368,7 +359,9 @@ struct JournalListView: View {
     
     private var entriesThisMonth: Int {
         let calendar = Calendar.current
-        return journalVM.entries.filter { calendar.isDate($0.date, equalTo: Date(), toGranularity: .month) }.count
+        return journalVM.entries.filter { 
+            calendar.isDate($0.createdAt, equalTo: Date(), toGranularity: .month) 
+        }.count
     }
     
     private var writingStreak: Int {
@@ -376,30 +369,48 @@ struct JournalListView: View {
         var streak = 0
         var currentDate = Date()
         
-        while true {
-            let hasEntry = journalVM.entries.contains { calendar.isDate($0.date, inSameDayAs: currentDate) }
-            if hasEntry {
+        // Get all unique dates when entries were created
+        let entryDates = Set(journalVM.entries.map { 
+            calendar.startOfDay(for: $0.createdAt) 
+        }).sorted(by: >)
+        
+        // If no entries, return 0
+        guard let mostRecentEntry = entryDates.first else { return 0 }
+        
+        // If most recent entry is not today, no streak
+        if !calendar.isDateInToday(mostRecentEntry) {
+            return 0
+        }
+        
+        // Count consecutive days with entries
+        currentDate = calendar.startOfDay(for: mostRecentEntry)
+        var previousDate = currentDate
+        
+        for date in entryDates.dropFirst() {
+            let dayDifference = calendar.dateComponents([.day], from: date, to: previousDate).day ?? 0
+            if dayDifference == 1 {
                 streak += 1
-                currentDate = calendar.date(byAdding: .day, value: -1, to: currentDate) ?? currentDate
-            } else {
+                previousDate = date
+            } else if dayDifference > 1 {
                 break
             }
         }
         
-        return streak
+        // Add 1 to include the current day
+        return streak + 1
     }
     
-    private func deleteEntry(_ entry: JournalEntryModel) {
+    private func deleteEntry(_ entry: JournalEntry) {
         if let index = journalVM.entries.firstIndex(where: { $0.id == entry.id }) {
             Task {
-                await journalVM.delete(at: IndexSet([index]))
+                await journalVM.delete(entries: [journalVM.entries[index]])
             }
         }
     }
     
-    private func shareEntry(_ entry: JournalEntryModel) {
+    private func shareEntry(_ entry: JournalEntry) {
         let title = entry.title ?? "Journal Entry"
-        let date = DateFormatter.localizedString(from: entry.date, dateStyle: .medium, timeStyle: .none)
+        let date = DateFormatter.localizedString(from: entry.createdAt, dateStyle: .medium, timeStyle: .none)
         let content = "\(title)\n\(date)\n\n\(entry.body)"
         
         let activityVC = UIActivityViewController(activityItems: [content], applicationActivities: nil)

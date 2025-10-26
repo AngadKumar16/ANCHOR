@@ -1,6 +1,6 @@
 import SwiftUI
 import CoreData
-import ButtonStyles // Import the ButtonStyles module
+import os.log
 
 struct MoodTrackingView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -16,6 +16,8 @@ struct MoodTrackingView: View {
     
     // Theme
     @Environment(\.colorScheme) private var colorScheme
+    
+    private let log = OSLog(subsystem: "com.yourapp.ANCHOR", category: "MoodTrackingView")
     
     var body: some View {
         NavigationView {
@@ -98,7 +100,6 @@ struct MoodTrackingView: View {
                                 .foregroundColor(ANCHORDesign.Colors.textPrimary)
                         }
                     }
-                    .buttonStyle(ScaleButtonStyle())
                 }
             }
             .padding()
@@ -230,7 +231,10 @@ struct MoodTrackingView: View {
                 let generator = UINotificationFeedbackGenerator()
                 generator.notificationOccurred(.success)
             } catch {
-                Logger.persistence.error("Failed to save mood: \(error.localizedDescription)")
+                os_log("Failed to save mood: %{public}@", 
+                      log: self.log, 
+                      type: .error, 
+                      error.localizedDescription)
             }
         }
     }
