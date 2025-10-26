@@ -11,21 +11,18 @@ struct RiskQuestionView: View {
     @EnvironmentObject var viewModel: RiskAssessmentViewModel
     @Environment(\.dismiss) private var dismiss
     
-    @State private var mood: Int = 1
-    @State private var craving: Double = 0
-    @State private var triggersText: String = ""
     @State private var isCalculating = false
     @State private var showError = false
     @State private var errorMessage = ""
     
     private var isFormValid: Bool {
-        !triggersText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        !viewModel.triggersText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
     var body: some View {
         Form {
             Section(header: Text("How are you feeling?")) {
-                Picker("Mood", selection: $mood) {
+                Picker("Mood", selection: $viewModel.mood) {
                     Text("😔 Low").tag(0)
                     Text("😐 Neutral").tag(1)
                     Text("😊 High").tag(2)
@@ -41,14 +38,14 @@ struct RiskQuestionView: View {
                         Text("Craving:")
                             .font(.headline)
                         Spacer()
-                        Text("\(Int(craving))")  
+                        Text("\(Int(viewModel.craving))")
                             .font(.title3.monospacedDigit())
-                            .foregroundColor(craving > 7 ? .red : .primary)
-                            .animation(.easeInOut, value: craving)
+                            .foregroundColor(viewModel.craving > 7 ? .red : .primary)
+                            .animation(.easeInOut, value: viewModel.craving)
                     }
                     
-                    Slider(value: $craving, in: 0...10, step: 1)
-                        .tint(craving > 7 ? .red : .blue)
+                    Slider(value: $viewModel.craving, in: 0...10, step: 1)
+                        .tint(viewModel.craving > 7 ? .red : .blue)
                     
                     HStack {
                         Text("None")
@@ -65,16 +62,16 @@ struct RiskQuestionView: View {
             
             Section(header: Text("Triggers"),
                    footer: Text("List any triggers you've encountered (separate with commas)")) {
-                TextEditor(text: $triggersText)
+                TextEditor(text: $viewModel.triggersText)
                     .frame(minHeight: 80)
                     .overlay(
                         RoundedRectangle(cornerRadius: 8)
                             .stroke(Color.gray.opacity(0.2), lineWidth: 1)
                     )
-                    .onChange(of: triggersText) { newValue in
+                    .onChange(of: viewModel.triggersText) { newValue in
                         // Limit text length if needed
                         if newValue.count > 200 {
-                            triggersText = String(newValue.prefix(200))
+                            viewModel.triggersText = String(newValue.prefix(200))
                         }
                     }
             }
@@ -115,25 +112,10 @@ struct RiskQuestionView: View {
         } message: {
             Text(errorMessage)
         }
-        .onAppear {
-            // Sync with view model when view appears
-            mood = viewModel.mood
-            craving = viewModel.craving
-            triggersText = viewModel.triggersText
-        }
-        .onChange(of: mood) { oldValue, newValue in
-            viewModel.mood = newValue
-        }
-        .onChange(of: craving) { oldValue, newValue in
-            viewModel.craving = newValue
-        }
-        .onChange(of: triggersText) { oldValue, newValue in
-            viewModel.triggersText = newValue
-        }
     }
     
     private func calculateRisk() {
-        guard !triggersText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+        guard !viewModel.triggersText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             errorMessage = "Please describe any triggers you've encountered."
             showError = true
             return
@@ -141,14 +123,11 @@ struct RiskQuestionView: View {
         
         isCalculating = true
         
-        // Update view model
-        viewModel.mood = mood
-        viewModel.craving = craving
-        viewModel.triggersText = triggersText
+        // Calculate and save using the view model
+        viewModel.calculateAndSave()
         
-        // Simulate network/database operation
+        // Dismiss after a short delay to allow the view model to process
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            viewModel.calculateAndSave()
             isCalculating = false
             dismiss()
         }

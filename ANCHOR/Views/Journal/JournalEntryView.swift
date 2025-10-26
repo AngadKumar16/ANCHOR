@@ -80,188 +80,12 @@ struct JournalEntryView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 24) {
-                    // Date Picker Section
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Date & Time")
-                            .font(.headline)
-                            .foregroundColor(.secondary)
-                        
-                        Button(action: {
-                            showingDatePicker.toggle()
-                        }) {
-                            HStack {
-                                Image(systemName: "calendar")
-                                    .foregroundColor(.blue)
-                                
-                                Text(entryDate, style: .date)
-                                    .font(.body)
-                                    .foregroundColor(.primary)
-                                
-                                Text("at")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                
-                                Text(entryDate, style: .time)
-                                    .font(.body)
-                                    .foregroundColor(.primary)
-                                
-                                Spacer()
-                                
-                                Image(systemName: "chevron.right")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                            .padding()
-                            .background(Color(.systemGray6))
-                            .cornerRadius(10)
-                        }
-                        .sheet(isPresented: $showingDatePicker) {
-                            DatePickerSheet(selectedDate: $entryDate)
-                        }
-                    }
-                    
-                    // Mood Selector
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("How are you feeling?")
-                            .font(.headline)
-                            .foregroundColor(.secondary)
-                        
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 16) {
-                                ForEach(MoodType.allCases, id: \.self) { mood in
-                                    MoodButton(
-                                        mood: mood,
-                                        isSelected: selectedMood == mood,
-                                        action: { selectedMood = mood }
-                                    )
-                                }
-                            }
-                            .padding(.horizontal, 16)
-                        }
-                    }
-                    
-                    // Title Input
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Title (Optional)")
-                            .font(.headline)
-                            .foregroundColor(.secondary)
-                        
-                        TextField("Give your entry a title...", text: $title)
-                            .textFieldStyle(.roundedBorder)
-                            .font(.body)
-                    }
-                    
-                    // Body Input
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Your Thoughts")
-                            .font(.headline)
-                            .foregroundColor(.secondary)
-                        
-                        ZStack(alignment: .topLeading) {
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(Color(.systemGray6))
-                                .frame(minHeight: 250)
-                            
-                            if entryText.isEmpty {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text("Write about your day, feelings, thoughts, or anything on your mind...")
-                                        .foregroundColor(.secondary)
-                                    Text("This is your private space to reflect and process.")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                }
-                                .padding(.horizontal, 16)
-                                .padding(.vertical, 12)
-                            }
-                            
-                            TextEditor(text: $entryText)
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 8)
-                                .background(Color.clear)
-                                .font(.body)
-                        }
-                    }
-                    
-                    // Attachments Section
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Attachments (Optional)")
-                            .font(.headline)
-                            .foregroundColor(.secondary)
-                        
-                        HStack(spacing: 16) {
-                            // Photo Picker
-                            PhotosPicker(
-                                selection: $selectedPhotos,
-                                maxSelectionCount: 3,
-                                matching: .images
-                            ) {
-                                HStack {
-                                    Image(systemName: "photo")
-                                    Text("Add Photo")
-                                }
-                                .font(.caption)
-                                .fontWeight(.medium)
-                                .padding(.horizontal, 16)
-                                .padding(.vertical, 8)
-                                .background(Color.blue.opacity(0.1))
-                                .foregroundColor(.blue)
-                                .cornerRadius(20)
-                            }
-                            
-                            // Voice Note Button (Placeholder)
-                            Button(action: {
-                                // TODO: Implement voice recording
-                            }) {
-                                HStack {
-                                    Image(systemName: "mic")
-                                    Text("Voice Note")
-                                }
-                                .font(.caption)
-                                .fontWeight(.medium)
-                                .padding(.horizontal, 16)
-                                .padding(.vertical, 8)
-                                .background(Color.orange.opacity(0.1))
-                                .foregroundColor(.orange)
-                                .cornerRadius(20)
-                            }
-                            .disabled(true) // Disabled for now
-                            
-                            Spacer()
-                        }
-                        
-                        // Display attached images
-                        if !attachedImages.isEmpty {
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 8) {
-                                    ForEach(Array(attachedImages.enumerated()), id: \.offset) { index, image in
-                                        AttachedImageView(image: image) {
-                                            attachedImages.remove(at: index)
-                                        }
-                                    }
-                                }
-                                .padding(.horizontal, 16)
-                            }
-                        }
-                    }
-                    
-                    // Tags Selection
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Tags")
-                            .font(.headline)
-                            .foregroundColor(.secondary)
-                        
-                        LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 8) {
-                            ForEach(availableTags, id: \.self) { tag in
-                                TagButton(
-                                    tag: tag,
-                                    isSelected: selectedTags.contains(tag),
-                                    action: { toggleTag(tag) }
-                                )
-                            }
-                        }
-                    }
-                    
-                    Spacer(minLength: 20)
+                    dateTimeSection
+                    titleSection
+                    contentSection
+                    moodSection
+                    tagsSection
+                    attachmentsSection
                 }
                 .padding()
             }
@@ -322,6 +146,9 @@ struct JournalEntryView: View {
         .onChange(of: selectedPhotos) { oldValue, newPhotos in
             loadSelectedPhotos(newPhotos)
         }
+        .sheet(isPresented: $showingDatePicker) {
+            DatePickerSheet(selectedDate: $entryDate)
+        }
         .sheet(isPresented: $showingShareSheet) {
             ShareSheet(entry: createEntryForSharing())
         }
@@ -334,6 +161,210 @@ struct JournalEntryView: View {
             Text("Are you sure you want to delete this journal entry? This action cannot be undone.")
         }
     }
+    
+    // MARK: - View Components
+    
+    private var dateTimeSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Date & Time")
+                .font(.headline)
+                .foregroundColor(.secondary)
+            
+            Button(action: { showingDatePicker.toggle() }) {
+                HStack {
+                    Image(systemName: "calendar")
+                        .foregroundColor(.blue)
+                    
+                    Text(entryDate, style: .date)
+                        .font(.body)
+                        .foregroundColor(.primary)
+                    
+                    Text("at")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    
+                    Text(entryDate, style: .time)
+                        .font(.body)
+                        .foregroundColor(.primary)
+                    
+                    Spacer()
+                    
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .padding()
+                .background(Color(.systemGray6))
+                .cornerRadius(10)
+            }
+            .sheet(isPresented: $showingDatePicker) {
+                DatePickerSheet(selectedDate: $entryDate)
+            }
+        }
+    }
+    
+    private var titleSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Title (Optional)")
+                .font(.headline)
+                .foregroundColor(.secondary)
+            
+            TextField("Give your entry a title...", text: $title)
+                .textFieldStyle(.roundedBorder)
+                .font(.body)
+        }
+    }
+    
+    private var contentSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Your Thoughts")
+                .font(.headline)
+                .foregroundColor(.secondary)
+            
+            ZStack(alignment: .topLeading) {
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color(.systemGray6))
+                    .frame(minHeight: 250)
+                
+                if entryText.isEmpty {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Write about your day, feelings, thoughts, or anything on your mind...")
+                            .foregroundColor(.secondary)
+                        Text("This is your private space to reflect and process.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                }
+                
+                TextEditor(text: $entryText)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(Color.clear)
+                    .font(.body)
+            }
+        }
+    }
+    
+    private var moodSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("How are you feeling?")
+                .font(.headline)
+                .foregroundColor(.secondary)
+            
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 16) {
+                    ForEach(MoodType.allCases, id: \.self) { mood in
+                        MoodButton(
+                            mood: mood,
+                            isSelected: selectedMood == mood,
+                            action: { selectedMood = mood }
+                        )
+                    }
+                }
+                .padding(.horizontal, 16)
+            }
+        }
+    }
+    
+    private var tagsSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Tags")
+                .font(.headline)
+                .foregroundColor(.secondary)
+            
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 8) {
+                ForEach(availableTags, id: \.self) { tag in
+                    TagButton(
+                        tag: tag,
+                        isSelected: selectedTags.contains(tag),
+                        action: { toggleTag(tag) }
+                    )
+                }
+            }
+        }
+    }
+    
+    private var attachmentsSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Attachments (Optional)")
+                .font(.headline)
+                .foregroundColor(.secondary)
+            
+            HStack(spacing: 16) {
+                // Photo Picker
+                PhotosPicker(
+                    selection: $selectedPhotos,
+                    maxSelectionCount: 3,
+                    matching: .images
+                ) {
+                    HStack {
+                        Image(systemName: "photo")
+                        Text("Add Photo")
+                    }
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(Color.blue.opacity(0.1))
+                    .foregroundColor(.blue)
+                    .cornerRadius(20)
+                }
+                
+                // Voice Note Button (Placeholder)
+                Button(action: {
+                    // TODO: Implement voice recording
+                }) {
+                    HStack {
+                        Image(systemName: "mic")
+                        Text("Voice Note")
+                    }
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(Color.orange.opacity(0.1))
+                    .foregroundColor(.orange)
+                    .cornerRadius(20)
+                }
+                .disabled(true) // Disabled for now
+                
+                Spacer()
+            }
+            
+            // Display attached images
+            if !attachedImages.isEmpty {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        ForEach(Array(attachedImages.enumerated()), id: \.offset) { index, image in
+                            AttachedImageView(image: image) {
+                                attachedImages.remove(at: index)
+                            }
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                }
+            }
+        }
+    }
+    
+    // MARK: - Sharing
+    
+    private func createEntryForSharing() -> JournalEntryModel {
+        // Create a new JournalEntryModel with current values
+        let entry = JournalEntryModel(
+            id: self.entry?.id ?? UUID(),
+            date: entryDate,
+            title: title.isEmpty ? nil : title,
+            body: entryText,
+            sentiment: Double(selectedMood.sentimentValue),
+            tags: Array(selectedTags)
+        )
+        return entry
+    }
+    
+    // MARK: - Supporting Views
     
     private func setupInitialValues() {
         if let entry = entry {

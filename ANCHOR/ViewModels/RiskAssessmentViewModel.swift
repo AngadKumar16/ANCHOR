@@ -11,6 +11,10 @@ class RiskAssessmentViewModel: ObservableObject {
     @Published var showAlert = false
     @Published var alertMessage = ""
     
+    @Published var mood: Int = 1
+    @Published var craving: Double = 0
+    @Published var triggersText: String = ""
+    
     init(viewContext: NSManagedObjectContext) {
         self.viewContext = viewContext
         fetchLatestAssessment()
@@ -73,5 +77,19 @@ class RiskAssessmentViewModel: ObservableObject {
         let total = answers.reduce(0, +)
         let average = Double(total) / Double(answers.count * 5) // Assuming 5-point scale
         return min(max(average, 0), 1) // Clamp between 0 and 1
+    }
+    
+    func calculateAndSave() {
+        // Calculate risk score based on mood and craving
+        // Mood: 0=low, 1=neutral, 2=high (map to 0-1 range)
+        // Craving: 0-10 scale (map to 0-1 range)
+        let moodScore = Double(mood) / 2.0  // 0-1 range
+        let cravingScore = craving / 10.0    // 0-1 range
+        
+        // Simple average of the two scores
+        let score = (moodScore + cravingScore) / 2.0
+        
+        // Save the assessment
+        saveAssessment(score: score, reason: triggersText)
     }
 }

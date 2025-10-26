@@ -6,14 +6,8 @@ extension RiskAssessmentEntity: Identifiable {
     // This makes it work with SwiftUI's ForEach and other Identifiable requirements
 }
 
-// MARK: - Convenience Methods
+// MARK: - Additional Convenience Methods
 extension RiskAssessmentEntity {
-    static func create(in context: NSManagedObjectContext, date: Date, reason: String?, score: Double) -> RiskAssessmentEntity {
-        let assessment = RiskAssessmentEntity(context: context)
-        assessment.id = UUID()
-        assessment.date = date
-        assessment.reason = reason
-        assessment.score = score
-        return assessment
-    }
+    // The create method is already defined in the Core Data class
+    // Add any additional convenience methods here
 }
