@@ -33,6 +33,8 @@ struct DashboardView: View {
         "leaf.fill"
     ]
     
+    private let recoveryTipColors: [Color] = [.blue, .green, .orange, .purple, .teal]
+    
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -163,14 +165,14 @@ struct DashboardView: View {
                 quickActionButton(
                     title: "New Entry",
                     icon: "plus.circle.fill",
-                    color: .blue,
+                    color: ANCHORDesign.Colors.primary,
                     action: { showingJournalEntry = true }
                 )
                 
                 quickActionButton(
                     title: "Breathe",
                     icon: "wind",
-                    color: .green,
+                    color: .teal,
                     action: { showingBreathingExercise = true }
                 )
                 
@@ -198,27 +200,35 @@ struct DashboardView: View {
         action: @escaping () -> Void
     ) -> some View {
         Button(action: action) {
-            ANCHORCard(
-                padding: ANCHORDesign.Spacing.lg,
-                cornerRadius: ANCHORDesign.CornerRadius.medium,
-                shadowStyle: ANCHORDesign.Shadow.small,
-                backgroundColor: color.opacity(0.1),
-                showBorder: true
-            ) {
-                VStack(spacing: ANCHORDesign.Spacing.sm) {
+            VStack(spacing: ANCHORDesign.Spacing.sm) {
+                ZStack {
+                    Circle()
+                        .fill(color.opacity(0.1))
+                        .frame(width: 50, height: 50)
+                    
                     Image(systemName: icon)
                         .font(.title2)
                         .foregroundColor(color)
-                    
-                    Text(title)
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                        .foregroundColor(ANCHORDesign.Colors.textPrimary)
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .padding(.vertical, ANCHORDesign.Spacing.sm)
+                
+                Text(title)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundColor(ANCHORDesign.Colors.textPrimary)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(1)
             }
-            .frame(height: 100)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding(ANCHORDesign.Spacing.md)
+            .background(
+                RoundedRectangle(cornerRadius: ANCHORDesign.CornerRadius.medium)
+                    .fill(ANCHORDesign.Colors.backgroundCard)
+                    .shadow(color: color.opacity(0.2), radius: 5, x: 0, y: 2)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: ANCHORDesign.CornerRadius.medium)
+                    .stroke(color.opacity(0.2), lineWidth: 1)
+            )
         }
         .buttonStyle(ScaleButtonStyle())
     }
@@ -236,6 +246,7 @@ struct DashboardView: View {
                 NavigationLink(destination: JournalListView()) {
                     Text("View All")
                         .font(.subheadline)
+                        .fontWeight(.medium)
                         .foregroundColor(ANCHORDesign.Colors.primary)
                 }
             }
@@ -243,42 +254,70 @@ struct DashboardView: View {
             
             if let recentEntry = journalVM.entries.first {
                 ANCHORCard.gradient(
-                    Gradient(colors: [ANCHORDesign.Colors.secondary.opacity(0.7), ANCHORDesign.Colors.primary.opacity(0.7)]),
+                    Gradient(colors: [
+                        ANCHORDesign.Colors.primary.opacity(0.9),
+                        ANCHORDesign.Colors.secondary.opacity(0.8)
+                    ]),
                     padding: ANCHORDesign.Spacing.lg
                 ) {
                     VStack(alignment: .leading, spacing: ANCHORDesign.Spacing.md) {
-                        HStack {
-                            Text(recentEntry.title ?? "Untitled Entry")
-                                .font(.headline)
-                                .foregroundColor(.white)
+                        HStack(alignment: .top) {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(recentEntry.title ?? "Untitled Entry")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                
+                                Text(recentEntry.createdAt, style: .date)
+                                    .font(.caption)
+                                    .foregroundColor(.white.opacity(0.9))
+                            }
                             
                             Spacer()
                             
-                            Text(recentEntry.createdAt, style: .date)
-                                .font(.caption)
-                                .foregroundColor(.white.opacity(0.8))
+                            // Mood indicator based on sentiment
+                            if let sentiment = recentEntry.sentiment {
+                                Circle()
+                                    .fill(moodColor(for: sentiment))
+                                    .frame(width: 12, height: 12)
+                                    .shadow(color: .black.opacity(0.2), radius: 2, x: 0, y: 1)
+                            }
                         }
                         
                         Text(recentEntry.body.prefix(120) + (recentEntry.body.count > 120 ? "..." : ""))
                             .font(.subheadline)
-                            .foregroundColor(.white.opacity(0.9))
+                            .foregroundColor(.white.opacity(0.95))
                             .lineLimit(3)
+                        
+                        if !recentEntry.tags.isEmpty {
+                            HStack {
+                                ForEach(Array(recentEntry.tags.prefix(3).enumerated()), id: \.offset) { _, tag in
+                                    Text(tag)
+                                        .font(.caption2)
+                                        .fontWeight(.medium)
+                                        .padding(.horizontal, 8)
+                                        .padding(.vertical, 4)
+                                        .background(Color.white.opacity(0.2))
+                                        .foregroundColor(.white)
+                                        .cornerRadius(4)
+                                }
+                            }
+                        }
                         
                         HStack {
                             Spacer()
                             Text("Tap to view")
                                 .font(.caption)
                                 .foregroundColor(.white.opacity(0.8))
-                                .padding(.top, ANCHORDesign.Spacing.xs)
+                                .padding(.top, 4)
                         }
+                    }
+                    .onTapGesture {
+                        // Handle tap to view full entry
                     }
                 }
             } else {
-                ANCHORCard(
-                    padding: ANCHORDesign.Spacing.lg,
-                    backgroundColor: ANCHORDesign.Colors.backgroundCard,
-                    showBorder: true
-                ) {
+                // No entries state
+                ANCHORCard(padding: ANCHORDesign.Spacing.lg) {
                     VStack(spacing: ANCHORDesign.Spacing.md) {
                         Image(systemName: "text.badge.plus")
                             .font(.title2)
@@ -291,11 +330,12 @@ struct DashboardView: View {
                         Button(action: { showingJournalEntry = true }) {
                             Text("Create your first entry")
                                 .font(.subheadline)
-                                .foregroundColor(ANCHORDesign.Colors.primary)
-                                .padding(.vertical, ANCHORDesign.Spacing.xs)
-                                .padding(.horizontal, ANCHORDesign.Spacing.md)
-                                .background(ANCHORDesign.Colors.primary.opacity(0.1))
-                                .cornerRadius(ANCHORDesign.CornerRadius.small)
+                                .fontWeight(.medium)
+                                .foregroundColor(.white)
+                                .padding(.vertical, 8)
+                                .padding(.horizontal, 16)
+                                .background(ANCHORDesign.Colors.primary)
+                                .cornerRadius(ANCHORDesign.CornerRadius.medium)
                         }
                         .padding(.top, ANCHORDesign.Spacing.xs)
                     }
@@ -303,6 +343,17 @@ struct DashboardView: View {
                     .padding(.vertical, ANCHORDesign.Spacing.lg)
                 }
             }
+        }
+    }
+    
+    private func moodColor(for sentiment: Double) -> Color {
+        switch sentiment {
+        case ..<(-0.3):
+            return .red // Negative mood
+        case -0.3..<0.3:
+            return .yellow // Neutral mood
+        default:
+            return .green // Positive mood
         }
     }
     
@@ -336,7 +387,7 @@ struct DashboardView: View {
                 }
                 
                 let quote = DailyQuoteService.shared.getTodaysQuote()
-                Text("\\(quote.text)")
+                Text("\"\(quote.text)\"")
                     .font(.body.italic())
                     .foregroundColor(.white)
                     .multilineTextAlignment(.leading)
@@ -359,28 +410,46 @@ struct DashboardView: View {
             
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: ANCHORDesign.Spacing.md) {
-                    ForEach(0..<5) { index in
-                        ANCHORCard(
-                            padding: ANCHORDesign.Spacing.md,
-                            backgroundColor: ANCHORDesign.Colors.backgroundCard,
-                            showBorder: true
-                        ) {
-                            VStack(alignment: .leading, spacing: ANCHORDesign.Spacing.sm) {
-                                Image(systemName: recoveryTipIcons[index])
-                                    .font(.title2)
-                                    .foregroundColor(ANCHORDesign.Colors.primary)
-                                
-                                Text(recoveryTips[index])
-                                    .font(.subheadline)
-                                    .foregroundColor(ANCHORDesign.Colors.textPrimary)
-                                    .fixedSize(horizontal: false, vertical: true)
-                            }
-                            .frame(width: 150, height: 120, alignment: .topLeading)
-                        }
+                    ForEach(Array(zip(recoveryTips.indices, recoveryTips)), id: \.0) { index, tip in
+                        recoveryTipCard(
+                            tip: tip,
+                            icon: recoveryTipIcons[index % recoveryTipIcons.count],
+                            color: recoveryTipColors[index % recoveryTipColors.count]
+                        )
                     }
                 }
+                .padding(.horizontal, ANCHORDesign.Spacing.md)
+                .padding(.vertical, 4)
             }
+            .padding(.horizontal, -ANCHORDesign.Spacing.md)
         }
+    }
+    
+    private func recoveryTipCard(tip: String, icon: String, color: Color) -> some View {
+        HStack(spacing: ANCHORDesign.Spacing.md) {
+            Image(systemName: icon)
+                .font(.title3)
+                .foregroundColor(color)
+                .frame(width: 40)
+            
+            Text(tip)
+                .font(.subheadline)
+                .foregroundColor(ANCHORDesign.Colors.textPrimary)
+                .fixedSize(horizontal: false, vertical: true)
+            
+            Spacer(minLength: 0)
+        }
+        .padding(ANCHORDesign.Spacing.md)
+        .frame(width: 280, alignment: .leading)
+        .background(
+            RoundedRectangle(cornerRadius: ANCHORDesign.CornerRadius.medium)
+                .fill(ANCHORDesign.Colors.backgroundCard)
+                .shadow(color: color.opacity(0.1), radius: 5, x: 0, y: 2)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: ANCHORDesign.CornerRadius.medium)
+                .stroke(color.opacity(0.1), lineWidth: 1)
+        )
     }
     
     // MARK: - Helper Functions
