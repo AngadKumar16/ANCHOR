@@ -6,12 +6,6 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		2FC0D0EB2EAD740C0077FB54 /* ANCHOR.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2FC0D0E92EAD740C0077FB54 /* ANCHOR.xcdatamodeld */; };
-		2FC0D0EC2EAD740C0077FB54 /* ANCHOR.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2FC0D0E92EAD740C0077FB54 /* ANCHOR.xcdatamodeld */; };
-		2FC0D0ED2EAD740C0077FB54 /* ANCHOR.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2FC0D0E92EAD740C0077FB54 /* ANCHOR.xcdatamodeld */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXContainerItemProxy section */
 		2F672E642E47048D00B58187 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -33,7 +27,6 @@
 		2F672E512E47048C00B58187 /* ANCHOR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ANCHOR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F672E632E47048D00B58187 /* ANCHORTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ANCHORTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F672E6D2E47048D00B58187 /* ANCHORUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ANCHORUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		2FC0D0EA2EAD740C0077FB54 /* ANCHOR.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ANCHOR.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -44,6 +37,20 @@
 			);
 			target = 2F672E502E47048C00B58187 /* ANCHOR */;
 		};
+		2FC0D1712EADDED90077FB54 /* Exceptions for "ANCHOR" folder in "ANCHORTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ANCHOR.xcdatamodeld,
+			);
+			target = 2F672E622E47048D00B58187 /* ANCHORTests */;
+		};
+		2FC0D1722EADDED90077FB54 /* Exceptions for "ANCHOR" folder in "ANCHORUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ANCHOR.xcdatamodeld,
+			);
+			target = 2F672E6C2E47048D00B58187 /* ANCHORUITests */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -51,6 +58,8 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				2FC0CDB72EA731990077FB54 /* Exceptions for "ANCHOR" folder in "ANCHOR" target */,
+				2FC0D1712EADDED90077FB54 /* Exceptions for "ANCHOR" folder in "ANCHORTests" target */,
+				2FC0D1722EADDED90077FB54 /* Exceptions for "ANCHOR" folder in "ANCHORUITests" target */,
 			);
 			path = ANCHOR;
 			sourceTree = "<group>";
@@ -95,8 +104,6 @@
 		2F672E482E47048C00B58187 = {
 			isa = PBXGroup;
 			children = (
-				2FC0D10E2EAD77E80077FB54 /* CodeData */,
-				2FC0D0E92EAD740C0077FB54 /* ANCHOR.xcdatamodeld */,
 				2F672E532E47048C00B58187 /* ANCHOR */,
 				2F672E662E47048D00B58187 /* ANCHORTests */,
 				2F672E702E47048D00B58187 /* ANCHORUITests */,
@@ -112,13 +119,6 @@
 				2F672E6D2E47048D00B58187 /* ANCHORUITests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		2FC0D10E2EAD77E80077FB54 /* CodeData */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = CodeData;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -265,7 +265,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2FC0D0EB2EAD740C0077FB54 /* ANCHOR.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,7 +272,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2FC0D0EC2EAD740C0077FB54 /* ANCHOR.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -281,7 +279,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2FC0D0ED2EAD740C0077FB54 /* ANCHOR.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -598,19 +595,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		2FC0D0E92EAD740C0077FB54 /* ANCHOR.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				2FC0D0EA2EAD740C0077FB54 /* ANCHOR.xcdatamodel */,
-			);
-			currentVersion = 2FC0D0EA2EAD740C0077FB54 /* ANCHOR.xcdatamodel */;
-			path = ANCHOR.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 2F672E492E47048C00B58187 /* Project object */;
 }
