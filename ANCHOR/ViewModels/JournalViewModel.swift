@@ -60,6 +60,47 @@ final class JournalViewModel: ObservableObject {
         }
     }
     
+    /// Refresh all entries, resetting pagination
+    func refreshEntries() async {
+        currentPage = 0
+        hasMorePages = true
+        entries = []
+        loadMore()
+    }
+    
+    /// Fetch journal entries with pagination
+    /// - Parameters:
+    ///   - page: Page number (0-based)
+    ///   - pageSize: Number of items per page
+    /// - Returns: Array of JournalEntry
+    func fetchEntries(page: Int = 0, pageSize: Int = 20) async throws -> [JournalEntry] {
+        try await performOnContext { [weak self] context in
+            guard let self = self else { return [] }
+            let request = JournalEntryEntity.fetchRequest()
+            let offset = page * pageSize
+            request.fetchLimit = pageSize
+            request.fetchOffset = offset
+            request.sortDescriptors = [NSSortDescriptor(keyPath: \JournalEntryEntity.createdAt, ascending: false)]
+            
+            // Add search and filter predicates if needed
+            var predicates: [NSPredicate] = []
+            if !self.searchText.isEmpty {
+                predicates.append(NSPredicate(format: "body CONTAINS[cd] %@", self.searchText))
+            }
+            
+            if !self.selectedTags.isEmpty {
+                predicates.append(NSPredicate(format: "ANY tags.name IN %@", Array(self.selectedTags)))
+            }
+            
+            if !predicates.isEmpty {
+                request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+            }
+            
+            let entries = try context.fetch(request)
+            return entries.compactMap { $0.toModel() }
+        }
+    }
+    
     /// Create a new journal entry
     func createEntry(title: String?, body: String, tags: Set<String> = []) async throws {
         var entry = try JournalEntry(
@@ -186,36 +227,6 @@ final class JournalViewModel: ObservableObject {
     private func performOnContext<T>(_ block: @escaping (NSManagedObjectContext) throws -> T) async throws -> T {
         try await context.perform {
             try block(self.context)
-        }
-    }
-    
-    private func fetchEntries(page: Int, pageSize: Int) async throws -> [JournalEntry] {
-        try await performOnContext { [weak self] context in
-            guard let self = self else { return [] }
-            let request = JournalEntryEntity.fetchRequest()
-            let offset = page * pageSize
-            request.fetchLimit = pageSize
-            request.fetchOffset = offset
-            request.sortDescriptors = [NSSortDescriptor(keyPath: \JournalEntryEntity.createdAt, ascending: false)]
-            
-            // Add search and filter predicates if needed
-            var predicates: [NSPredicate] = []
-            
-            if !self.searchText.isEmpty {
-                predicates.append(NSPredicate(format: "(title CONTAINS[cd] %@) OR (body CONTAINS[cd] %@)", 
-                                           self.searchText, self.searchText))
-            }
-            
-            if !self.selectedTags.isEmpty {
-                predicates.append(NSPredicate(format: "ANY tags.name IN %@", Array(self.selectedTags)))
-            }
-            
-            if !predicates.isEmpty {
-                request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
-            }
-            
-            let entries = try context.fetch(request)
-            return entries.compactMap { $0.toModel() }
         }
     }
     
