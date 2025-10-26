@@ -25,6 +25,7 @@ public struct ANCHORDesign {
         public static let accent = Color.anchorAccent
         public static let accentLight = Color.anchorAccent.opacity(0.7)
         public static let secondary = Color.blue
+        public static let tertiary = Color.purple
         
         // Background Colors
         public static let background = Color(UIColor.systemBackground)
@@ -38,20 +39,75 @@ public struct ANCHORDesign {
         public static let textSecondary = Color(UIColor.secondaryLabel)
         public static let textTertiary = Color(UIColor.tertiaryLabel)
         
-        // Semantic Colors
-        public static let success = Color.green
-        public static let warning = Color.orange
-        public static let error = Color.red
-        public static let info = Color.blue
+        // UI Element Colors
+        public static let border = Color.gray.opacity(0.2)
+        public static let shadow = Color.black.opacity(0.1)
         
-        // Mood Colors
-        public static let moodVeryHappy = Color.yellow
-        public static let moodHappy = Color.yellow.opacity(0.8)
-        public static let moodCalm = Color.blue
-        public static let moodSad = Color.indigo
-        public static let moodAnxious = Color.orange
-        public static let moodAngry = Color.red
-        public static let moodNeutral = Color.gray
+        // Semantic Colors
+        public static let success = Color(hex: "2ECC71")  // Vibrant green
+        public static let warning = Color(hex: "F39C12")  // Warm orange
+        public static let error = Color(hex: "E74C3C")    // Bright red
+        public static let info = Color(hex: "3498DB")     // Friendly blue
+        
+        // Mood Colors - Gradient from sad to happy
+        public static let moodVerySad = Color(hex: "8E44AD")  // Deep purple
+        public static let moodSad = Color(hex: "3498DB")      // Blue
+        public static let moodNeutral = Color(hex: "2ECC71")  // Green
+        public static let moodHappy = Color(hex: "F1C40F")    // Yellow
+        public static let moodVeryHappy = Color(hex: "E67E22") // Orange
+        public static let moodAnxious = Color(hex: "E74C3C")  // Red
+        public static let moodAngry = Color(hex: "C0392B")    // Dark red
+        
+        // Additional UI Colors
+        public static let highlight = Color(hex: "E3F2FD")    // Light blue for selection
+        public static let shimmer = Color.white.opacity(0.6)   // For shimmer effects
+        public static let overlay = Color.black.opacity(0.4)  // For overlays
+        
+        // Social Media Colors (if needed)
+        public static let facebook = Color(hex: "3B5998")
+        public static let twitter = Color(hex: "1DA1F2")
+        public static let instagram = Color(hex: "E1306C")
+        
+        // Gradients
+        public static var primaryGradient: LinearGradient {
+            LinearGradient(
+                gradient: Gradient(colors: [primary, primaryLight]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        }
+        
+        public static var moodGradient: LinearGradient {
+            LinearGradient(
+                gradient: Gradient(colors: [moodVerySad, moodSad, moodNeutral, moodHappy, moodVeryHappy]),
+                startPoint: .leading,
+                endPoint: .trailing
+            )
+        }
+        
+        public static var successGradient: LinearGradient {
+            LinearGradient(
+                gradient: Gradient(colors: [Color(hex: "2ECC71"), Color(hex: "27AE60")]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        }
+        
+        public static var errorGradient: LinearGradient {
+            LinearGradient(
+                gradient: Gradient(colors: [Color(hex: "E74C3C"), Color(hex: "C0392B")]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        }
+        
+        public static var accentGradient: LinearGradient {
+            LinearGradient(
+                gradient: Gradient(colors: [accent, accentLight]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        }
     }
     
     // MARK: - Typography
