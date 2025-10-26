@@ -245,25 +245,16 @@ struct TabBarButton: View {
     let isSelected: Bool
     let action: () -> Void
     
-    @State private var isAnimating = false
-    
     var body: some View {
-        Button(action: {
-            action()
-            isAnimating = true
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                isAnimating = false
-            }
-        }) {
+        Button(action: action) {
             VStack(spacing: 4) {
                 Image(systemName: icon)
-                    .font(.system(size: 22, weight: isSelected ? .bold : .regular))
-                    .scaleEffect(isAnimating ? 0.8 : 1.0)
+                    .font(.system(size: 20, weight: isSelected ? .semibold : .regular))
                     .foregroundColor(isSelected ? ANCHORDesign.Colors.primary : ANCHORDesign.Colors.textSecondary)
                 
                 Text(label)
                     .font(.caption2)
-                    .fontWeight(isSelected ? .semibold : .regular)
+                    .fontWeight(isSelected ? .medium : .regular)
                     .foregroundColor(isSelected ? ANCHORDesign.Colors.primary : ANCHORDesign.Colors.textSecondary)
             }
             .frame(maxWidth: .infinity)
