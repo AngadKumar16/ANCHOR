@@ -29,7 +29,9 @@ final class JournalViewModel: ObservableObject {
     init(context: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
         self.context = context
         setupBindings()
-        loadMore()
+        Task {
+            await loadEntries()
+        }
     }
     
     // MARK: - Public Methods
@@ -40,32 +42,28 @@ final class JournalViewModel: ObservableObject {
     }
     
     /// Load more entries with pagination
-    func loadMore() {
+    func loadMore() async {
         guard hasMorePages else { return }
         
-        Task {
-            do {
-                let newEntries = try await fetchEntries(page: currentPage, pageSize: pageSize)
-                if newEntries.count < pageSize {
-                    hasMorePages = false
-                }
-                if !newEntries.isEmpty {
-                    entries.append(contentsOf: newEntries)
-                    currentPage += 1
-                }
-            } catch {
-                self.error = error
-                Logger.log("Failed to load journal entries: \(error)")
+        do {
+            let newEntries = try await fetchEntries(page: currentPage, pageSize: pageSize)
+            if newEntries.count < pageSize {
+                hasMorePages = false
             }
+            entries.append(contentsOf: newEntries)
+            currentPage += 1
+        } catch {
+            print("❌ Error loading more entries: \(error)")
+            self.error = error
         }
     }
     
     /// Refresh all entries, resetting pagination
-    func refreshEntries() async {
+    func refresh() async {
         currentPage = 0
         hasMorePages = true
         entries = []
-        loadMore()
+        await loadEntries()
     }
     
     /// Fetch journal entries with pagination
@@ -186,6 +184,39 @@ final class JournalViewModel: ObservableObject {
         }
     }
     
+    // MARK: - Data Loading
+    @MainActor
+    func loadEntries() async {
+        do {
+            let request: NSFetchRequest<JournalEntryEntity> = JournalEntryEntity.fetchRequest()
+            request.sortDescriptors = [NSSortDescriptor(keyPath: \JournalEntryEntity.createdAt, ascending: false)]
+            
+            print("🔄 Loading journal entries...")
+            let entities = try context.fetch(request)
+            print("✅ Found \(entities.count) journal entries")
+            
+            let entries = entities.compactMap { entity -> JournalEntry? in
+                do {
+                    if let model = try entity.toModel() {
+                        return model
+                    } else {
+                        print("⚠️ Failed to convert entity to model: \(entity)")
+                        return nil
+                    }
+                } catch {
+                    print("❌ Error converting entity to model: \(error)")
+                    return nil
+                }
+            }
+            
+            self.entries = entries
+            print("📊 Loaded \(self.entries.count) valid journal entries")
+        } catch {
+            print("❌ Failed to fetch journal entries: \(error)")
+            self.error = error
+        }
+    }
+    
     // MARK: - Undo/Redo Support
     
     func undo() {
@@ -202,38 +233,41 @@ final class JournalViewModel: ObservableObject {
     
     private func setupBindings() {
         $searchText
-            .dropFirst()
+            .combineLatest($selectedTags)
             .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
             .sink { [weak self] _ in
-                self?.refresh()
+                guard let self = self else { return }
+                Task { @MainActor in
+                    await self.refresh()
+                }
             }
             .store(in: &cancellables)
-            
-        $selectedTags
-            .dropFirst()
-            .sink { [weak self] _ in
-                self?.refresh()
-            }
-            .store(in: &cancellables)
-    }
-    
-    private func refresh() {
-        currentPage = 0
-        hasMorePages = true
-        entries = []
-        loadMore()
-    }
-    
-    private func performOnContext<T>(_ block: @escaping (NSManagedObjectContext) throws -> T) async throws -> T {
-        try await context.perform {
-            try block(self.context)
-        }
     }
     
     private func saveContext() async throws {
-        try await performOnContext { context in
-            if context.hasChanges {
-                try context.save()
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            context.perform {
+                do {
+                    if self.context.hasChanges {
+                        try self.context.save()
+                    }
+                    continuation.resume()
+                } catch {
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+    
+    private func performOnContext<T>(_ block: @escaping (NSManagedObjectContext) throws -> T) async throws -> T {
+        try await withCheckedThrowingContinuation { continuation in
+            context.perform {
+                do {
+                    let result = try block(self.context)
+                    continuation.resume(returning: result)
+                } catch {
+                    continuation.resume(throwing: error)
+                }
             }
         }
     }

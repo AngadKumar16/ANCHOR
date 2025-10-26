@@ -144,8 +144,9 @@ class DailyQuoteService: ObservableObject {
 
     
     private init() {
-        // Initialize with today's quote
-        self.currentQuote = getQuoteForToday()
+        let dayOfYear = Calendar.current.ordinality(of: .day, in: .year, for: Date()) ?? 0
+        let quoteIndex = dayOfYear % quotes.count
+        self.currentQuote = quotes[quoteIndex]
     }
     
     private func getQuoteForToday() -> DailyQuote {

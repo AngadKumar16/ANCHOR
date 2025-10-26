@@ -24,6 +24,8 @@ public struct ANCHORDesign {
         public static let primaryLight = Color.anchorPrimary.opacity(0.7)
         public static let accent = Color.anchorAccent
         public static let accentLight = Color.anchorAccent.opacity(0.7)
+        public static let accentPrimary = Color(hex: "4A90E2")  // Soft blue
+        public static let accentSecondary = Color(hex: "50E3C2") // Teal
         public static let secondary = Color.blue
         public static let tertiary = Color.purple
         

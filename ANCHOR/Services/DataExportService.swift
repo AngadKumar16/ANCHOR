@@ -16,10 +16,10 @@ final class DataExportService {
             
             let models = results.map { entity -> JournalEntryModel in
                 return JournalEntryModel(
-                    id: entity.id,
-                    date: entity.createdAt,
+                    id: entity.id ?? UUID(),
+                    date: entity.createdAt ?? Date(),
                     title: entity.title,
-                    body: entity.body,
+                    body: entity.body ?? "",
                     sentiment: entity.sentiment,
                     tags: entity.tagsArray
                 )
