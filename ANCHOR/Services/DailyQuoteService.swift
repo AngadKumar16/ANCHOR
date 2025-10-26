@@ -145,15 +145,16 @@ class DailyQuoteService: ObservableObject {
     
     private init() {
         // Initialize with today's quote
-        self.currentQuote = DailyQuoteService.getQuoteForToday()
+        self.currentQuote = getQuoteForToday()
     }
     
-    private static func getQuoteForToday() -> DailyQuote {
+    private func getQuoteForToday() -> DailyQuote {
         // Use the day of the year to get a consistent quote for each day
         let dayOfYear = Calendar.current.ordinality(of: .day, in: .year, for: Date()) ?? 0
-        let quoteIndex = dayOfYear % DailyQuoteService.shared.quotes.count
-        return DailyQuoteService.shared.quotes[quoteIndex]
+        let quoteIndex = dayOfYear % self.quotes.count
+        return self.quotes[quoteIndex]
     }
+
     
     func refreshQuote() {
         // Get a random quote that's different from the current one

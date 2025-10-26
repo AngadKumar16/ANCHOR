@@ -9,12 +9,12 @@ import ANCHOR
 import SwiftUI
 
 struct DashboardView: View {
-    @StateObject private var viewModel = DashboardViewModel()
+    @StateObject private var viewModel = DashboardViewModel(title: "Dashboard")
     @State private var showingJournalEntry = false
     @State private var showingCheckIn = false
     @State private var showingBreathingExercise = false
     @State private var showingRiskAssessment = false
-    @State private var checkInStatus: Models.CheckInStatus = .notStarted
+    @State private var checkInStatus: CheckInStatus = .notStarted
     
     @StateObject private var quoteService = DailyQuoteService.shared
     

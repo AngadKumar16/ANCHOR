@@ -58,5 +58,5 @@ func __registerFeaturesForLinking() {
     
     // Other feature views
     _ = BreathingExerciseView()
-    _ = CheckInView()
+    _ = CheckInView(checkInStatus: .constant(.notStarted))
 }

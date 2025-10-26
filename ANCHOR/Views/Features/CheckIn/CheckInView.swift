@@ -6,11 +6,10 @@
 //
 
 import SwiftUI
-import Utils
 
 struct CheckInView: View {
     @Environment(\.dismiss) private var dismiss
-    @Binding var checkInStatus: Utils.CheckInStatus
+    @Binding var checkInStatus: CheckInStatus
     @State private var moodRating: Double = 5
     @State private var notes: String = ""
     @State private var selectedTags: Set<String> = []
