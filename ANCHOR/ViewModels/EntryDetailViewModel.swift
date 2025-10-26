@@ -8,8 +8,10 @@ final class EntryDetailViewModel: ObservableObject {
     @Published private(set) var shouldDismiss = false
     @Published var error: Error?
     
+    // MARK: - Properties
+    let journalViewModel: JournalViewModel
+    
     // MARK: - Private Properties
-    private let journalViewModel: JournalViewModel
     private var originalEntry: JournalEntry
     
     // MARK: - Initialization

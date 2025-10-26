@@ -34,6 +34,11 @@ final class JournalViewModel: ObservableObject {
     
     // MARK: - Public Methods
     
+    /// Check if there are more entries to load
+    func canLoadMore() -> Bool {
+        return hasMorePages
+    }
+    
     /// Load more entries with pagination
     func loadMore() {
         guard hasMorePages else { return }

@@ -61,9 +61,14 @@ struct EntryListView: View {
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: { showNewEntry = true }) {
-                        Image(systemName: "plus.circle.fill")
-                            .imageScale(.large)
+                        HStack {
+                            Image(systemName: "plus.circle")
+                            Text("New Entry")
+                        }
+                        .padding(8)
                     }
+                    .buttonStyle(.borderedProminent)
+                    .padding(.top)
                 }
             }
             .sheet(isPresented: $showNewEntry) {
@@ -91,8 +96,11 @@ struct EntryListView: View {
                 .foregroundColor(.secondary)
             
             Button(action: { showNewEntry = true }) {
-                Label("New Entry", systemName: "plus.circle")
-                    .padding(8)
+                HStack {
+                    Image(systemName: "plus.circle")
+                    Text("New Entry")
+                }
+                .padding(8)
             }
             .buttonStyle(.borderedProminent)
             .padding(.top)
@@ -160,11 +168,13 @@ struct EntryListView: View {
                 }
             }
             
-            if viewModel.hasMorePages {
+            if viewModel.canLoadMore() {
                 ProgressView()
                     .frame(maxWidth: .infinity, alignment: .center)
                     .onAppear {
-                        Task { await viewModel.loadMore() }
+                        if viewModel.canLoadMore() {
+                            viewModel.loadMore()
+                        }
                     }
             }
         }

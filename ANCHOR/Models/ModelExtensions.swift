@@ -72,6 +72,24 @@ public struct JournalEntryModel: Identifiable, Codable {
     public var body: String
     public var sentiment: Double
     public var tags: [String]
+    
+    public init(id: UUID = UUID(), date: Date = Date(), title: String?, body: String, sentiment: Double = 0, tags: [String] = []) {
+        self.id = id
+        self.date = date
+        self.title = title
+        self.body = body
+        self.sentiment = sentiment
+        self.tags = tags
+    }
+    
+    public init(from entry: JournalEntry) {
+        self.id = entry.id
+        self.date = entry.createdAt
+        self.title = entry.title
+        self.body = entry.body
+        self.sentiment = entry.sentiment ?? 0
+        self.tags = Array(entry.tags)
+    }
 }
 
 // MARK: - JournalEntryEntity Extensions

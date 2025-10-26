@@ -33,6 +33,19 @@ class RiskAssessmentViewModel: ObservableObject {
         }
     }
     
+    func fetchRecent(limit: Int = 5) -> [RiskAssessmentEntity] {
+        let request: NSFetchRequest<RiskAssessmentEntity> = RiskAssessmentEntity.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \RiskAssessmentEntity.date, ascending: false)]
+        request.fetchLimit = limit
+        
+        do {
+            return try viewContext.fetch(request)
+        } catch {
+            print("Error fetching recent assessments: \(error)")
+            return []
+        }
+    }
+    
     func saveAssessment(score: Double, reason: String?) {
         let assessment = RiskAssessmentEntity.create(
             in: viewContext,

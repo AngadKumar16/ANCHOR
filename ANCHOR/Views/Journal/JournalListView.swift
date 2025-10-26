@@ -7,7 +7,7 @@ struct JournalListView: View {
     @State private var searchText = ""
     @State private var selectedMoodFilter: MoodFilter = .all
     @State private var showingDeleteAlert = false
-    @State private var entryToDelete: JournalEntry?
+    @State private var entryToDelete: JournalEntryModel?
     
     enum MoodFilter: String, CaseIterable {
         case all = "All"
@@ -280,12 +280,13 @@ struct JournalListView: View {
                         
                         // Entries for this month
                         ForEach(entries) { entry in
-                            NavigationLink(destination: JournalEntryView(entry: entry)) {
-                                JournalEntryCard(entry: entry)
+                            let entryModel = JournalEntryModel(from: entry)
+                            NavigationLink(destination: JournalEntryView(entry: entryModel)) {
+                                JournalEntryCard(entry: entryModel)
                             }
                             .buttonStyle(PlainButtonStyle())
                             .contextMenu {
-                                contextMenuForEntry(entry)
+                                contextMenuForEntry(entryModel)
                             }
                         }
                     }
@@ -338,12 +339,14 @@ struct JournalListView: View {
     
     // MARK: - Context Menu
     
-    private func contextMenuForEntry(_ entry: JournalEntry) -> some View {
+    private func contextMenuForEntry(_ entry: JournalEntryModel) -> some View {
         Group {
             Button(action: {
-                shareEntry(entry)
+                // Handle edit
+                showingNewEntry = true
+                // You might want to pass the entry to an edit view here
             }) {
-                Label("Share", systemImage: "square.and.arrow.up")
+                Label("Edit", systemImage: "pencil")
             }
             
             Button(role: .destructive, action: {
@@ -400,24 +403,17 @@ struct JournalListView: View {
         return streak + 1
     }
     
-    private func deleteEntry(_ entry: JournalEntry) {
-        if let index = journalVM.entries.firstIndex(where: { $0.id == entry.id }) {
-            Task {
-                await journalVM.delete(entries: [journalVM.entries[index]])
+    private func deleteEntry(_ entry: JournalEntryModel) {
+        Task {
+            do {
+                // Convert JournalEntryModel back to JournalEntry if needed
+                if let journalEntry = journalVM.entries.first(where: { $0.id == entry.id }) {
+                    try await journalVM.delete(entries: [journalEntry])
+                }
+            } catch {
+                // Handle error appropriately in your UI
+                print("Error deleting entry: \(error.localizedDescription)")
             }
-        }
-    }
-    
-    private func shareEntry(_ entry: JournalEntry) {
-        let title = entry.title ?? "Journal Entry"
-        let date = DateFormatter.localizedString(from: entry.createdAt, dateStyle: .medium, timeStyle: .none)
-        let content = "\(title)\n\(date)\n\n\(entry.body)"
-        
-        let activityVC = UIActivityViewController(activityItems: [content], applicationActivities: nil)
-        
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let window = windowScene.windows.first {
-            window.rootViewController?.present(activityVC, animated: true)
         }
     }
 }

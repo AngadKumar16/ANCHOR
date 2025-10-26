@@ -42,7 +42,7 @@ struct EntryDetailView: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
                             ForEach(Array(viewModel.entry.tags.sorted()), id: \.self) { tag in
-                                TagView(name: tag, isSelected: true)
+                                TagView(text: tag, style: .standard, size: .medium)
                             }
                         }
                     }
@@ -58,16 +58,13 @@ struct EntryDetailView: View {
                 // Metadata
                 VStack(alignment: .leading, spacing: 8) {
                     if viewModel.entry.createdAt != viewModel.entry.updatedAt {
-                        DetailRow(icon: "arrow.clockwise", 
-                                 text: "Updated \(viewModel.entry.updatedAt.formatted(date: .abbreviated, time: .shortened))")
+                        DetailRow(title: "Updated", value: viewModel.entry.updatedAt.formatted(date: .abbreviated, time: .shortened))
                     }
                     
-                    DetailRow(icon: "number", 
-                             text: "Version \(viewModel.entry.version)")
+                    DetailRow(title: "Version", value: "\(viewModel.entry.version)")
                     
                     if let sentiment = viewModel.entry.sentiment {
-                        DetailRow(icon: "face.smiling", 
-                                 text: String(format: "Sentiment: %.1f%%", sentiment * 100))
+                        DetailRow(title: "Sentiment", value: String(format: "%.1f%%", sentiment * 100))
                     }
                 }
                 .padding(.top)
@@ -130,18 +127,17 @@ struct EntryDetailView: View {
 // MARK: - Supporting Views
 
 private struct DetailRow: View {
-    let icon: String
-    let text: String
+    let title: String
+    let value: String
     
     var body: some View {
-        HStack(spacing: 8) {
-            Image(systemName: icon)
-                .foregroundColor(.secondary)
-                .frame(width: 20)
-            Text(text)
+        HStack {
+            Text(title)
                 .font(.subheadline)
                 .foregroundColor(.secondary)
             Spacer()
+            Text(value)
+                .font(.subheadline)
         }
     }
 }

@@ -18,6 +18,11 @@ struct RiskAssessmentHistoryView: View {
     @State private var showingDeleteAlert = false
     @State private var assessmentToDelete: RiskAssessmentEntity?
     
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \RiskAssessmentEntity.date, ascending: false)],
+        animation: .default)
+    private var assessments: FetchedResults<RiskAssessmentEntity>
+    
     private enum TimeFrame: String, CaseIterable, Identifiable {
         case week = "This Week"
         case month = "This Month"
@@ -44,15 +49,6 @@ struct RiskAssessmentHistoryView: View {
                 return nil
             }
         }
-    }
-    
-    private var fetchRequest: FetchRequest<RiskAssessmentEntity>
-    private var assessments: FetchedResults<RiskAssessmentEntity> { fetchRequest.wrappedValue }
-    
-    init() {
-        let request: NSFetchRequest<RiskAssessmentEntity> = RiskAssessmentEntity.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \RiskAssessmentEntity.date, ascending: false)]
-        _fetchRequest = FetchRequest(fetchRequest: request)
     }
     
     var body: some View {
@@ -85,7 +81,10 @@ struct RiskAssessmentHistoryView: View {
             Text("Are you sure you want to delete this assessment? This action cannot be undone.")
         }
         .onChange(of: selectedTimeFrame) { _ in
-            updateFetchRequest()
+            updatePredicate()
+        }
+        .onChange(of: searchText) { _ in
+            updatePredicate()
         }
     }
     
@@ -101,9 +100,6 @@ struct RiskAssessmentHistoryView: View {
                 TextField("Search assessments...", text: $searchText)
                     .textFieldStyle(PlainTextFieldStyle())
                     .disableAutocorrection(true)
-                    .onChange(of: searchText) { _ in
-                        updateFetchRequest()
-                    }
                 
                 if !searchText.isEmpty {
                     Button(action: { searchText = "" }) {
@@ -183,26 +179,31 @@ struct RiskAssessmentHistoryView: View {
         List {
             ForEach(groupedAssessments, id: \.0) { date, assessments in
                 Section(header: Text(date).font(.headline)) {
-                    ForEach(assessments) { assessment in
-                        AssessmentRow(assessment: assessment)
-                            .contentShape(Rectangle())
-                            .onTapGesture {
-                                // Handle tap to view details
-                            }
-                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                Button(role: .destructive) {
-                                    assessmentToDelete = assessment
-                                    showingDeleteAlert = true
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
-                                }
-                            }
-                    }
+                    assessmentRows(for: assessments)
                 }
             }
         }
         .listStyle(InsetGroupedListStyle())
         .background(Color(.systemGroupedBackground))
+    }
+    
+    @ViewBuilder
+    private func assessmentRows(for assessments: [RiskAssessmentEntity]) -> some View {
+        ForEach(assessments) { assessment in
+            AssessmentRow(assessment: assessment)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    // Handle tap to view details
+                }
+                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                    Button(role: .destructive) {
+                        assessmentToDelete = assessment
+                        showingDeleteAlert = true
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                    }
+                }
+        }
     }
     
     private var groupedAssessments: [(String, [RiskAssessmentEntity])] {
@@ -248,12 +249,12 @@ struct RiskAssessmentHistoryView: View {
     
     // MARK: - Helper Methods
     
-    private func updateFetchRequest() {
-        var predicates = [NSPredicate]()
+    private func updatePredicate() {
+        var predicates: [NSPredicate] = []
         
         // Add time frame predicate
-        if let timePredicate = selectedTimeFrame.predicate {
-            predicates.append(timePredicate)
+        if let timeFramePredicate = selectedTimeFrame.predicate {
+            predicates.append(timeFramePredicate)
         }
         
         // Add search text predicate
@@ -263,7 +264,7 @@ struct RiskAssessmentHistoryView: View {
         }
         
         let compoundPredicate = predicates.isEmpty ? nil : NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
-        fetchRequest.nsPredicate = compoundPredicate
+        assessments.nsPredicate = compoundPredicate
     }
     
     private func deleteAssessment(_ assessment: RiskAssessmentEntity) {
@@ -377,27 +378,21 @@ struct RiskAssessmentHistoryView_Previews: PreviewProvider {
         let assessment1 = RiskAssessmentEntity(context: context)
         assessment1.id = UUID()
         assessment1.date = Date()
-        assessment1.score = 25
-        assessment1.reason = "Feeling good, no strong triggers"
+        assessment1.score = 75.0
+        assessment1.reason = "Feeling very stressed with work"
         
         let assessment2 = RiskAssessmentEntity(context: context)
         assessment2.id = UUID()
         assessment2.date = Calendar.current.date(byAdding: .day, value: -1, to: Date())!
-        assessment2.score = 65
-        assessment2.reason = "Work stress, trouble sleeping"
-        
-        let assessment3 = RiskAssessmentEntity(context: context)
-        assessment3.id = UUID()
-        assessment3.date = Calendar.current.date(byAdding: .day, value: -2, to: Date())!
-        assessment3.score = 80
-        assessment3.reason = "High stress, strong cravings"
+        assessment2.score = 45.0
+        assessment2.reason = "Had a better day today"
         
         try? context.save()
         
         return NavigationView {
             RiskAssessmentHistoryView()
-                .environmentObject(RiskAssessmentViewModel())
                 .environment(\.managedObjectContext, context)
+                .environmentObject(RiskAssessmentViewModel(viewContext: context))
         }
     }
 }

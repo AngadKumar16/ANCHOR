@@ -23,6 +23,7 @@ struct JournalEntryView: View {
     @State private var showingDatePicker = false
     @State private var selectedPhotos: [PhotosPickerItem] = []
     @State private var attachedImages: [UIImage] = []
+    @State private var error: Error?
     
     let entry: JournalEntryModel?
     
@@ -385,57 +386,71 @@ struct JournalEntryView: View {
         Task {
             do {
                 if let existingEntry = entry {
-                    // Update existing entry
-                    try await journalVM.update(
-                        entryId: existingEntry.id,
-                        newTitle: title.isEmpty ? nil : title,
-                        newBody: entryText,
-                        newTags: Array(selectedTags)
-                    )
-                } else {
-                    // Create new entry
-                    try await journalVM.add(
+                    // Convert JournalEntryModel to JournalEntry
+                    let journalEntry = try JournalEntry(
+                        id: existingEntry.id,
+                        createdAt: existingEntry.date,
+                        updatedAt: Date(),
                         title: title.isEmpty ? nil : title,
                         body: entryText,
-                        tags: Array(selectedTags)
+                        bodyFormat: "plain",
+                        sentiment: existingEntry.sentiment,
+                        tags: selectedTags,
+                        isLocked: false,
+                        version: 1
+                    )
+                    try await journalVM.updateEntry(
+                        journalEntry,
+                        title: title.isEmpty ? nil : title,
+                        body: entryText,
+                        tags: selectedTags
+                    )
+                } else {
+                    // Create new entry with current date
+                    try await journalVM.createEntry(
+                        title: title.isEmpty ? nil : title,
+                        body: entryText,
+                        tags: selectedTags
                     )
                 }
                 
                 await MainActor.run {
-                    isAnalyzing = false
                     dismiss()
                 }
             } catch {
                 await MainActor.run {
-                    isAnalyzing = false
-                    // Could show an error alert here in the future
-                    Logger.log("Failed to save journal entry: \(error)")
+                    self.error = error
                 }
+            }
+            
+            await MainActor.run {
+                isAnalyzing = false
             }
         }
     }
     
     private func deleteEntry() {
-        guard let entry = entry,
-              let index = journalVM.entries.firstIndex(where: { $0.id == entry.id }) else { return }
+        guard let entry = entry else { return }
         
         Task {
-            await journalVM.delete(at: IndexSet([index]))
+            // Convert to JournalEntry
+            let journalEntry = try JournalEntry(
+                id: entry.id,
+                createdAt: entry.date,
+                updatedAt: Date(),
+                title: entry.title,
+                body: entry.body,
+                bodyFormat: "plain",
+                sentiment: entry.sentiment,
+                tags: Set(entry.tags),
+                isLocked: false,
+                version: 1
+            )
+            try? await journalVM.delete(entries: [journalEntry])
             await MainActor.run {
                 dismiss()
             }
         }
-    }
-    
-    private func createEntryForSharing() -> JournalEntryModel {
-        return JournalEntryModel(
-            id: entry?.id ?? UUID(),
-            date: entryDate,
-            title: title.isEmpty ? nil : title,
-            body: entryText,
-            sentiment: selectedMood.sentimentValue,
-            tags: Array(selectedTags)
-        )
     }
 }
 
@@ -560,7 +575,7 @@ private struct ShareSheet: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIActivityViewController {
         let title = entry.title ?? "Journal Entry"
         let date = DateFormatter.localizedString(from: entry.date, dateStyle: .full, timeStyle: .short)
-        let mood = moodDescription(for: entry.sentiment)
+        let mood = moodDescription(for: Int(entry.sentiment))
         let tags = entry.tags.isEmpty ? "" : "\n\nTags: " + entry.tags.joined(separator: ", ")
         
         let content = """
@@ -575,11 +590,27 @@ private struct ShareSheet: UIViewControllerRepresentable {
         """
         
         let activityVC = UIActivityViewController(activityItems: [content], applicationActivities: nil)
-        activityVC.excludedActivityTypes = [
-            .assignToContact,
-            .saveToCameraRoll,
-            .addToReadingList
-        ]
+        
+        // Safely handle activity types
+        var excludedTypes: [UIActivity.ActivityType] = []
+        
+        // Check for iOS 15+ specific types
+        if #available(iOS 15.0, *) {
+            excludedTypes.append(contentsOf: [
+                .addToReadingList,
+                .assignToContact,
+                .saveToCameraRoll
+            ])
+        } else {
+            // Fallback for earlier iOS versions
+            excludedTypes.append(contentsOf: [
+                .init("com.apple.UIKit.activity.AddToReadingList"),
+                .init("com.apple.UIKit.activity.AssignToContact"),
+                .init("com.apple.UIKit.activity.SaveToCameraRoll")
+            ].compactMap { $0 })
+        }
+        
+        activityVC.excludedActivityTypes = excludedTypes
         
         return activityVC
     }
