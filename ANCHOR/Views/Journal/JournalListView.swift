@@ -34,26 +34,26 @@ struct JournalListView: View {
         }
     }
     
-    var filteredEntries: [JournalEntryModel] {
+    var filteredEntries: [JournalEntry] {
         var entries = journalVM.entries
         
-        // Apply search filter
+        // Apply search text filter
         if !searchText.isEmpty {
-            entries = entries.filter { entry in
-                let titleMatch = entry.title?.localizedCaseInsensitiveContains(searchText) ?? false
-                let bodyMatch = entry.body.localizedCaseInsensitiveContains(searchText)
-                let tagsMatch = entry.tags.joined(separator: " ").localizedCaseInsensitiveContains(searchText)
-                return titleMatch || bodyMatch || tagsMatch
+            entries = entries.filter { 
+                ($0.title?.localizedCaseInsensitiveContains(searchText) ?? false) ||
+                $0.body.localizedCaseInsensitiveContains(searchText) ||
+                $0.tags.contains(where: { $0.localizedCaseInsensitiveContains(searchText) })
             }
         }
         
         // Apply mood filter
         if selectedMoodFilter != .all {
             entries = entries.filter { entry in
+                let sentiment = entry.sentiment ?? 0
                 switch selectedMoodFilter {
-                case .positive: return entry.sentiment > 0
-                case .neutral: return entry.sentiment == 0
-                case .negative: return entry.sentiment < 0
+                case .positive: return sentiment > 0
+                case .neutral: return sentiment == 0
+                case .negative: return sentiment < 0
                 case .all: return true
                 }
             }
@@ -62,29 +62,21 @@ struct JournalListView: View {
         return entries
     }
     
-    var groupedEntries: [(String, [JournalEntryModel])] {
+    var groupedEntries: [(String, [JournalEntry])] {
         let grouped = Dictionary(grouping: filteredEntries) { entry in
             let formatter = DateFormatter()
             formatter.dateFormat = "MMMM yyyy"
-            return formatter.string(from: entry.date)
+            return formatter.string(from: entry.createdAt)
         }
-        
-        return grouped.sorted { first, second in
-            let formatter = DateFormatter()
-            formatter.dateFormat = "MMMM yyyy"
-            let firstDate = formatter.date(from: first.key) ?? Date.distantPast
-            let secondDate = formatter.date(from: second.key) ?? Date.distantPast
-            return firstDate > secondDate
-        }.map { (key, value) in
-            (key, value.sorted { $0.date > $1.date })
-        }
+        return grouped.sorted { $0.key > $1.key }
     }
     
     var body: some View {
         NavigationStack {
             ZStack {
                 // Background
-                ANCHORGradientBackground()
+                ANCHORDesign.Colors.background
+                    .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
                     // Header with Search and Filters
@@ -100,6 +92,8 @@ struct JournalListView: View {
             }
             .navigationTitle("Journal")
             .navigationBarTitleDisplayMode(.large)
+            .toolbarBackground(ANCHORDesign.Colors.background, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     HStack(spacing: ANCHORDesign.Spacing.md) {
@@ -112,7 +106,9 @@ struct JournalListView: View {
                 }
             }
             .sheet(isPresented: $showingNewEntry) {
-                JournalEntryView()
+                NavigationView {
+                    JournalEntryView()
+                }
             }
             .alert("Delete Entry", isPresented: $showingDeleteAlert) {
                 Button("Cancel", role: .cancel) { }
@@ -143,9 +139,7 @@ struct JournalListView: View {
                 statsSection
             }
         }
-        .padding(.horizontal, ANCHORDesign.Spacing.md)
-        .padding(.top, ANCHORDesign.Spacing.sm)
-        .padding(.bottom, ANCHORDesign.Spacing.md)
+        .padding(ANCHORDesign.Spacing.md)
         .background(
             ANCHORDesign.Colors.backgroundCard
                 .shadow(
@@ -158,25 +152,21 @@ struct JournalListView: View {
     }
     
     private var searchBar: some View {
-        HStack(spacing: ANCHORDesign.Spacing.sm) {
+        HStack {
             Image(systemName: "magnifyingglass")
                 .foregroundColor(ANCHORDesign.Colors.textSecondary)
-                .font(.title3)
             
-            TextField("Search entries...", text: $searchText)
+            TextField("Search journal entries", text: $searchText)
                 .textFieldStyle(.plain)
-                .anchorTextStyle(.body)
             
             if !searchText.isEmpty {
-                Button("Clear") {
-                    searchText = ""
+                Button(action: { searchText = "" }) {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(ANCHORDesign.Colors.textSecondary)
                 }
-                .anchorTextStyle(.caption1)
-                .foregroundColor(ANCHORDesign.Colors.primary)
             }
         }
-        .padding(.horizontal, ANCHORDesign.Spacing.md)
-        .padding(.vertical, ANCHORDesign.Spacing.sm)
+        .padding(ANCHORDesign.Spacing.sm)
         .background(ANCHORDesign.Colors.backgroundSecondary)
         .cornerRadius(ANCHORDesign.CornerRadius.medium)
     }
@@ -185,45 +175,195 @@ struct JournalListView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: ANCHORDesign.Spacing.sm) {
                 ForEach(MoodFilter.allCases, id: \.self) { filter in
-                    MoodFilterPill(
-                        title: filter.rawValue,
-                        icon: filter.icon,
-                        color: filter.color,
-                        isSelected: selectedMoodFilter == filter
-                    ) {
-                        withAnimation(.easeInOut(duration: 0.2)) {
+                    Button(action: {
+                        withAnimation(.spring()) {
                             selectedMoodFilter = filter
                         }
+                    }) {
+                        HStack(spacing: ANCHORDesign.Spacing.xs) {
+                            Image(systemName: filter.icon)
+                            Text(filter.rawValue)
+                                .font(.caption)
+                        }
+                        .padding(.horizontal, ANCHORDesign.Spacing.md)
+                        .padding(.vertical, ANCHORDesign.Spacing.xs)
+                        .background(selectedMoodFilter == filter ? filter.color.opacity(0.2) : ANCHORDesign.Colors.backgroundSecondary)
+                        .foregroundColor(selectedMoodFilter == filter ? filter.color : ANCHORDesign.Colors.textPrimary)
+                        .cornerRadius(ANCHORDesign.CornerRadius.large)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: ANCHORDesign.CornerRadius.large)
+                                .stroke(selectedMoodFilter == filter ? filter.color : Color.clear, lineWidth: 1)
+                        )
                     }
+                    .buttonStyle(ScaleButtonStyle())
                 }
             }
-            .padding(.horizontal, ANCHORDesign.Spacing.md)
+            .padding(.vertical, ANCHORDesign.Spacing.xs)
         }
     }
     
     private var statsSection: some View {
         HStack(spacing: ANCHORDesign.Spacing.lg) {
-            StatCard(
-                title: "Total Entries",
+            StatView(
                 value: "\(journalVM.entries.count)",
+                label: "Entries",
                 icon: "book.fill",
                 color: ANCHORDesign.Colors.primary
             )
             
-            StatCard(
-                title: "This Month",
-                value: "\(entriesThisMonth)",
-                icon: "calendar",
-                color: ANCHORDesign.Colors.accent
-            )
+            Divider()
+                .frame(height: 40)
             
-            StatCard(
-                title: "Writing Streak",
-                value: "\(writingStreak) days",
+            StatView(
+                value: "\(writingStreak)",
+                label: "Day Streak",
                 icon: "flame.fill",
-                color: ANCHORDesign.Colors.warning
+                color: .orange
             )
         }
+        .padding(.vertical, ANCHORDesign.Spacing.sm)
+    }
+    
+    // MARK: - Journal Entries List Components
+    
+    private func monthSection(month: String, entries: [JournalEntry]) -> some View {
+        Section(header: 
+            HStack {
+                Text(month)
+                    .font(.headline)
+                    .foregroundColor(ANCHORDesign.Colors.primary) // Primary color for month headers
+                Spacer()
+            }
+            .padding(.vertical, 4)
+            .background(ANCHORDesign.Colors.backgroundPrimary)
+        ) {
+            ForEach(entries) { entry in
+                journalEntryRow(entry: entry)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(ANCHORDesign.Colors.backgroundCard)
+                            .shadow(color: ANCHORDesign.Colors.primary.opacity(0.05), radius: 3, x: 0, y: 2)
+                    )
+                    .padding(.vertical, 4)
+            }
+        }
+        .listRowInsets(EdgeInsets(
+            top: 4,
+            leading: 16,
+            bottom: 4,
+            trailing: 16
+        ))
+    }
+    
+    private func journalEntryRow(entry: JournalEntry) -> some View {
+        NavigationLink(destination: JournalDetailView(viewModel: journalVM, entry: entry)) {
+            VStack(alignment: .leading, spacing: 4) {
+                HStack {
+                    Text(entry.title ?? "Untitled Entry")
+                        .font(.headline)
+                        .foregroundColor(ANCHORDesign.Colors.textPrimary)
+                    
+                    Spacer()
+                    
+                    // Mood indicator dot
+                    Circle()
+                        .fill(moodColor(for: entry.sentiment ?? 0))
+                        .frame(width: 8, height: 8)
+                }
+                
+                Text(entry.body)
+                    .font(.subheadline)
+                    .foregroundColor(ANCHORDesign.Colors.textSecondary)
+                    .lineLimit(2)
+                
+                HStack {
+                    Text(entry.createdAt, style: .date)
+                        .font(.caption2)
+                        .foregroundColor(ANCHORDesign.Colors.primary.opacity(0.7)) // Subtle primary color for date
+                    
+                    if !entry.tags.isEmpty {
+                        Text(entry.tags.joined(separator: ", "))
+                            .font(.caption2)
+                            .foregroundColor(ANCHORDesign.Colors.accent) // Accent color for tags
+                            .lineLimit(1)
+                    }
+                }
+                .padding(.top, 2)
+            }
+            .padding(12)
+        }
+        .listRowBackground(Color.clear)
+    }
+    
+    private func moodColor(for sentiment: Double) -> Color {
+        switch sentiment {
+        case ..<(-0.3):
+            return ANCHORDesign.Colors.error.opacity(0.7)
+        case -0.3..<0.3:
+            return ANCHORDesign.Colors.warning.opacity(0.7)
+        default:
+            return ANCHORDesign.Colors.success.opacity(0.7)
+        }
+    }
+    
+    // MARK: - Journal Entries List
+    
+    private var journalEntriesList: some View {
+        List {
+            ForEach(groupedEntries, id: \.0) { month, entries in
+                monthSection(month: month, entries: entries)
+            }
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
+        }
+        .listStyle(.plain)
+        .background(ANCHORDesign.Colors.backgroundPrimary)
+        .scrollContentBackground(.hidden)
+        .safeAreaInset(edge: .bottom) {
+            // Very subtle bottom bar
+            Color.clear
+                .frame(height: 0.2)
+                .background(ANCHORDesign.Colors.primary.opacity(0.1))
+        }
+        .animation(.easeInOut(duration: 0.15), value: groupedEntries.count)
+    }
+    
+    // MARK: - Empty State View
+    
+    private var emptyStateView: some View {
+        VStack(spacing: ANCHORDesign.Spacing.lg) {
+            Image(systemName: "book.closed.fill")
+                .font(.system(size: 60))
+                .foregroundColor(ANCHORDesign.Colors.primary.opacity(0.2))
+            
+            VStack(spacing: ANCHORDesign.Spacing.xs) {
+                Text("No Entries Yet")
+                    .font(.title3)
+                    .fontWeight(.medium)
+                    .foregroundColor(ANCHORDesign.Colors.textPrimary)
+                
+                Text("Start journaling to track your thoughts and progress")
+                    .font(.subheadline)
+                    .foregroundColor(ANCHORDesign.Colors.textSecondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, ANCHORDesign.Spacing.xl)
+            }
+            
+            Button(action: { showingNewEntry = true }) {
+                Text("New Entry")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding(.horizontal, ANCHORDesign.Spacing.xl)
+                    .padding(.vertical, ANCHORDesign.Spacing.md)
+                    .background(ANCHORDesign.Colors.primary)
+                    .cornerRadius(ANCHORDesign.CornerRadius.medium)
+                    .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 3)
+            }
+            .buttonStyle(ScaleButtonStyle())
+            .padding(.top, ANCHORDesign.Spacing.sm)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(.bottom, 100)
     }
     
     // MARK: - Privacy Indicator
@@ -277,72 +417,108 @@ struct JournalListView: View {
         .animation(.easeInOut(duration: 0.1), value: false)
     }
     
-    // MARK: - Journal Entries List
+    // MARK: - StatView Component
     
-    private var journalEntriesList: some View {
-        ScrollView {
-            LazyVStack(spacing: ANCHORDesign.Spacing.md) {
-                ForEach(groupedEntries, id: \.0) { monthYear, entries in
-                    VStack(spacing: ANCHORDesign.Spacing.sm) {
-                        // Month Header
-                        MonthHeaderCard(monthYear: monthYear, entryCount: entries.count)
-                        
-                        // Entries for this month
-                        ForEach(entries) { entry in
-                            NavigationLink(destination: JournalEntryView(entry: entry)) {
-                                JournalEntryCard(entry: entry)
-                            }
-                            .buttonStyle(PlainButtonStyle())
-                            .contextMenu {
-                                contextMenuForEntry(entry)
-                            }
-                        }
-                    }
+    private struct StatView: View {
+        let value: String
+        let label: String
+        let icon: String
+        let color: Color
+        
+        var body: some View {
+            VStack(spacing: 4) {
+                HStack(alignment: .center, spacing: ANCHORDesign.Spacing.xs) {
+                    Image(systemName: icon)
+                        .font(.subheadline)
+                        .foregroundColor(color)
+                    
+                    Text(value)
+                        .font(.title3)
+                        .fontWeight(.bold)
+                        .foregroundColor(ANCHORDesign.Colors.textPrimary)
                 }
+                
+                Text(label)
+                    .font(.caption)
+                    .foregroundColor(ANCHORDesign.Colors.textSecondary)
             }
-            .padding(.horizontal, ANCHORDesign.Spacing.md)
-            .padding(.bottom, ANCHORDesign.Spacing.xxl)
+            .frame(maxWidth: .infinity)
         }
     }
     
-    // MARK: - Empty State
+    // MARK: - JournalEntryRow Component
     
-    private var emptyStateView: some View {
-        VStack(spacing: ANCHORDesign.Spacing.lg) {
-            Spacer()
-            
-            // Illustration
-            ZStack {
-                Circle()
-                    .fill(ANCHORDesign.Colors.primary.opacity(0.1))
-                    .frame(width: 120, height: 120)
-                
-                Image(systemName: journalVM.entries.isEmpty ? "book.closed" : "magnifyingglass")
-                    .font(.system(size: 50))
-                    .foregroundColor(ANCHORDesign.Colors.primary)
+    private struct JournalEntryRow: View {
+        let entry: JournalEntry
+        
+        private var moodColor: Color {
+            guard let sentiment = entry.sentiment else { 
+                return ANCHORDesign.Colors.textSecondary 
             }
-            
-            VStack(spacing: ANCHORDesign.Spacing.sm) {
-                Text(journalVM.entries.isEmpty ? "Start Your Journey" : "No Results Found")
-                    .anchorTextStyle(.title1)
-                
-                Text(journalVM.entries.isEmpty 
-                     ? "Write your first journal entry to begin tracking your thoughts and progress."
-                     : "Try adjusting your search or filter criteria to find what you're looking for.")
-                    .anchorTextStyle(.callout)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, ANCHORDesign.Spacing.lg)
+            if sentiment > 0.3 {
+                return ANCHORDesign.Colors.moodHappy
+            } else if sentiment < -0.3 {
+                return ANCHORDesign.Colors.moodSad
+            } else {
+                return ANCHORDesign.Colors.moodNeutral
             }
-            
-            if journalVM.entries.isEmpty {
-                ANCHORButton(title: "Write First Entry", style: .primary, size: .large) {
-                    showingNewEntry = true
-                }
-            }
-            
-            Spacer()
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        
+        private var formattedDate: String {
+            let formatter = DateFormatter()
+            formatter.dateStyle = .medium
+            formatter.timeStyle = .short
+            return formatter.string(from: entry.createdAt)
+        }
+        
+        private var titleView: some View {
+            Text(entry.title ?? "Untitled Entry")
+                .font(.headline)
+                .foregroundColor(ANCHORDesign.Colors.textPrimary)
+                .lineLimit(1)
+        }
+        
+        private var bodyPreview: some View {
+            Text(entry.body)
+                .font(.subheadline)
+                .foregroundColor(ANCHORDesign.Colors.textSecondary)
+                .lineLimit(2)
+        }
+        
+        private var dateView: some View {
+            Text(formattedDate)
+                .font(.caption2)
+                .foregroundColor(ANCHORDesign.Colors.textTertiary)
+        }
+        
+        private var moodIndicator: some View {
+            Circle()
+                .fill(moodColor)
+                .frame(width: 8, height: 8)
+                .shadow(color: moodColor.opacity(0.5), radius: 2, x: 0, y: 1)
+        }
+        
+        var body: some View {
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(alignment: .top) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        titleView
+                        bodyPreview
+                    }
+                    
+                    Spacer()
+                    
+                    VStack(alignment: .trailing, spacing: 4) {
+                        dateView
+                        moodIndicator
+                    }
+                }
+                .padding(ANCHORDesign.Spacing.sm)
+                .background(ANCHORDesign.Colors.backgroundCard)
+                .cornerRadius(ANCHORDesign.CornerRadius.medium)
+                .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: 1)
+            }
+        }
     }
     
     // MARK: - Context Menu
@@ -350,9 +526,11 @@ struct JournalListView: View {
     private func contextMenuForEntry(_ entry: JournalEntryModel) -> some View {
         Group {
             Button(action: {
-                shareEntry(entry)
+                // Handle edit
+                showingNewEntry = true
+                // You might want to pass the entry to an edit view here
             }) {
-                Label("Share", systemImage: "square.and.arrow.up")
+                Label("Edit", systemImage: "pencil")
             }
             
             Button(role: .destructive, action: {
@@ -368,7 +546,9 @@ struct JournalListView: View {
     
     private var entriesThisMonth: Int {
         let calendar = Calendar.current
-        return journalVM.entries.filter { calendar.isDate($0.date, equalTo: Date(), toGranularity: .month) }.count
+        return journalVM.entries.filter { 
+            calendar.isDate($0.createdAt, equalTo: Date(), toGranularity: .month) 
+        }.count
     }
     
     private var writingStreak: Int {
@@ -376,37 +556,48 @@ struct JournalListView: View {
         var streak = 0
         var currentDate = Date()
         
-        while true {
-            let hasEntry = journalVM.entries.contains { calendar.isDate($0.date, inSameDayAs: currentDate) }
-            if hasEntry {
+        // Get all unique dates when entries were created
+        let entryDates = Set(journalVM.entries.map { 
+            calendar.startOfDay(for: $0.createdAt) 
+        }).sorted(by: >)
+        
+        // If no entries, return 0
+        guard let mostRecentEntry = entryDates.first else { return 0 }
+        
+        // If most recent entry is not today, no streak
+        if !calendar.isDateInToday(mostRecentEntry) {
+            return 0
+        }
+        
+        // Count consecutive days with entries
+        currentDate = calendar.startOfDay(for: mostRecentEntry)
+        var previousDate = currentDate
+        
+        for date in entryDates.dropFirst() {
+            let dayDifference = calendar.dateComponents([.day], from: date, to: previousDate).day ?? 0
+            if dayDifference == 1 {
                 streak += 1
-                currentDate = calendar.date(byAdding: .day, value: -1, to: currentDate) ?? currentDate
-            } else {
+                previousDate = date
+            } else if dayDifference > 1 {
                 break
             }
         }
         
-        return streak
+        // Add 1 to include the current day
+        return streak + 1
     }
     
     private func deleteEntry(_ entry: JournalEntryModel) {
-        if let index = journalVM.entries.firstIndex(where: { $0.id == entry.id }) {
-            Task {
-                await journalVM.delete(at: IndexSet([index]))
+        Task {
+            do {
+                // Convert JournalEntryModel back to JournalEntry if needed
+                if let journalEntry = journalVM.entries.first(where: { $0.id == entry.id }) {
+                    try await journalVM.delete(entries: [journalEntry])
+                }
+            } catch {
+                // Handle error appropriately in your UI
+                print("Error deleting entry: \(error.localizedDescription)")
             }
-        }
-    }
-    
-    private func shareEntry(_ entry: JournalEntryModel) {
-        let title = entry.title ?? "Journal Entry"
-        let date = DateFormatter.localizedString(from: entry.date, dateStyle: .medium, timeStyle: .none)
-        let content = "\(title)\n\(date)\n\n\(entry.body)"
-        
-        let activityVC = UIActivityViewController(activityItems: [content], applicationActivities: nil)
-        
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let window = windowScene.windows.first {
-            window.rootViewController?.present(activityVC, animated: true)
         }
     }
 }

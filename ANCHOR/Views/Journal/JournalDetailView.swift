@@ -1,31 +1,54 @@
 import SwiftUI
 
 struct JournalDetailView: View {
-    let entry: JournalEntryModel
     @ObservedObject var viewModel: JournalViewModel
+    @Environment(\.dismiss) private var dismiss
     @State private var showingEdit = false
-
+    
+    let entry: JournalEntry
+    
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 12) {
-                Text(entry.title ?? "Untitled").font(.title2).bold()
-                Text(entry.date.friendlyString()).font(.caption)
-                Divider()
-                Text(entry.body).padding(.vertical)
+            VStack(alignment: .leading, spacing: 16) {
+                Text(entry.title ?? "Untitled Entry")
+                    .font(.title)
+                    .padding(.bottom, 8)
+                
+                Text(entry.body)
+                    .font(.body)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
                 if !entry.tags.isEmpty {
-                    HStack { ForEach(entry.tags, id: \.self) { tag in
-                        Text(tag).font(.caption).padding(6).background(Color(UIColor.systemGray5)).cornerRadius(6)
-                    } }
+                    Text("Tags: \(entry.tags.joined(separator: ", "))")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                 }
-            }.padding()
+            }
+            .padding()
         }
-        .navigationBarItems(trailing: Button("Edit") { showingEdit = true })
-        .sheet(isPresented: $showingEdit) {
-            JournalEditorView(entry: JournalEntry(id: entry.id, date: entry.date, title: entry.title, body: entry.body, sentiment: entry.sentiment, tags: entry.tags)) { edited in
-                Task {
-                    try? await viewModel.update(entryId: edited.id, newTitle: edited.title, newBody: edited.body, newTags: edited.tags)
-                    showingEdit = false
+        .navigationTitle("Entry Details")
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Edit") {
+                    showingEdit = true
                 }
+            }
+        }
+        .sheet(isPresented: $showingEdit) {
+            NavigationView {
+                JournalEditorView(entry: entry) { editedEntry in
+                    Task {
+                        try? await viewModel.updateEntry(
+                            editedEntry,
+                            title: editedEntry.title,
+                            body: editedEntry.body,
+                            tags: editedEntry.tags
+                        )
+                        dismiss()
+                    }
+                }
+                .navigationTitle("Edit Entry")
+                .navigationBarTitleDisplayMode(.inline)
             }
         }
     }

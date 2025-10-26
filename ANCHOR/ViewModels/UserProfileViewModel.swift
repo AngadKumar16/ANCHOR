@@ -3,66 +3,110 @@ import CoreData
 import LocalAuthentication
 
 @MainActor
-final class UserProfileViewModel: ObservableObject {
-    @Published var displayName: String = ""
+class UserProfileViewModel: ObservableObject {
+    private let viewContext: NSManagedObjectContext
+    private let biometricAuth = LAContext()
+    
+    @Published var displayName: String = "" {
+        didSet {
+            updateProfile(displayName: displayName)
+        }
+    }
+    
+    @Published var anonymousId: String = ""
+    @Published var createdAt: Date = Date()
+    @Published var showAlert = false
+    @Published var alertMessage = ""
     @Published var biometricEnabled: Bool = false
-
-    private let ctx: NSManagedObjectContext
-    private var profileEntity: UserProfileEntity?
-
-    init(context: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
-        self.ctx = context
-        load()
+    
+    init(viewContext: NSManagedObjectContext) {
+        self.viewContext = viewContext
+        fetchUserProfile()
     }
-
-    func load() {
-        let req: NSFetchRequest<UserProfileEntity> = UserProfileEntity.fetchRequest()
-        req.fetchLimit = 1
+    
+    private func fetchUserProfile() {
+        let request: NSFetchRequest<UserProfileEntity> = UserProfileEntity.fetchRequest()
+        request.fetchLimit = 1
+        
         do {
-            let arr = try ctx.fetch(req)
-            if let first = arr.first {
-                profileEntity = first
-                displayName = first.displayName ?? ""
+            let results = try viewContext.fetch(request)
+            if let profile = results.first {
+                displayName = profile.displayName ?? ""
+                anonymousId = profile.anonymousId ?? ""
+                createdAt = profile.createdAt ?? Date()
+                biometricEnabled = profile.biometricEnabled
             } else {
-                // create default
-                try ctx.performAndWait {
-                    let created = UserProfileEntity.createDefault(in: ctx)
-                    try ctx.save()
-                    self.profileEntity = created
-                    self.displayName = created.displayName ?? ""
-                }
+                createNewProfile()
             }
-            biometricEnabled = UserDefaults.standard.bool(forKey: "anchor.biometricEnabled")
         } catch {
-            Logger.log("UserProfile load error: \(error)")
+            print("Error fetching user profile: \(error)")
+            createNewProfile()
         }
     }
-
-    func save() {
-        guard let pe = profileEntity else { return }
-        pe.displayName = displayName
+    
+    private func createNewProfile() {
+        let profile = UserProfileEntity.create(
+            in: viewContext,
+            displayName: nil,
+            anonymousId: nil,
+            biometricEnabled: false
+        )
+        
         do {
-            try ctx.save()
+            try viewContext.save()
+            displayName = profile.displayName ?? ""
+            anonymousId = profile.anonymousId ?? ""
+            createdAt = profile.createdAt ?? Date()
+            biometricEnabled = profile.biometricEnabled
         } catch {
-            Logger.log("Profile save err: \(error)")
+            print("Error creating user profile: \(error)")
         }
     }
-
-    func toggleBiometric(_ enable: Bool, completion: @escaping (Bool)->Void) {
-        let ctxLA = LAContext()
-        var err: NSError?
-        if ctxLA.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &err) {
-            ctxLA.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: "Enable biometric unlock for ANCHOR") { success, _ in
-                DispatchQueue.main.async {
-                    if success {
-                        self.biometricEnabled = enable
-                        UserDefaults.standard.set(enable, forKey: "anchor.biometricEnabled")
-                    }
-                    completion(success)
+    
+    func updateDisplayName(_ name: String) {
+        displayName = name
+    }
+    
+    func updateBiometricEnabled(_ enabled: Bool) {
+        biometricEnabled = enabled
+        updateProfile(biometricEnabled: enabled)
+    }
+    
+    private func updateProfile(displayName: String? = nil, biometricEnabled: Bool? = nil) {
+        let request: NSFetchRequest<UserProfileEntity> = UserProfileEntity.fetchRequest()
+        request.fetchLimit = 1
+        
+        do {
+            let results = try viewContext.fetch(request)
+            if let profile = results.first {
+                if let displayName = displayName {
+                    profile.displayName = displayName
                 }
+                if let enabled = biometricEnabled {
+                    profile.biometricEnabled = enabled
+                }
+                try viewContext.save()
             }
-        } else {
-            completion(false)
+        } catch {
+            print("Error updating user profile: \(error)")
+            alertMessage = "Failed to update profile: \(error.localizedDescription)"
+            showAlert = true
+        }
+    }
+    
+    var biometricType: LABiometryType {
+        var error: NSError?
+        if biometricAuth.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+            return biometricAuth.biometryType
+        }
+        return .none
+    }
+    
+    var biometricIconName: String {
+        switch biometricType {
+        case .faceID: return "faceid"
+        case .touchID: return "touchid"
+        default: return "lock"
         }
     }
 }

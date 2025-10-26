@@ -357,7 +357,6 @@ struct MoodFilterPill: View {
         }
     }
     
-    @ViewBuilder
     // MARK: - Shape Helpers
     
     private var pillShape: some Shape {

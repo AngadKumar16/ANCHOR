@@ -1,14 +1,14 @@
 import SwiftUI
 
 /// A reusable gradient background view that can be used throughout the app.
-struct GradientBackground: View {
+public struct GradientBackground: View {
     // MARK: - Properties
     
     /// The colors to use for the gradient. Defaults to a soothing blue/purple gradient.
-    let colors: [Color]
+    public let colors: [Color]
     
     /// The direction of the gradient. Defaults to top to bottom.
-    let direction: Gradient.Direction
+    public let direction: Gradient.Direction
     
     // MARK: - Initializers
     
@@ -16,7 +16,7 @@ struct GradientBackground: View {
     /// - Parameters:
     ///   - colors: The colors to use for the gradient. Defaults to a soothing blue/purple gradient.
     ///   - direction: The direction of the gradient. Defaults to top to bottom.
-    init(colors: [Color]? = nil, direction: Gradient.Direction = .topToBottom) {
+    public init(colors: [Color]? = nil, direction: Gradient.Direction = .topToBottom) {
         self.colors = colors ?? [
             ANCHORDesign.Colors.primary,
             ANCHORDesign.Colors.primary.opacity(0.8),
@@ -27,7 +27,7 @@ struct GradientBackground: View {
     
     // MARK: - Body
     
-    var body: some View {
+    public var body: some View {
         LinearGradient(
             gradient: Gradient(colors: colors),
             startPoint: direction.startPoint,
@@ -40,13 +40,13 @@ struct GradientBackground: View {
 // MARK: - Gradient Direction
 
 extension Gradient {
-    enum Direction {
+    public enum Direction {
         case topToBottom
         case leadingToTrailing
         case diagonal
         case custom(start: UnitPoint, end: UnitPoint)
         
-        var startPoint: UnitPoint {
+        public var startPoint: UnitPoint {
             switch self {
             case .topToBottom: return .top
             case .leadingToTrailing: return .leading
@@ -55,7 +55,7 @@ extension Gradient {
             }
         }
         
-        var endPoint: UnitPoint {
+        public var endPoint: UnitPoint {
             switch self {
             case .topToBottom: return .bottom
             case .leadingToTrailing: return .trailing

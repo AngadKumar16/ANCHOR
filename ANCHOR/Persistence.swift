@@ -6,52 +6,153 @@
 //
 
 import CoreData
+import os.log
+import Combine
 
-struct PersistenceController {
+final class PersistenceController: ObservableObject {
     static let shared = PersistenceController()
-
+    let container: NSPersistentCloudKitContainer
+    private let logger = OSLog(subsystem: "com.angadkumar16.ANCHOR", category: "Persistence")
+    
+    // Published property to track changes
+    @Published var viewContext: NSManagedObjectContext
+    
     @MainActor
     static let preview: PersistenceController = {
-        let result = PersistenceController(inMemory: true)
-        let viewContext = result.container.viewContext
-        for _ in 0..<10 {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
+        let controller = PersistenceController(inMemory: true)
+        let viewContext = controller.container.viewContext
+        
+        // Add preview data
+        for i in 0..<10 {
+            let entry = JournalEntryEntity(context: viewContext)
+            entry.id = UUID()
+            entry.title = "Preview Entry \(i+1)"
+            entry.body = "This is a preview journal entry number \(i+1)."
+            entry.createdAt = Date()
+            entry.updatedAt = Date()
+            entry.isLocked = i % 3 == 0
         }
+        
         do {
             try viewContext.save()
         } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             let nsError = error as NSError
             fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
         }
-        return result
+        return controller
     }()
-
-    let container: NSPersistentContainer
-
+    
     init(inMemory: Bool = false) {
-        container = NSPersistentContainer(name: "ANCHOR")
+        os_log("🔄 Initializing PersistenceController (inMemory: %@)", 
+              log: logger, 
+              type: .debug, 
+              inMemory ? "true" : "false")
+        
+        container = NSPersistentCloudKitContainer(name: "ANCHOR")
+        
         if inMemory {
-            container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
+            container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
+            os_log("📦 Using in-memory store", log: logger, type: .debug)
         }
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+        
+        // Enable history tracking and remote notifications
+        guard let description = container.persistentStoreDescriptions.first else {
+            os_log("❌ Failed to retrieve a persistent store description", log: logger, type: .error)
+            fatalError("Failed to retrieve a persistent store description.")
+        }
+        
+        description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+        description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+        
+        // Store logger in a local variable to avoid capturing self
+        let logger = self.logger
+        
+        container.loadPersistentStores { description, error in
             if let error = error as NSError? {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-
-                /*
-                 Typical reasons for an error here include:
-                 * The parent directory does not exist, cannot be created, or disallows writing.
-                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-                 * The device is out of space.
-                 * The store could not be migrated to the current model version.
-                 Check the error message to determine what the actual problem was.
-                 */
+                os_log("❌ Failed to load persistent store: %{public}@", 
+                      log: logger, 
+                      type: .error, 
+                      error.localizedDescription)
                 fatalError("Unresolved error \(error), \(error.userInfo)")
+            } else {
+                os_log("✅ Successfully loaded persistent store: %{public}@", 
+                      log: logger, 
+                      type: .info, 
+                      description.description)
             }
-        })
-        container.viewContext.automaticallyMergesChangesFromParent = true
+        }
+        
+        // Configure view context
+        viewContext = container.viewContext
+        viewContext.automaticallyMergesChangesFromParent = true
+        viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        
+        // Set up CloudKit schema if needed
+        #if DEBUG
+        do {
+            try container.initializeCloudKitSchema()
+            os_log("Successfully initialized CloudKit schema", log: logger, type: .debug)
+        } catch {
+            os_log("Failed to initialize CloudKit schema: %{public}@", log: logger, type: .error, error.localizedDescription)
+        }
+        #endif
+    }
+    
+    // MARK: - Core Data Saving support
+    
+    func saveContext() {
+        let context = container.viewContext
+        if context.hasChanges {
+            do {
+                try context.save()
+                os_log("Context saved successfully.", log: logger, type: .debug)
+            } catch {
+                let nsError = error as NSError
+                os_log("Unresolved error saving context: %{public}@", log: logger, type: .error, nsError.localizedDescription)
+                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            }
+        }
+    }
+    
+    // MARK: - CloudKit Sync
+    
+    @discardableResult
+    func saveIfNeeded() -> Bool {
+        let context = container.viewContext
+        guard context.hasChanges else { return false }
+        
+        do {
+            try context.save()
+            return true
+        } catch {
+            context.rollback()
+            return false
+        }
+    }
+    
+    /// Reset the local CloudKit data
+    func resetCloudKit() async throws {
+        try await container.viewContext.perform { [weak self] in
+            guard let self = self else { return }
+            
+            // Delete all data from all entities
+            let entities = self.container.managedObjectModel.entities
+            for entity in entities {
+                if let entityName = entity.name {
+                    let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
+                    let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+                    
+                    do {
+                        try self.container.viewContext.execute(deleteRequest)
+                    } catch {
+                        throw error
+                    }
+                }
+            }
+            
+            // Save the context
+            try self.container.viewContext.save()
+            os_log("Reset local CloudKit data", log: self.logger, type: .info)
+        }
     }
 }

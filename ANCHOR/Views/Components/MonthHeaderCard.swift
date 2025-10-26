@@ -150,91 +150,81 @@ struct MonthHeaderCard: View {
         }
     }
     
-    private var scaleEffect: CGFloat {
-        if isPressed && scaleOnPress {
-            return 0.98
-        } else if isHovered && hoverEffect {
-            return 1.02
-        } else if hasAppeared || !animateOnAppear {
-            return 1.0
-        } else {
-            return 0.95
-        }
+    var body: some View {
+        mainView
+            .modifier(AppearanceModifier(
+                hasAppeared: $hasAppeared,
+                isPressed: $isPressed,
+                isHovered: $isHovered,
+                animateOnAppear: animateOnAppear,
+                hoverEffect: hoverEffect,
+                scaleOnPress: scaleOnPress,
+                accessibilityLabel: accessibilityLabel ?? "\(monthYear), \(entryCountText)",
+                accessibilityHint: accessibilityHint,
+                accessibilityValue: accessibilityValue,
+                isInteractive: onTap != nil,
+                onAppear: {},
+                onHover: { hovering in
+                    if hoverEffect {
+                        isHovered = hovering
+                    }
+                }
+            ))
     }
     
-    var body: some View {
-        Group {
-            if let onTap = onTap {
-                Button(action: handleTap) {
-                    headerContent
-                }
-                .buttonStyle(PlainButtonStyle())
-            } else {
+    @ViewBuilder
+    private var mainView: some View {
+        if let onTap = onTap {
+            Button(action: handleTap) {
                 headerContent
             }
+            .buttonStyle(PlainButtonStyle())
+        } else {
+            headerContent
         }
-        .scaleEffect(scaleEffect)
-        .opacity(hasAppeared || !animateOnAppear ? 1.0 : 0.0)
-        .animation(.spring(response: 0.4, dampingFraction: 0.8), value: isPressed)
-        .animation(.easeOut(duration: 0.6), value: hasAppeared)
-        .animation(.easeInOut(duration: 0.2), value: isHovered)
-        .onAppear {
-            if animateOnAppear {
-                withAnimation(.easeOut(duration: 0.6).delay(Double.random(in: 0...0.2))) {
-                    hasAppeared = true
-                }
-            } else {
-                hasAppeared = true
-            }
-        }
-        .onHover { hovering in
-            if hoverEffect {
-                isHovered = hovering
-            }
-        }
-        .accessibilityLabel(accessibilityLabel ?? "\(monthYear), \(entryCountText)")
-        .accessibilityHint(accessibilityHint)
-        .accessibilityValue(accessibilityValue)
-        .accessibilityAddTraits(onTap != nil ? .isButton : .isHeader)
     }
     
     // MARK: - Header Content
-    @ViewBuilder
     private var headerContent: some View {
         ZStack {
-            // Main content with background
-            Group {
-                if let customBg = customBackground {
-                    mainContent
-                        .background(customBg)
-                } else {
-                    mainContent
-                        .padding(headerPadding)
-                        .background(headerBackground)
-                        .cornerRadius(headerCornerRadius)
-                        .shadow(
-                            color: headerShadow.color,
-                            radius: headerShadow.radius,
-                            x: headerShadow.x,
-                            y: headerShadow.y
-                        )
-                }
+            backgroundContent
+            overlays
+        }
+    }
+    
+    @ViewBuilder
+    private var backgroundContent: some View {
+        if let customBg = customBackground {
+            mainContent
+                .background(customBg)
+        } else {
+            mainContent
+                .padding(headerPadding)
+                .background(headerBackground)
+                .cornerRadius(headerCornerRadius)
+                .shadow(
+                    color: headerShadow.color,
+                    radius: headerShadow.radius,
+                    x: headerShadow.x,
+                    y: headerShadow.y
+                )
+        }
+    }
+    
+    @ViewBuilder
+    private var overlays: some View {
+        if showBadge {
+            badgeView
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+        }
+        
+        VStack {
+            Spacer()
+            if showDivider {
+                dividerView
             }
-
-            // Overlays
-            if showBadge {
-                badgeView
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
-            }
-            
-            VStack {
-                Spacer()
-                if showDivider {
-                    dividerView
-                }
-                if showProgress {
-                    progressView
-                }
+            if showProgress {
+                progressView
             }
         }
     }
@@ -539,6 +529,61 @@ extension MonthHeaderCard {
         case vertical
         case compact
         case centered
+    }
+}
+
+// MARK: - View Modifier
+private struct AppearanceModifier: ViewModifier {
+    @Binding var hasAppeared: Bool
+    @Binding var isPressed: Bool
+    @Binding var isHovered: Bool
+    
+    let animateOnAppear: Bool
+    let hoverEffect: Bool
+    let scaleOnPress: Bool
+    let accessibilityLabel: String
+    let accessibilityHint: String?
+    let accessibilityValue: String?
+    let isInteractive: Bool
+    let onAppear: () -> Void
+    let onHover: (Bool) -> Void
+    
+    func body(content: Content) -> some View {
+        content
+            .scaleEffect(scaleEffect)
+            .opacity(hasAppeared || !animateOnAppear ? 1.0 : 0.0)
+            .animation(.spring(response: 0.4, dampingFraction: 0.8), value: isPressed)
+            .animation(.easeOut(duration: 0.6), value: hasAppeared)
+            .animation(.easeInOut(duration: 0.2), value: isHovered)
+            .onAppear {
+                if animateOnAppear {
+                    withAnimation(.easeOut(duration: 0.6).delay(Double.random(in: 0...0.2))) {
+                        hasAppeared = true
+                    }
+                } else {
+                    hasAppeared = true
+                }
+                onAppear()
+            }
+            .onHover { hovering in
+                onHover(hovering)
+            }
+            .accessibilityLabel(accessibilityLabel)
+            .accessibilityHint(accessibilityHint ?? "")
+            .accessibilityValue(accessibilityValue ?? "")
+            .accessibilityAddTraits(isInteractive ? .isButton : .isHeader)
+    }
+    
+    private var scaleEffect: CGFloat {
+        if isPressed && scaleOnPress {
+            return 0.98
+        } else if isHovered && hoverEffect {
+            return 1.02
+        } else if hasAppeared || !animateOnAppear {
+            return 1.0
+        } else {
+            return 0.95
+        }
     }
 }
 

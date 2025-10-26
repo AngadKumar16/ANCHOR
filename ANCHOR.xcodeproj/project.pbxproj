@@ -29,9 +29,38 @@
 		2F672E6D2E47048D00B58187 /* ANCHORUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ANCHORUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		2FC0CDB72EA731990077FB54 /* Exceptions for "ANCHOR" folder in "ANCHOR" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Models/AIAnalysisServiceModel.swift,
+			);
+			target = 2F672E502E47048C00B58187 /* ANCHOR */;
+		};
+		2FC0D1712EADDED90077FB54 /* Exceptions for "ANCHOR" folder in "ANCHORTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ANCHOR.xcdatamodeld,
+			);
+			target = 2F672E622E47048D00B58187 /* ANCHORTests */;
+		};
+		2FC0D1722EADDED90077FB54 /* Exceptions for "ANCHOR" folder in "ANCHORUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ANCHOR.xcdatamodeld,
+			);
+			target = 2F672E6C2E47048D00B58187 /* ANCHORUITests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		2F672E532E47048C00B58187 /* ANCHOR */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				2FC0CDB72EA731990077FB54 /* Exceptions for "ANCHOR" folder in "ANCHOR" target */,
+				2FC0D1712EADDED90077FB54 /* Exceptions for "ANCHOR" folder in "ANCHORTests" target */,
+				2FC0D1722EADDED90077FB54 /* Exceptions for "ANCHOR" folder in "ANCHORUITests" target */,
+			);
 			path = ANCHOR;
 			sourceTree = "<group>";
 		};
@@ -171,7 +200,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1630;
-				LastUpgradeCheck = 1630;
+				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					2F672E502E47048C00B58187 = {
 						CreatedOnToolsVersion = 16.3;
@@ -328,6 +357,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -385,6 +415,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -395,11 +426,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ANCHOR/ANCHOR.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5XTU3ZWHX9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "ANCHOR would like to read your mindful minutes to help track your progress and provide personalized insights. Your data stays private and secure.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "ANCHOR would like to save your mindful minutes to Health. This helps you keep all your wellness data in one place and track your progress over time.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -423,11 +457,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ANCHOR/ANCHOR.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5XTU3ZWHX9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "ANCHOR would like to read your mindful minutes to help track your progress and provide personalized insights. Your data stays private and secure.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "ANCHOR would like to save your mindful minutes to Health. This helps you keep all your wellness data in one place and track your progress over time.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

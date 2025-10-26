@@ -93,11 +93,11 @@ struct PermissionRequestView: View {
         
         Task {
             if notificationEnabled {
-                await appState.requestNotificationPermission()
+                _ = await appState.requestNotificationPermission()
             }
             
             if healthKitEnabled {
-                await appState.requestHealthKitPermission()
+                _ = await appState.requestHealthKitPermission()
             }
             
             // Schedule daily reminders if notifications are enabled

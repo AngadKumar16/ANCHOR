@@ -9,23 +9,50 @@ final class DataExportService {
     func exportAllJournalEntries(presenting viewController: UIViewController?) {
         let ctx = PersistenceController.shared.container.viewContext
         let req: NSFetchRequest<JournalEntryEntity> = JournalEntryEntity.fetchRequest()
+        req.sortDescriptors = [NSSortDescriptor(keyPath: \JournalEntryEntity.createdAt, ascending: false)]
+        
         do {
             let results = try ctx.fetch(req)
-            // decrypt to plain structs
-            let models = results.map { $0.toModel() }
-            let data = try JSONEncoder().encode(models)
-            let tmp = FileManager.default.temporaryDirectory.appendingPathComponent("anchor_journal_export.json")
-            try data.write(to: tmp, options: .atomicWrite)
-            DispatchQueue.main.async {
-                let av = UIActivityViewController(activityItems: [tmp], applicationActivities: nil)
-                let presenter = viewController ?? UIApplication.shared.connectedScenes
-                    .compactMap { $0 as? UIWindowScene }
-                    .flatMap { $0.windows }
-                    .first { $0.isKeyWindow }?.rootViewController
-                presenter?.present(av, animated: true)
+            
+            let models = results.map { entity -> JournalEntryModel in
+                return JournalEntryModel(
+                    id: entity.id,
+                    date: entity.createdAt,
+                    title: entity.title,
+                    body: entity.body,
+                    sentiment: entity.sentiment,
+                    tags: entity.tagsArray
+                )
             }
+            
+            let encoder = JSONEncoder()
+            encoder.dateEncodingStrategy = .iso8601
+            encoder.outputFormatting = .prettyPrinted
+            
+            let data = try encoder.encode(models)
+            
+            // Save the file to a temporary location
+            let tempDir = FileManager.default.temporaryDirectory
+            let fileName = "journal_export_\(Date().timeIntervalSince1970).json"
+            let fileURL = tempDir.appendingPathComponent(fileName)
+            
+            try data.write(to: fileURL)
+            
+            // Present share sheet
+            DispatchQueue.main.async {
+                let activityVC = UIActivityViewController(
+                    activityItems: [fileURL],
+                    applicationActivities: nil
+                )
+                
+                if let vc = viewController {
+                    activityVC.popoverPresentationController?.sourceView = vc.view
+                    vc.present(activityVC, animated: true)
+                }
+            }
+            
         } catch {
-            Logger.log("Export failed: \(error)")
+            print("Error exporting journal entries: \(error)")
         }
     }
 }

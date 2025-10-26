@@ -18,11 +18,15 @@ final class AIAnalysisServiceViewModel: ObservableObject {
 
         // attempt backend post (best-effort)
         do {
-            let posted = try await APIClient.shared.postAIAnalysisService(m)
+            _ = try await APIClient.shared.postAIAnalysisService(m)
             // ignore for now
         } catch { }
 
-            DispatchQueue.main.async { self.items.append(m); draftTitle = ""; draftBody = "" }
+            await MainActor.run { [items = self.items] in
+                self.items = items + [m]
+                self.draftTitle = ""
+                self.draftBody = ""
+            }
         } catch { }
     }
 
@@ -32,13 +36,18 @@ final class AIAnalysisServiceViewModel: ObservableObject {
         do {
             let remote = try await APIClient.shared.fetchAIAnalysisServices()
             if !remote.isEmpty {
-                DispatchQueue.main.async { self.items = remote }
+                await MainActor.run {
+                    self.items = remote
+                }
                 return
             }
         } catch { }
 
         do {
-            self.items = try await AIAnalysisServiceRepository.shared.fetchAll()
+            let local = try await AIAnalysisServiceRepository.shared.fetchAll()
+            await MainActor.run {
+                self.items = local
+            }
         } catch { }
     }
 }
