@@ -6,269 +6,91 @@
 //
 
 import SwiftUI
+import ButtonStyles // Import the ButtonStyles module
 
-// Add this at the top of the file or in a separate ButtonStyles.swift file
-struct ScaleButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
-            .animation(.easeInOut, value: configuration.isPressed)
+// ... (rest of the code remains the same)
+
+// MARK: - Main Body
+
+var body: some View {
+    mainContentWrapper
+        .opacity(computedOpacity)
+        .animation(.easeOut(duration: 0.6), value: hasAppeared)
+        .animation(.easeInOut(duration: 0.2), value: isHovered)
+        .onAppear(perform: handleAppear)
+        .onHover { hovering in
+            if hoverEffect {
+                isHovered = hovering
+            }
+        }
+        .accessibilityLabel(computedAccessibilityLabel)
+        .accessibilityHint(computedAccessibilityHint ?? "")
+        .accessibilityValue(accessibilityValue ?? "")
+        .accessibilityAddTraits(computedAccessibilityTraits)
+}
+
+// MARK: - Content Wrappers
+@ViewBuilder
+private var cardContent: some View {
+    if customBackground != nil {
+        mainContentWithCustomBackground
+    } else {
+        mainContentWithDefaultBackground
     }
 }
 
-struct RecoveryTipCard: View {
-    // MARK: - Core Properties
-    let icon: String
-    let title: String
-    let description: String
-    let color: Color
-    
-    // MARK: - Customization Properties
-    let style: CardStyle
-    let size: CardSize
-    let layout: Layout
-    let showIcon: Bool
-    let iconStyle: IconStyle
-    let showChevron: Bool
-    let showBadge: Bool
-    let badgeText: String?
-    let badgeColor: Color?
-    let priority: Priority
-    let category: String?
-    let showCategory: Bool
-    let maxDescriptionLines: Int?
-    let customBackground: AnyView?
-    let customPadding: EdgeInsets?
-    let customCornerRadius: CGFloat?
-    let customShadow: ANCHORDesign.Shadow?
-    let onTap: (() -> Void)?
-    let onLongPress: (() -> Void)?
-    
-    // MARK: - Animation Properties
-    let animateOnAppear: Bool
-    let hoverEffect: Bool
-    let scaleOnPress: Bool
-    let hapticFeedback: Bool
-    
-    // MARK: - Accessibility Properties
-    let accessibilityLabel: String?
-    let accessibilityHint: String?
-    let accessibilityValue: String?
-    
-    // MARK: - State
-    @State private var hasAppeared = false
-    @State private var isPressed = false
-    @State private var isHovered = false
-    
-    // MARK: - Initializers
-    init(
-        icon: String,
-        title: String,
-        description: String,
-        color: Color,
-        style: CardStyle = .standard,
-        size: CardSize = .medium,
-        layout: Layout = .horizontal,
-        showIcon: Bool = true,
-        iconStyle: IconStyle = .filled,
-        showChevron: Bool = false,
-        showBadge: Bool = false,
-        badgeText: String? = nil,
-        badgeColor: Color? = nil,
-        priority: Priority = .normal,
-        category: String? = nil,
-        showCategory: Bool = false,
-        maxDescriptionLines: Int? = 2,
-        customBackground: AnyView? = nil,
-        customPadding: EdgeInsets? = nil,
-        customCornerRadius: CGFloat? = nil,
-        customShadow: ANCHORDesign.Shadow? = nil,
-        animateOnAppear: Bool = false,
-        hoverEffect: Bool = true,
-        scaleOnPress: Bool = true,
-        hapticFeedback: Bool = false,
-        accessibilityLabel: String? = nil,
-        accessibilityHint: String? = nil,
-        accessibilityValue: String? = nil,
-        onTap: (() -> Void)? = nil,
-        onLongPress: (() -> Void)? = nil
-    ) {
-        self.icon = icon
-        self.title = title
-        self.description = description
-        self.color = color
-        self.style = style
-        self.size = size
-        self.layout = layout
-        self.showIcon = showIcon
-        self.iconStyle = iconStyle
-        self.showChevron = showChevron
-        self.showBadge = showBadge
-        self.badgeText = badgeText
-        self.badgeColor = badgeColor
-        self.priority = priority
-        self.category = category
-        self.showCategory = showCategory
-        self.maxDescriptionLines = maxDescriptionLines
-        self.customBackground = customBackground
-        self.customPadding = customPadding
-        self.customCornerRadius = customCornerRadius
-        self.customShadow = customShadow
-        self.animateOnAppear = animateOnAppear
-        self.hoverEffect = hoverEffect
-        self.scaleOnPress = scaleOnPress
-        self.hapticFeedback = hapticFeedback
-        self.accessibilityLabel = accessibilityLabel
-        self.accessibilityHint = accessibilityHint
-        self.accessibilityValue = accessibilityValue
-        self.onTap = onTap
-        self.onLongPress = onLongPress
+@ViewBuilder
+private var mainContentWrapper: some View {
+    if hasTapAction {
+        tapableCard
+    } else if customBackground != nil {
+        mainContentWithCustomBackground
+    } else {
+        mainContentWithDefaultBackground
     }
-    
-    // MARK: - Computed Properties
-    private var cardPadding: EdgeInsets {
-        customPadding ?? EdgeInsets(
-            top: size.padding,
-            leading: size.padding,
-            bottom: size.padding,
-            trailing: size.padding
-        )
-    }
-    
-    private var cardCornerRadius: CGFloat {
-        customCornerRadius ?? size.cornerRadius
-    }
-    
-    private var cardShadow: ANCHORDesign.Shadow {
-        customShadow ?? style.shadow
-    }
-    
-    private var iconSize: CGFloat {
-        switch size {
-        case .small: return 14
-        case .medium: return 18
-        case .large: return 22
-        case .extraLarge: return 26
-        }
-    }
-    
-    private var iconContainerSize: CGFloat {
-        switch size {
-        case .small: return 32
-        case .medium: return 40
-        case .large: return 48
-        case .extraLarge: return 56
-        }
-    }
-    
-    private var priorityColor: Color {
-        switch priority {
-        case .low: return ANCHORDesign.Colors.textTertiary
-        case .normal: return color
-        case .high: return ANCHORDesign.Colors.warning
-        case .urgent: return ANCHORDesign.Colors.error
-        }
-    }
-    
-    // MARK: - Computed Properties for View Configuration
-    
-    private var computedOpacity: Double {
-        hasAppeared || !animateOnAppear ? 1.0 : 0.0
-    }
-    
-    private var computedAccessibilityLabel: String {
-        accessibilityLabel ?? "\(title). \(description)"
-    }
-    
-    private var computedAccessibilityHint: String? {
-        accessibilityHint ?? (onTap != nil ? "Double tap to view tip details" : nil)
-    }
-    
-    private var computedAccessibilityTraits: AccessibilityTraits {
-        onTap != nil ? .isButton : .isStaticText
-    }
-    
-    // MARK: - Main Body
-    
-    var body: some View {
-        mainContentWrapper
-            .opacity(computedOpacity)
-            .animation(.easeOut(duration: 0.6), value: hasAppeared)
-            .animation(.easeInOut(duration: 0.2), value: isHovered)
-            .onAppear(perform: handleAppear)
-            .onHover { hovering in
-                if hoverEffect {
-                    isHovered = hovering
-                }
-            }
-            .accessibilityLabel(computedAccessibilityLabel)
-            .accessibilityHint(computedAccessibilityHint ?? "")
-            .accessibilityValue(accessibilityValue ?? "")
-            .accessibilityAddTraits(computedAccessibilityTraits)
-    }
-    
-    // MARK: - Content Wrappers
-    @ViewBuilder
-    private var cardContent: some View {
-        if customBackground != nil {
-            mainContentWithCustomBackground
-        } else {
-            mainContentWithDefaultBackground
-        }
-    }
-    
-    @ViewBuilder
-    private var mainContentWrapper: some View {
-        if hasTapAction {
-            tapableCard
-        } else if customBackground != nil {
-            mainContentWithCustomBackground
-        } else {
-            mainContentWithDefaultBackground
-        }
-    }
-    
-    // MARK: - Card Content
-    @ViewBuilder
-    private var mainContentWithCustomBackground: some View {
-        mainContent
-            .padding(cardPadding)
-            .background(customBackground)
-            .cornerRadius(cardCornerRadius)
-    }
-    
-    @ViewBuilder
-    private var mainContentWithDefaultBackground: some View {
-        mainContent
-            .padding(cardPadding)
-            .background(cardBackground)
-            .cornerRadius(cardCornerRadius)
-            .shadow(
-                color: cardShadow.color,
-                radius: cardShadow.radius,
-                x: cardShadow.x,
-                y: cardShadow.y
-            )
-    }
+}
 
-    @ViewBuilder
-    private var tapableCard: some View {
-        Button(action: handleTap) {
-            cardContent
-                .scaleEffect(scaleOnPress && isPressed ? 0.98 : 1.0)
-                .opacity(scaleOnPress && isPressed ? 0.9 : 1.0)
-        }
-        .buttonStyle(ScaleButtonStyle())
-        .onLongPressGesture(minimumDuration: 0.3, pressing: { pressing in
-            if hapticFeedback && pressing {
-                let impact = UIImpactFeedbackGenerator(style: .medium)
-                impact.impactOccurred()
-            }
-            isPressed = pressing
-        }, perform: {
-            onLongPress?()
-        })
+// MARK: - Card Content
+@ViewBuilder
+private var mainContentWithCustomBackground: some View {
+    mainContent
+        .padding(cardPadding)
+        .background(customBackground)
+        .cornerRadius(cardCornerRadius)
+}
+
+@ViewBuilder
+private var mainContentWithDefaultBackground: some View {
+    mainContent
+        .padding(cardPadding)
+        .background(cardBackground)
+        .cornerRadius(cardCornerRadius)
+        .shadow(
+            color: cardShadow.color,
+            radius: cardShadow.radius,
+            x: cardShadow.x,
+            y: cardShadow.y
+        )
+}
+
+@ViewBuilder
+private var tapableCard: some View {
+    Button(action: handleTap) {
+        cardContent
+            .scaleEffect(scaleOnPress && isPressed ? 0.98 : 1.0)
+            .opacity(scaleOnPress && isPressed ? 0.9 : 1.0)
     }
+    .buttonStyle(ScaleButtonStyle()) // Use the imported ScaleButtonStyle
+    .onLongPressGesture(minimumDuration: 0.3, pressing: { pressing in
+        if hapticFeedback && pressing {
+            let impact = UIImpactFeedbackGenerator(style: .medium)
+            impact.impactOccurred()
+        }
+        isPressed = pressing
+    }, perform: {
+        onLongPress?()
+    })
+}
 
     // MARK: - Main Content
     @ViewBuilder

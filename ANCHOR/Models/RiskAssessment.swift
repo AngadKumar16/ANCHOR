@@ -2,22 +2,20 @@
 //  RiskAssessment.swift
 //  ANCHOR
 //
-//  Created by Angad Kumar on 8/12/25.
+//  Created by Angad Kumar on 10/25/25.
 //
-
 
 import Foundation
 
-public struct RiskAssessment: Codable, Identifiable {
-    public var id: UUID
-    public var date: Date
-    public var score: Double    // 0.0 - 100.0
-    public var reason: String?
-
-    public init(id: UUID = .init(), date: Date = .init(), score: Double = 0, reason: String? = nil) {
+struct RiskAssessment: Identifiable, Codable {
+    let id: UUID
+    let date: Date
+    var score: Int = 0
+    var riskLevel: String = "low"
+    var responses: [String: Any] = [:]
+    
+    init(id: UUID = UUID(), date: Date = Date()) {
         self.id = id
         self.date = date
-        self.score = score
-        self.reason = reason
     }
 }

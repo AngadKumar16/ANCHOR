@@ -1,14 +1,12 @@
 // Auto-generated FeatureRegistry to ensure views are linked
 import SwiftUI
 
+@MainActor
 func __registerFeaturesForLinking() {
     // Create mock data for views that require it
     let mockRiskResult = RiskAssessment(
         id: UUID(),
-        date: Date(),
-        score: 50, // Updated to use Int for score
-        riskLevel: "medium", // Using string literal for risk level
-        responses: [:] as [String: Any]
+        date: Date()
     )
     
     // Get the shared view context
@@ -20,7 +18,6 @@ func __registerFeaturesForLinking() {
     
     // Register views with required parameters
     _ = AIAnalysisServiceView()
-    _ = CloudSyncSettingsView(viewModel: CloudSyncSettingsViewModel())
     _ = DashboardView()
         .environmentObject(journalVM)
         .environmentObject(riskVM)

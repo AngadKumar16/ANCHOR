@@ -8,7 +8,8 @@
 import CoreData
 import os.log
 
-struct PersistenceController {
+// Changed from struct to class to handle escaping closures properly
+final class PersistenceController {
     static let shared = PersistenceController()
     let container: NSPersistentCloudKitContainer
     private let logger = OSLog(subsystem: "com.angadkumar16.ANCHOR", category: "Persistence")
@@ -90,7 +91,8 @@ struct PersistenceController {
                 // Set up remote change notifications
                 NotificationCenter.default.addObserver(forName: .NSPersistentStoreRemoteChange, 
                                                     object: container.persistentStoreCoordinator,
-                                                    queue: .main) { _ in
+                                                    queue: .main) { [weak self] _ in
+                    guard let self = self else { return }
                     os_log("Received a remote store change notification", log: self.logger, type: .debug)
                     // Handle remote changes if needed
                 }
