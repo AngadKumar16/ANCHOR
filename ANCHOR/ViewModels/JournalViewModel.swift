@@ -91,25 +91,52 @@ final class JournalViewModel: ObservableObject {
     func delete(entries: [JournalEntry]) async throws {
         let ids = entries.map { $0.id }
         
-        try await context.perform {
-            let request: NSFetchRequest<NSFetchRequestResult> = JournalEntryEntity.fetchRequest()
-            request.predicate = NSPredicate(format: "id IN %@", ids)
-            
-            let deleteRequest = NSBatchDeleteRequest(fetchRequest: request)
-            deleteRequest.resultType = .resultTypeObjectIDs
-            
-            if let result = try self.context.execute(deleteRequest) as? NSBatchDeleteResult,
-               let objectIDs = result.result as? [NSManagedObjectID] {
-                let changes = [NSDeletedObjectsKey: objectIDs]
-                NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [self.context])
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            context.perform {
+                do {
+                    let request: NSFetchRequest<NSFetchRequestResult> = JournalEntryEntity.fetchRequest()
+                    request.predicate = NSPredicate(format: "id IN %@", ids)
+                    
+                    let deleteRequest = NSBatchDeleteRequest(fetchRequest: request)
+                    deleteRequest.resultType = .resultTypeObjectIDs
+                    
+                    if let result = try self.context.execute(deleteRequest) as? NSBatchDeleteResult,
+                       let objectIDs = result.result as? [NSManagedObjectID] {
+                        let changes = [NSDeletedObjectsKey: objectIDs]
+                        NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [self.context])
+                    }
+                    
+                    try self.context.save()
+                    
+                    // Update local state
+                    Task { @MainActor in
+                        self.entries.removeAll { ids.contains($0.id) }
+                        continuation.resume()
+                    }
+                } catch {
+                    continuation.resume(throwing: error)
+                }
             }
-            
-            try self.context.save()
-            
-            // Update local state
-            await MainActor.run {
-                self.entries.removeAll { ids.contains($0.id) }
-            }
+        }
+    }
+    
+    /// Add a new journal entry
+    func add(title: String? = nil, body: String, tags: [String] = []) async throws {
+        let entry = try JournalEntry(
+            id: UUID(),
+            createdAt: Date(),
+            title: title,
+            body: body,
+            bodyFormat: "plain",
+            sentiment: nil,
+            tags: Set(tags),
+            isLocked: false,
+            version: 1
+        )
+        
+        try await saveEntry(entry)
+        await MainActor.run {
+            self.entries.insert(entry, at: 0)
         }
     }
     
@@ -196,18 +223,28 @@ final class JournalViewModel: ObservableObject {
     }
     
     private func saveEntry(_ entry: JournalEntry) async throws {
-        try await context.perform {
-            let _ = try JournalEntryEntity.updateOrCreate(from: entry, in: self.context)
-            if self.context.hasChanges {
-                try self.context.save()
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            context.perform {
+                do {
+                    _ = try JournalEntryEntity.updateOrCreate(from: entry, in: self.context)
+                    if self.context.hasChanges {
+                        try self.context.save()
+                    }
+                    continuation.resume()
+                } catch {
+                    continuation.resume(throwing: error)
+                }
             }
         }
     }
     
     private func analyzeSentiment(text: String) async -> Double? {
-        // This would call your AIAnalysisService
-        // For now, return nil or a mock value
-        return nil
+        // Use AIAnalysisService for sentiment analysis
+        let service = AIAnalysisService.shared
+        let sentiment = service.analyzeSentiment(text: text)
+        
+        // Convert the Int16 result (-1, 0, 1) to a Double in range -1.0 to 1.0
+        return Double(sentiment)
     }
 }
 

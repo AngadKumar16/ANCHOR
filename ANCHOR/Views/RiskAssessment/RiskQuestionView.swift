@@ -158,6 +158,6 @@ struct RiskQuestionView: View {
 #Preview {
     NavigationView {
         RiskQuestionView()
-            .environmentObject(RiskAssessmentViewModel())
+            .environmentObject(RiskAssessmentViewModel(viewContext: PersistenceController.preview.container.viewContext))
     }
 }

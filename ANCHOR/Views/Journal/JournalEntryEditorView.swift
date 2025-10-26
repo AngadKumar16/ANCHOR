@@ -45,7 +45,7 @@ struct JournalEntryEditorView: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
                             ForEach(Array(viewModel.tags), id: \.self) { tag in
-                                TagView(name: tag, isSelected: true) {
+                                EditorTagView(name: tag, isSelected: true) {
                                     viewModel.tags.remove(tag)
                                 }
                             }
@@ -138,7 +138,7 @@ struct JournalEntryEditorView: View {
 
 // MARK: - Supporting Views
 
-private struct TagView: View {
+private struct EditorTagView: View {
     let name: String
     let isSelected: Bool
     let onDelete: (() -> Void)?

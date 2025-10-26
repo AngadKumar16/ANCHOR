@@ -6,13 +6,13 @@
 //
 
 import CoreData
-import CloudKit
 import os.log
 
 struct PersistenceController {
     static let shared = PersistenceController()
     let container: NSPersistentCloudKitContainer
-    private let logger = OSLog(subsystem: "com.yourapp.ANCHOR", category: "Persistence")    
+    private let logger = OSLog(subsystem: "com.angadkumar16.ANCHOR", category: "Persistence")
+    
     @MainActor
     static let preview: PersistenceController = {
         let controller = PersistenceController(inMemory: true)
@@ -33,6 +33,7 @@ struct PersistenceController {
             try viewContext.save()
         } catch {
             let nsError = error as NSError
+            os_log("Failed to save preview data: %{public}@", log: controller.logger, type: .error, nsError.localizedDescription)
             fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
         }
         return controller
@@ -43,6 +44,7 @@ struct PersistenceController {
         
         // Enable history tracking and remote notifications
         guard let description = container.persistentStoreDescriptions.first else {
+            os_log("Failed to retrieve a persistent store description", log: logger, type: .error)
             fatalError("###\(#function): Failed to retrieve a persistent store description.")
         }
         
@@ -62,10 +64,15 @@ struct PersistenceController {
         }
         
         // Load the persistent stores
-        container.loadPersistentStores { storeDescription, error in
+        container.loadPersistentStores { [weak self] storeDescription, error in
             if let error = error as NSError? {
-                self.logger.error("Failed to load persistent stores: \(error), \(error.userInfo)")
+                os_log("Failed to load persistent stores: %{public}@", log: self?.logger ?? .default, type: .error, error.localizedDescription)
                 fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+            if let url = storeDescription.url {
+                os_log("Successfully loaded persistent store at %{public}@", log: self?.logger ?? .default, type: .info, url.absoluteString)
+            } else {
+                os_log("Successfully loaded persistent store", log: self?.logger ?? .default, type: .info)
             }
         }
         
@@ -78,17 +85,18 @@ struct PersistenceController {
         if !inMemory {
             do {
                 try container.initializeCloudKitSchema(options: [])
+                os_log("Successfully initialized CloudKit schema", log: logger, type: .debug)
                 
                 // Set up remote change notifications
                 NotificationCenter.default.addObserver(forName: .NSPersistentStoreRemoteChange, 
                                                     object: container.persistentStoreCoordinator,
                                                     queue: .main) { _ in
-                    self.logger.debug("Received a remote store change notification.")
+                    os_log("Received a remote store change notification", log: self.logger, type: .debug)
                     // Handle remote changes if needed
                 }
                 
             } catch {
-                logger.error("Failed to initialize CloudKit schema: \(error.localizedDescription)")
+                os_log("Failed to initialize CloudKit schema: %{public}@", log: logger, type: .error, error.localizedDescription)
             }
         }
     }
@@ -97,52 +105,56 @@ struct PersistenceController {
     
     /// Force a sync with CloudKit
     func syncWithCloudKit() async throws {
-        try await container.viewContext.perform {
-            try self.container.viewContext.save()
+        try await container.viewContext.perform { [weak self] in
+            guard let self = self else { return }
             
-            // Trigger a sync with CloudKit
-            if let store = self.container.persistentStoreCoordinator.persistentStores.first {
-                try self.container.persistentStoreCoordinator.setMetadata(
-                    [NSPersistentStoreRemoteChangeNotificationPostOptionKey: true], 
-                    for: store
-                )
+            do {
+                try self.container.viewContext.save()
+                os_log("Successfully saved context for CloudKit sync", log: self.logger, type: .debug)
+                
+                // Trigger a sync with CloudKit
+                if let store = self.container.persistentStoreCoordinator.persistentStores.first {
+                    try self.container.persistentStoreCoordinator.setMetadata(
+                        [NSPersistentStoreRemoteChangeNotificationPostOptionKey: true], 
+                        for: store
+                    )
+                    os_log("Successfully triggered CloudKit sync", log: self.logger, type: .debug)
+                }
+            } catch {
+                os_log("Failed to sync with CloudKit: %{public}@", log: self.logger, type: .error, error.localizedDescription)
+                throw error
             }
         }
     }
     
     /// Reset the local CloudKit data
     func resetCloudKit() async throws {
-        try await container.viewContext.perform {
+        try await container.viewContext.perform { [weak self] in
+            guard let self = self else { return }
+            
             self.container.viewContext.reset()
+            os_log("Reset local CloudKit data", log: self.logger, type: .info)
             
             // Reset the CloudKit container
             if let store = self.container.persistentStoreCoordinator.persistentStores.first {
-                try self.container.persistentStoreCoordinator.remove(store)
-                try self.container.persistentStoreCoordinator.addPersistentStore(
-                    ofType: NSSQLiteStoreType,
-                    configurationName: nil,
-                    at: store.url,
-                    options: store.options
+                try? self.container.persistentStoreCoordinator.setMetadata(
+                    [NSPersistentStoreRemoteChangeNotificationPostOptionKey: true],
+                    for: store
                 )
             }
-            
-            // Re-fetch data
-            try self.container.viewContext.setQueryGenerationFrom(.current)
         }
     }
     
-    // MARK: - Helper Methods
+    // MARK: - Core Data Saving support
     
-    /// Save changes to the context if there are any
-    func save() {
+    func saveContext() {
         let context = container.viewContext
         if context.hasChanges {
             do {
                 try context.save()
-                logger.debug("Context saved successfully.")
+                os_log("Context saved successfully.", log: logger, type: .debug)
             } catch {
-                let nsError = error as NSError
-                logger.error("Unresolved error saving context: \(nsError), \(nsError.userInfo)")
+                os_log("Unresolved error saving context: %{public}@", log: logger, type: .error, error.localizedDescription)
                 // Consider presenting an error to the user
             }
         }

@@ -16,7 +16,6 @@ struct ScaleButtonStyle: ButtonStyle {
     }
 }
 
-
 struct RecoveryTipCard: View {
     // MARK: - Core Properties
     let icon: String

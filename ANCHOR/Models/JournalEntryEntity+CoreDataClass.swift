@@ -57,6 +57,26 @@ public class JournalEntryEntity: NSManagedObject, Identifiable {
         tagsArray = Array(entry.tags)
     }
     
+    static func updateOrCreate(from entry: JournalEntry, in context: NSManagedObjectContext) throws -> JournalEntryEntity {
+        let request: NSFetchRequest<JournalEntryEntity> = JournalEntryEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", entry.id as CVarArg)
+        
+        let entity = (try? context.fetch(request).first) ?? JournalEntryEntity(context: context)
+        
+        entity.id = entry.id
+        entity.createdAt = entry.createdAt
+        entity.updatedAt = entry.updatedAt
+        entity.title = entry.title
+        entity.body = entry.body
+        entity.bodyFormat = entry.bodyFormat
+        entity.sentiment = entry.sentiment ?? 0
+        entity.isLocked = entry.isLocked
+        entity.version = Int32(entry.version)
+        entity.tags = !entry.tags.isEmpty ? entry.tags.joined(separator: ",") : nil
+        
+        return entity
+    }
+    
     func toModel() -> JournalEntry? {
         guard let context = managedObjectContext else { return nil }
         

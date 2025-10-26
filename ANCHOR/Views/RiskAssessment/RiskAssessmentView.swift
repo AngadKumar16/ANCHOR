@@ -14,9 +14,9 @@ struct RiskAssessmentView: View {
     @State private var selectedTab = 0
     
     private let riskLevels: [ClosedRange<Double>: (String, Color, String)] = [
-        0..<30: ("Low", .green, "You're doing great! Keep up the good work."),
-        30..<70: ("Medium", .orange, "Be mindful of your triggers and practice healthy coping strategies."),
-        70...100: ("High", .red, "Consider reaching out for support and using your coping strategies.")
+        0.0...29.9: ("Low", .green, "You're doing great! Keep up the good work."),
+        30.0...69.9: ("Medium", .orange, "Be mindful of your triggers and practice healthy coping strategies."),
+        70.0...100.0: ("High", .red, "Consider reaching out for support and using your coping strategies.")
     ]
     
     private var recentAssessments: [RiskAssessmentEntity] {
@@ -291,12 +291,11 @@ struct RiskAssessmentView: View {
 }
 
 #Preview {
-    let viewModel = RiskAssessmentViewModel()
-    
-    // Create a test context
-    let context = PersistenceController.preview.container.viewContext
+    let viewModel = RiskAssessmentViewModel(viewContext: PersistenceController.preview.container.viewContext)
     
     // Add sample data for preview
+    let context = PersistenceController.preview.container.viewContext
+    
     let assessment1 = RiskAssessmentEntity(context: context)
     assessment1.id = UUID()
     assessment1.date = Date().addingTimeInterval(-86400) // Yesterday
@@ -311,7 +310,7 @@ struct RiskAssessmentView: View {
     
     try? context.save()
     
-    RiskAssessmentView()
+    return RiskAssessmentView()
         .environmentObject(viewModel)
         .environment(\.managedObjectContext, context)
 }

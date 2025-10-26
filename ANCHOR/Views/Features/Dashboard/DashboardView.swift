@@ -87,7 +87,7 @@ struct DashboardView: View {
         .sheet(isPresented: $showingRiskAssessment) {
             NavigationView {
                 RiskAssessmentView()
-                    .environmentObject(RiskAssessmentViewModel(context: PersistenceController.shared.container.viewContext))
+                    .environmentObject(RiskAssessmentViewModel(viewContext: PersistenceController.shared.container.viewContext))
             }
         }
     }
@@ -216,7 +216,7 @@ struct DashboardView: View {
                 ANCHORCard {
                     VStack(alignment: .leading, spacing: ANCHORDesign.Spacing.sm) {
                         HStack {
-                            ANCHORMoodIcon(mood: moodFromSentiment(recentEntry.sentiment), size: 24)
+                            ANCHORMoodIcon(mood: moodFromSentiment(recentEntry.sentiment ?? 0.0), size: 24)
                             
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(recentEntry.title ?? "Journal Entry")
@@ -358,7 +358,7 @@ struct DashboardView: View {
     
     // MARK: - Helper Functions
     
-    private func moodFromSentiment(_ sentiment: Int) -> ANCHORMoodIcon.MoodType {
+    private func moodFromSentiment(_ sentiment: Double) -> ANCHORMoodIcon.MoodType {
         switch sentiment {
         case 2: return .veryHappy
         case 1: return .happy

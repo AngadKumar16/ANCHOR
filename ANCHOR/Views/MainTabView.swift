@@ -8,9 +8,21 @@
 import SwiftUI
 
 struct MainTabView: View {
-    @StateObject private var journalViewModel = JournalViewModel()
-    @StateObject private var riskAssessmentViewModel = RiskAssessmentViewModel()
-    @StateObject private var userProfileViewModel = UserProfileViewModel()
+    @Environment(\.managedObjectContext) private var viewContext
+    @StateObject private var journalViewModel: JournalViewModel
+    @StateObject private var riskAssessmentViewModel: RiskAssessmentViewModel
+    @StateObject private var userProfileViewModel: UserProfileViewModel
+    
+    init() {
+        let context = PersistenceController.shared.container.viewContext
+        let journalVM = JournalViewModel(context: context)
+        let riskVM = RiskAssessmentViewModel(viewContext: context)
+        let userProfileVM = UserProfileViewModel(viewContext: context)
+        
+        _journalViewModel = StateObject(wrappedValue: journalVM)
+        _riskAssessmentViewModel = StateObject(wrappedValue: riskVM)
+        _userProfileViewModel = StateObject(wrappedValue: userProfileVM)
+    }
     
     var body: some View {
         TabView {
