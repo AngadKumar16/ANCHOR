@@ -95,6 +95,14 @@ extension JournalEntryEntity {
         
         return entity
     }
+    
+    // Find a JournalEntryEntity by ID
+    static func find(by id: UUID, in context: NSManagedObjectContext) throws -> JournalEntryEntity? {
+        let request: NSFetchRequest<JournalEntryEntity> = fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        request.fetchLimit = 1
+        return try context.fetch(request).first
+    }
 }
 
 // MARK: - Preview Support

@@ -124,7 +124,7 @@ struct ContentView: View {
                 JournalEditorView(onSave: { _ in
                     // Handle save action
                     Task {
-                        await journalVM.refreshEntries()
+                        await journalVM.refresh()
                     }
                     showingNewEntry = false
                 })

@@ -42,14 +42,18 @@ struct EntryListView: View {
             }
             .navigationTitle("Journal")
             .searchable(text: $searchText, prompt: "Search entries...")
-            .onChange(of: searchText) { _ in
-                viewModel.searchText = searchText
+            .onChange(of: searchText) { oldValue, newValue in
+                viewModel.searchText = newValue
             }
-            .onChange(of: selectedFilter) { _ in
-                applyFilters()
+            .onChange(of: selectedFilter) { oldValue, newValue in
+                Task {
+                    await applyFilters()
+                }
             }
-            .onChange(of: sortOrder) { _ in
-                applySort()
+            .onChange(of: sortOrder) { oldValue, newValue in
+                Task {
+                    await applySort()
+                }
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -173,7 +177,9 @@ struct EntryListView: View {
                     .frame(maxWidth: .infinity, alignment: .center)
                     .onAppear {
                         if viewModel.canLoadMore() {
-                            viewModel.loadMore()
+                            Task {
+                                await viewModel.loadMore()
+                            }
                         }
                     }
             }
@@ -181,16 +187,16 @@ struct EntryListView: View {
         .listStyle(.insetGrouped)
     }
     
-    private func applyFilters() {
+    private func applyFilters() async {
         // In a real app, you would update the view model's filter state
         // and trigger a new fetch with the updated filters
-        viewModel.loadMore()
+        await viewModel.loadMore()
     }
     
-    private func applySort() {
+    private func applySort() async {
         // In a real app, you would update the view model's sort order
         // and trigger a re-sort of the data
-        viewModel.loadMore()
+        await viewModel.loadMore()
     }
 }
 

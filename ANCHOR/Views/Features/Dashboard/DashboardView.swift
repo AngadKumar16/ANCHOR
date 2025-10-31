@@ -206,22 +206,36 @@ struct DashboardView: View {
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showingJournalEntry) {
             NavigationView {
-                // JournalEntryView()
+                JournalEntryView(entry: nil)
+                    .environmentObject(JournalViewModel(context: PersistenceController.shared.container.viewContext))
+                    .navigationBarItems(trailing: Button("Done") {
+                        showingJournalEntry = false
+                    })
             }
         }
         .sheet(isPresented: $showingCheckIn) {
             NavigationView {
-                // CheckInView()
+                CheckInView(checkInStatus: .constant(.inProgress))
+                    .navigationBarItems(trailing: Button("Done") {
+                        showingCheckIn = false
+                    })
             }
         }
         .sheet(isPresented: $showingBreathingExercise) {
             NavigationView {
-                // BreathingExerciseView()
+                BreathingExerciseView()
+                    .navigationBarItems(trailing: Button("Done") {
+                        showingBreathingExercise = false
+                    })
             }
         }
         .sheet(isPresented: $showingRiskAssessment) {
             NavigationView {
-                // RiskAssessmentView()
+                RiskAssessmentView()
+                    .environmentObject(RiskAssessmentViewModel(viewContext: PersistenceController.shared.container.viewContext))
+                    .navigationBarItems(trailing: Button("Done") {
+                        showingRiskAssessment = false
+                    })
             }
         }
     }
