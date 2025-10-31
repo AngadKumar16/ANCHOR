@@ -501,7 +501,7 @@ struct MoodFilterPill: View {
                         MoodFilterPill(
                             title: "Calm",
                             icon: "leaf.fill",
-                            color: ANCHORDesign.Colors.moodCalm,
+                            color: ANCHORDesign.Colors.moodNeutral,
                             isSelected: false,
                             onTap: {}
                         )

@@ -48,7 +48,7 @@ struct SplashScreenView: View {
                 }
                 
                 // Tagline
-                Text("Find your anchor")
+                Text("Mental wellness made practical")
                     .font(.title2)
                     .fontWeight(.medium)
                     .foregroundColor(.white.opacity(0.9))

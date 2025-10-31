@@ -12,70 +12,126 @@ struct ContentView: View {
     @EnvironmentObject var authManager: AuthManager
     @State private var selectedTab = 0
     @State private var showingNewEntry = false
+    @StateObject private var journalVM = JournalViewModel()
     
     var body: some View {
         ZStack(alignment: .bottom) {
+            // Main content with custom background
+            LinearGradient(
+                gradient: Gradient(colors: [
+                    ANCHORDesign.Colors.backgroundPrimary,
+                    ANCHORDesign.Colors.backgroundSecondary
+                ]),
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea()
+            
             // Main content
             TabView(selection: $selectedTab) {
                 // Dashboard View
                 DashboardView()
-                    .tabItem {
-                        Label("Home", systemImage: "house.fill")
-                    }
                     .tag(0)
+                    .hideNavigationBar()
                 
                 // Journal View
                 JournalListView()
-                    .tabItem {
-                        Label("Journal", systemImage: "book.fill")
-                    }
                     .tag(1)
+                    .hideNavigationBar()
                 
                 // Profile/More View
                 ProfileView()
-                    .tabItem {
-                        Label("Profile", systemImage: "person.fill")
-                    }
                     .tag(2)
+                    .hideNavigationBar()
             }
-            .accentColor(ANCHORDesign.Colors.primary)
-            
-            // Floating Action Button
-            VStack {
-                Spacer()
-                HStack {
-                    Spacer()
-                    Button(action: { showingNewEntry = true }) {
-                        Image(systemName: "plus")
-                            .font(.system(size: 24, weight: .bold))
-                            .foregroundColor(.white)
-                            .frame(width: 60, height: 60)
-                            .background(
-                                LinearGradient(
-                                    gradient: Gradient(colors: [
-                                        ANCHORDesign.Colors.primary,
-                                        ANCHORDesign.Colors.accent
-                                    ]),
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
+            .tabViewStyle(.page(indexDisplayMode: .never))
+            .overlay(
+                // Custom Tab Bar
+                VStack(spacing: 0) {
+                    // Divider
+                    Divider()
+                        .background(ANCHORDesign.Colors.primary.opacity(0.1))
+                    
+                    HStack(spacing: 0) {
+                        TabBarButton(
+                            icon: "house.fill",
+                            label: "Home",
+                            isSelected: selectedTab == 0,
+                            action: { withAnimation(.spring()) { selectedTab = 0 } }
+                        )
+                        
+                        Spacer(minLength: 0)
+                        
+                        // Center FAB
+                        Button(action: { showingNewEntry = true }) {
+                            Image(systemName: "plus")
+                                .font(.system(size: 20, weight: .bold))
+                                .foregroundColor(.white)
+                                .frame(width: 56, height: 56)
+                                .background(
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [
+                                            ANCHORDesign.Colors.primary,
+                                            ANCHORDesign.Colors.accent
+                                        ]),
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
                                 )
-                            )
-                            .clipShape(Circle())
-                            .shadow(color: ANCHORDesign.Colors.primary.opacity(0.3), radius: 10, x: 0, y: 5)
-                            .padding(.trailing, 24)
-                            .padding(.bottom, 8)
+                                .clipShape(Circle())
+                                .shadow(color: ANCHORDesign.Colors.primary.opacity(0.3), radius: 10, x: 0, y: 5)
+                                .offset(y: -28)
+                        }
+                        .buttonStyle(ScaleButtonStyle())
+                        .frame(width: 56, height: 56)
+                        
+                        Spacer(minLength: 0)
+                        
+                        TabBarButton(
+                            icon: "book.fill",
+                            label: "Journal",
+                            isSelected: selectedTab == 1,
+                            action: { withAnimation(.spring()) { selectedTab = 1 } }
+                        )
+                        
+                        Spacer(minLength: 0)
+                        
+                        TabBarButton(
+                            icon: "person.fill",
+                            label: "Profile",
+                            isSelected: selectedTab == 2,
+                            action: { withAnimation(.spring()) { selectedTab = 2 } }
+                        )
                     }
-                }
-            }
+                    .padding(.top, 12)
+                    .padding(.horizontal)
+                    .frame(height: 60)
+                    .background(ANCHORDesign.Colors.backgroundCard)
+                    .overlay(
+                        Rectangle()
+                            .frame(width: nil, height: 0.5, alignment: .top)
+                            .foregroundColor(ANCHORDesign.Colors.primary.opacity(0.1)),
+                        alignment: .top
+                    )
+                },
+                alignment: .bottom
+            )
+            .ignoresSafeArea(.keyboard, edges: .bottom)
         }
         .sheet(isPresented: $showingNewEntry) {
             // New Entry View
             NavigationView {
-                JournalEditorView()
-                    .navigationTitle("New Entry")
-                    .navigationBarItems(trailing: Button("Done") {
-                        showingNewEntry = false
-                    })
+                JournalEditorView(onSave: { _ in
+                    // Handle save action
+                    Task {
+                        await journalVM.refresh()
+                    }
+                    showingNewEntry = false
+                })
+                .navigationTitle("New Entry")
+                .navigationBarItems(trailing: Button("Done") {
+                    showingNewEntry = false
+                })
             }
         }
     }
@@ -123,10 +179,6 @@ struct ProfileView: View {
                 
                 // Settings
                 Section(header: Text("Settings")) {
-                    NavigationLink(destination: Text("Account Settings")) {
-                        Label("Account", systemImage: "person.crop.circle")
-                    }
-                    
                     NavigationLink(destination: Text("Notifications")) {
                         Label("Notifications", systemImage: "bell.badge")
                     }
@@ -186,11 +238,55 @@ struct StatView: View {
     }
 }
 
+// MARK: - Tab Bar Button
+struct TabBarButton: View {
+    let icon: String
+    let label: String
+    let isSelected: Bool
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 4) {
+                Image(systemName: icon)
+                    .font(.system(size: 20, weight: isSelected ? .semibold : .regular))
+                    .foregroundColor(isSelected ? ANCHORDesign.Colors.primary : ANCHORDesign.Colors.textSecondary)
+                
+                Text(label)
+                    .font(.caption2)
+                    .fontWeight(isSelected ? .medium : .regular)
+                    .foregroundColor(isSelected ? ANCHORDesign.Colors.primary : ANCHORDesign.Colors.textSecondary)
+            }
+            .frame(maxWidth: .infinity)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+}
+
+// MARK: - View Extension to Hide Navigation Bar
+extension View {
+    func hideNavigationBar() -> some View {
+        self
+            .navigationBarTitle("", displayMode: .inline)
+            .navigationBarHidden(true)
+    }
+}
+
 // MARK: - Preview
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
-            .environmentObject(AuthManager())
+        let authManager = AuthManager.shared
+        let previewUser = AuthManager.User(
+            id: "1", 
+            email: "preview@example.com", 
+            name: "Preview User"
+        )
+        authManager.updateForPreview(isAuthenticated: true, user: previewUser)
+        
+        return ContentView()
+            .environmentObject(authManager)
+            .environmentObject(JournalViewModel())
             .environment(\.colorScheme, .light)
     }
 }

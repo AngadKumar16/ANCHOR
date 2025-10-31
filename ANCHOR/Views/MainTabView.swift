@@ -11,17 +11,17 @@ struct MainTabView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @StateObject private var journalViewModel: JournalViewModel
     @StateObject private var riskAssessmentViewModel: RiskAssessmentViewModel
-    @StateObject private var userProfileViewModel: UserProfileViewModel
+    @StateObject private var settingsViewModel: SettingsViewModel
     
     init() {
         let context = PersistenceController.shared.container.viewContext
         let journalVM = JournalViewModel(context: context)
         let riskVM = RiskAssessmentViewModel(viewContext: context)
-        let userProfileVM = UserProfileViewModel(viewContext: context)
+        let settingsVM = SettingsViewModel()
         
         _journalViewModel = StateObject(wrappedValue: journalVM)
         _riskAssessmentViewModel = StateObject(wrappedValue: riskVM)
-        _userProfileViewModel = StateObject(wrappedValue: userProfileVM)
+        _settingsViewModel = StateObject(wrappedValue: settingsVM)
     }
     
     var body: some View {
@@ -31,8 +31,7 @@ struct MainTabView: View {
                 .environmentObject(journalViewModel)
                 .environmentObject(riskAssessmentViewModel)
                 .tabItem {
-                    Image(systemName: "house.fill")
-                    Text("Home")
+                    Label("Home", systemImage: "house.fill")
                 }
             
             // Journal Tab
@@ -41,29 +40,48 @@ struct MainTabView: View {
                     .environmentObject(journalViewModel)
             }
             .tabItem {
-                Image(systemName: "book.fill")
-                Text("Journal")
+                Label("Journal", systemImage: "book.fill")
             }
             
             // Risk Assessment Tab
             RiskAssessmentView()
                 .environmentObject(riskAssessmentViewModel)
                 .tabItem {
-                    Image(systemName: "shield.checkerboard")
-                    Text("Assessment")
+                    Label("Risk", systemImage: "exclamationmark.triangle.fill")
                 }
             
             // Settings Tab
             NavigationView {
                 SettingsView()
-                    .environmentObject(userProfileViewModel)
+                    .environmentObject(settingsViewModel)
             }
             .tabItem {
-                Image(systemName: "gearshape.fill")
-                Text("Settings")
+                Label("Settings", systemImage: "gearshape.fill")
             }
         }
-        .accentColor(.blue)
+        .accentColor(Color.blue) // Set the accent color for selected tab
+        .onAppear {
+            // Customize the tab bar appearance
+            let appearance = UITabBarAppearance()
+            
+            // Configure the default (unselected) tab bar appearance
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = UIColor.systemBackground
+            
+            // Customize the selected tab item appearance
+            appearance.stackedLayoutAppearance.selected.iconColor = UIColor(.blue)
+            appearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor(.blue)]
+            
+            // Customize the unselected tab item appearance
+            appearance.stackedLayoutAppearance.normal.iconColor = UIColor.secondaryLabel
+            appearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.secondaryLabel]
+            
+            // Apply the appearance
+            UITabBar.appearance().standardAppearance = appearance
+            if #available(iOS 15.0, *) {
+                UITabBar.appearance().scrollEdgeAppearance = appearance
+            }
+        }
     }
 }
 

@@ -97,10 +97,10 @@ public struct JournalEntryModel: Identifiable, Codable {
 public extension JournalEntryEntity {
     func toModel() -> JournalEntryModel {
         return JournalEntryModel(
-            id: self.id,
-            date: self.createdAt,
+            id: self.id ?? UUID(),
+            date: self.createdAt ?? Date(),
             title: self.title,
-            body: self.body,
+            body: self.body ?? "",
             sentiment: self.sentiment,
             tags: self.tagsArray
         )

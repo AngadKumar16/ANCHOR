@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CheckInView: View {
     @Environment(\.dismiss) private var dismiss
+    @Binding var checkInStatus: CheckInStatus
     @State private var moodRating: Double = 5
     @State private var notes: String = ""
     @State private var selectedTags: Set<String> = []
@@ -59,6 +60,7 @@ struct CheckInView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {
+                        checkInStatus = .notStarted
                         dismiss()
                     }
                 }
@@ -66,10 +68,14 @@ struct CheckInView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") {
                         saveCheckIn()
+                        checkInStatus = .completed
                         dismiss()
                     }
                     .disabled(notes.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && selectedTags.isEmpty)
                 }
+            }
+            .onAppear {
+                checkInStatus = .inProgress
             }
         }
     }
@@ -101,5 +107,5 @@ struct CheckInView: View {
 }
 
 #Preview {
-    CheckInView()
+    CheckInView(checkInStatus: .constant(.notStarted))
 }

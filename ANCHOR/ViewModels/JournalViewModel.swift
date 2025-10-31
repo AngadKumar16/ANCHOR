@@ -16,6 +16,7 @@ final class JournalViewModel: ObservableObject {
     @Published var searchText: String = ""
     @Published var selectedTags: Set<String> = []
     @Published private(set) var error: Error?
+    @Published private(set) var isLoading: Bool = false
     
     // MARK: - Private Properties
     private let context: NSManagedObjectContext
@@ -29,7 +30,9 @@ final class JournalViewModel: ObservableObject {
     init(context: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
         self.context = context
         setupBindings()
-        loadMore()
+        Task {
+            await loadEntries()
+        }
     }
     
     // MARK: - Public Methods
@@ -40,41 +43,98 @@ final class JournalViewModel: ObservableObject {
     }
     
     /// Load more entries with pagination
-    func loadMore() {
+    @MainActor
+    func loadMore() async {
         guard hasMorePages else { return }
         
-        Task {
-            do {
-                let newEntries = try await fetchEntries(page: currentPage, pageSize: pageSize)
-                if newEntries.count < pageSize {
-                    hasMorePages = false
-                }
-                if !newEntries.isEmpty {
-                    entries.append(contentsOf: newEntries)
-                    currentPage += 1
-                }
-            } catch {
-                self.error = error
-                Logger.log("Failed to load journal entries: \(error)")
+        do {
+            isLoading = true
+            let currentPage = entries.count / pageSize
+            let newEntries = try await fetchEntries(page: currentPage, pageSize: pageSize)
+            if newEntries.isEmpty {
+                hasMorePages = false
+            } else {
+                entries.append(contentsOf: newEntries)
+            }
+        } catch {
+            self.error = error
+            print("❌ Failed to load more entries: \(error)")
+        }
+        
+        isLoading = false
+    }
+    
+    /// Refresh all entries, resetting pagination
+    func refresh() async {
+        currentPage = 0
+        hasMorePages = true
+        entries = []
+        await loadEntries()
+    }
+    
+    /// Fetch journal entries with pagination
+    /// - Parameters:
+    ///   - page: Page number (0-based)
+    ///   - pageSize: Number of items per page
+    /// - Returns: Array of JournalEntry
+    func fetchEntries(page: Int = 0, pageSize: Int = 20) async throws -> [JournalEntry] {
+        try await performOnContext { [weak self] context in
+            guard let self = self else { return [] }
+            let request = JournalEntryEntity.fetchRequest()
+            let offset = page * pageSize
+            request.fetchLimit = pageSize
+            request.fetchOffset = offset
+            request.sortDescriptors = [NSSortDescriptor(keyPath: \JournalEntryEntity.createdAt, ascending: false)]
+            
+            // Add search and filter predicates if needed
+            var predicates: [NSPredicate] = []
+            if !self.searchText.isEmpty {
+                predicates.append(NSPredicate(format: "body CONTAINS[cd] %@", self.searchText))
+            }
+            
+            if !self.selectedTags.isEmpty {
+                predicates.append(NSPredicate(format: "ANY tags.name IN %@", Array(self.selectedTags)))
+            }
+            
+            if !predicates.isEmpty {
+                request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+            }
+            
+            let entries = try context.fetch(request)
+            return try entries.compactMap { entity in
+                try entity.toModel()
             }
         }
     }
     
     /// Create a new journal entry
     func createEntry(title: String?, body: String, tags: Set<String> = []) async throws {
-        var entry = try JournalEntry(
-            title: title,
-            body: body,
-            tags: tags
-        )
-        
-        try entry.validate()
+        // Create a new journal entry with the provided parameters
+        // Using the full initializer to ensure all required parameters are provided
+        let entry: JournalEntry
+        do {
+            entry = try JournalEntry(
+                id: UUID(),
+                createdAt: Date(),
+                updatedAt: nil,
+                title: title,
+                body: body,
+                bodyFormat: "plain",
+                sentiment: nil,
+                tags: tags,
+                isLocked: false,
+                version: 1
+            )
+        } catch {
+            throw error
+        }
         
         // Analyze sentiment asynchronously
         let sentiment = await analyzeSentiment(text: body)
-        entry.sentiment = sentiment
+        var updatedEntry = entry
+        updatedEntry.sentiment = sentiment
         
-        try await saveEntry(entry)
+        try await saveEntry(updatedEntry)
     }
     
     /// Update specific fields of an entry
@@ -125,24 +185,109 @@ final class JournalViewModel: ObservableObject {
         }
     }
     
-    /// Add a new journal entry
-    func add(title: String? = nil, body: String, tags: [String] = []) async throws {
+    // MARK: - Journal Entry Management
+    func add(title: String? = nil, body: String, tags: [String] = []) async throws -> JournalEntry {
         let entry = try JournalEntry(
             id: UUID(),
             createdAt: Date(),
+            updatedAt: nil,
             title: title,
             body: body,
             bodyFormat: "plain",
-            sentiment: nil,
+            sentiment: await analyzeSentiment(text: body),
             tags: Set(tags),
             isLocked: false,
             version: 1
         )
-        
-        try await saveEntry(entry)
-        await MainActor.run {
-            self.entries.insert(entry, at: 0)
+        return try await saveEntry(entry)
+    }
+
+    private func saveEntry(_ entry: JournalEntry) async throws -> JournalEntry {
+        let savedEntry = try await performOnContext { context -> JournalEntry in
+            let entity = try JournalEntryEntity.updateOrCreate(from: entry, in: context)
+            entity.updatedAt = Date()
+            
+            if context.hasChanges {
+                try context.save()
+            }
+            
+            return try entity.toModel()
         }
+        
+        await updateLocalEntries(with: savedEntry)
+        return savedEntry
+    }
+
+    @MainActor
+    private func updateLocalEntries(with entry: JournalEntry) {
+        if let index = entries.firstIndex(where: { $0.id == entry.id }) {
+            entries[index] = entry
+        } else {
+            entries.insert(entry, at: 0)
+        }
+    }
+
+    @MainActor
+    func refreshEntries() async {
+        do {
+            let fetchedEntries = try await fetchEntries()
+            entries = fetchedEntries.sorted { $0.createdAt > $1.createdAt }
+        } catch {
+            print("❌ Failed to refresh entries: \(error)")
+            self.error = error
+        }
+    }
+
+    // MARK: - Core Data Operations
+    private func performOnContext<T>(_ block: @escaping (NSManagedObjectContext) throws -> T) async throws -> T {
+        try await withCheckedThrowingContinuation { continuation in
+            let context = PersistenceController.shared.container.newBackgroundContext()
+            context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+            context.automaticallyMergesChangesFromParent = true
+            
+            context.perform {
+                do {
+                    let result = try block(context)
+                    continuation.resume(returning: result)
+                } catch {
+                    context.rollback()
+                    print("❌ Error in performOnContext: \(error)")
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+    
+    private func fetchEntries() async throws -> [JournalEntry] {
+        try await performOnContext { context in
+            let request = JournalEntryEntity.fetchRequest()
+            request.sortDescriptors = [NSSortDescriptor(keyPath: \JournalEntryEntity.createdAt, ascending: false)]
+            
+            // Add search and filter predicates if needed
+            var predicates: [NSPredicate] = []
+            
+            if !self.searchText.isEmpty {
+                predicates.append(NSPredicate(format: "body CONTAINS[cd] %@", self.searchText))
+            }
+            
+            if !self.selectedTags.isEmpty {
+                predicates.append(NSPredicate(format: "ANY tags.name IN %@", Array(self.selectedTags)))
+            }
+            
+            if !predicates.isEmpty {
+                request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+            }
+            
+            let entities = try context.fetch(request)
+            return try entities.map { try $0.toModel() }
+        }
+    }
+
+    // MARK: - Sentiment Analysis
+    private func analyzeSentiment(text: String) async -> Double? {
+        let service = AIAnalysisService.shared
+        let sentiment = service.analyzeSentiment(text: text)
+        return Double(sentiment.rawValue)
     }
     
     // MARK: - Undo/Redo Support
@@ -161,86 +306,53 @@ final class JournalViewModel: ObservableObject {
     
     private func setupBindings() {
         $searchText
-            .dropFirst()
+            .combineLatest($selectedTags)
             .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
             .sink { [weak self] _ in
-                self?.refresh()
+                guard let self = self else { return }
+                Task { @MainActor in
+                    await self.refresh()
+                }
             }
             .store(in: &cancellables)
-            
-        $selectedTags
-            .dropFirst()
-            .sink { [weak self] _ in
-                self?.refresh()
-            }
-            .store(in: &cancellables)
-    }
-    
-    private func refresh() {
-        currentPage = 0
-        hasMorePages = true
-        entries = []
-        loadMore()
-    }
-    
-    private func performOnContext<T>(_ block: @escaping (NSManagedObjectContext) throws -> T) async throws -> T {
-        try await context.perform {
-            try block(self.context)
-        }
-    }
-    
-    private func fetchEntries(page: Int, pageSize: Int) async throws -> [JournalEntry] {
-        try await performOnContext { [weak self] context in
-            guard let self = self else { return [] }
-            let request = JournalEntryEntity.fetchRequest()
-            let offset = page * pageSize
-            request.fetchLimit = pageSize
-            request.fetchOffset = offset
-            request.sortDescriptors = [NSSortDescriptor(keyPath: \JournalEntryEntity.createdAt, ascending: false)]
-            
-            // Add search and filter predicates if needed
-            var predicates: [NSPredicate] = []
-            
-            if !self.searchText.isEmpty {
-                predicates.append(NSPredicate(format: "(title CONTAINS[cd] %@) OR (body CONTAINS[cd] %@)", 
-                                           self.searchText, self.searchText))
-            }
-            
-            if !self.selectedTags.isEmpty {
-                predicates.append(NSPredicate(format: "ANY tags.name IN %@", Array(self.selectedTags)))
-            }
-            
-            if !predicates.isEmpty {
-                request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
-            }
-            
-            let entries = try context.fetch(request)
-            return entries.compactMap { $0.toModel() }
-        }
     }
     
     private func saveContext() async throws {
-        try await performOnContext { context in
-            if context.hasChanges {
-                try context.save()
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            context.perform {
+                do {
+                    if self.context.hasChanges {
+                        try self.context.save()
+                    }
+                    continuation.resume()
+                } catch {
+                    continuation.resume(throwing: error)
+                }
             }
         }
     }
     
-    private func saveEntry(_ entry: JournalEntry) async throws {
-        try await saveContext()
-        try await performOnContext { context in
-            _ = try JournalEntryEntity.updateOrCreate(from: entry, in: context)
+    // MARK: - Data Loading
+    @MainActor
+    func loadEntries() async {
+        do {
+            let request: NSFetchRequest<JournalEntryEntity> = JournalEntryEntity.fetchRequest()
+            request.sortDescriptors = [NSSortDescriptor(keyPath: \JournalEntryEntity.createdAt, ascending: false)]
+            
+            print("🔄 Loading journal entries...")
+            let entities = try context.fetch(request)
+            print("✅ Found \(entities.count) journal entries")
+            
+            let entries = try entities.compactMap { entity in
+                try entity.toModel()
+            }
+            
+            self.entries = entries
+            print("📊 Loaded \(self.entries.count) valid journal entries")
+        } catch {
+            print("❌ Failed to fetch journal entries: \(error)")
+            self.error = error
         }
-    }
-    
-    private func analyzeSentiment(text: String) async -> Double? {
-        // Use AIAnalysisService for sentiment analysis
-        let service = AIAnalysisService.shared
-        let sentiment = service.analyzeSentiment(text: text)
-        
-        // Convert the Int16 result (-1, 0, 1) to a Double in range -1.0 to 1.0
-        return Double(sentiment)
     }
 }
 
