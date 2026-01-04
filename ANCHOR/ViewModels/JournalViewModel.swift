@@ -38,16 +38,20 @@ final class JournalViewModel: ObservableObject {
             let bg = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
             bg.parent = self.context
             bg.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-            bg.perform {
-                Task {
-                    do {
-                        let result = try await block(bg)
-                        if bg.hasChanges { try bg.save() }
-                        continuation.resume(returning: result)
-                    } catch {
-                        bg.rollback()
-                        continuation.resume(throwing: error)
+            bg.performAndWait {
+                do {
+                    let result = try await block(bg)
+                    if bg.hasChanges {
+                        try bg.save()
+                        Task { @MainActor in
+                            try? self.context.save()
+                        }
                     }
+                    continuation.resume(returning: result)
+                } catch {
+                    bg.rollback()
+                    continuation.resume(throwing: error)
+                }
                 }
             }
         }
