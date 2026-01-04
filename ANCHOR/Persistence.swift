@@ -43,7 +43,7 @@ final class PersistenceController: ObservableObject {
     }()
     
     init(inMemory: Bool = false) {
-        os_log("🔄 Initializing PersistenceController (inMemory: %@)", 
+        os_log("Initializing PersistenceController (inMemory: %@)",
               log: logger, 
               type: .debug, 
               inMemory ? "true" : "false")
