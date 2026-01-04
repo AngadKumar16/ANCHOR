@@ -118,6 +118,31 @@ final class JournalViewModel: ObservableObject {
         return results
     }
 
+    func updateEntry(_ entry: JournalEntry) async {
+        do {
+            try await performOnContext { context in
+                _ = try JournalEntryEntity.updateOrCreate(from: entry, in: context)
+            }
+            await refresh()
+        } catch {
+            self.error = error
+        }
+    }
+
+    func createEntry(title: String?, body: String, tags: Set<String>) async throws {
+        let newEntry = try JournalEntry(title: title, body: body, tags: tags)
+        try await performOnContext { context in
+            _ = try JournalEntryEntity.updateOrCreate(from: newEntry, in: context)
+        }
+    }
+
+    func updateEntry(_ entry: JournalEntry, title: String?, body: String, tags: Set<String>) async throws {
+        let updatedEntry = try entry.withUpdatedContent(title: title, body: body)
+        try await performOnContext { context in
+            _ = try JournalEntryEntity.updateOrCreate(from: updatedEntry, in: context)
+        }
+    }
+
     func add(title: String, body: String, tags: [String]) async {
         do {
             let newEntry = try JournalEntry(title: title, body: body, tags: Set(tags))

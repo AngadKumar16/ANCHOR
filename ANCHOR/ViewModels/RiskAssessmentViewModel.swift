@@ -56,8 +56,8 @@ class RiskAssessmentViewModel: ObservableObject {
             }
             
             if let latest = results.first {
-                self.riskScore = latest.riskScore
-                self.riskReason = latest.riskReason ?? ""
+                self.riskScore = latest.score
+                self.riskReason = latest.reason ?? ""
                 self.lastAssessmentDate = latest.date
             }
         } catch {
@@ -74,8 +74,8 @@ class RiskAssessmentViewModel: ObservableObject {
                 let assessment = RiskAssessmentEntity(context: context)
                 assessment.id = UUID()
                 assessment.date = Date()
-                assessment.riskScore = score
-                assessment.riskReason = reason
+                assessment.score = score
+                assessment.reason = reason
             }
             
             self.riskScore = score
@@ -106,10 +106,31 @@ class RiskAssessmentViewModel: ObservableObject {
 extension RiskAssessmentViewModel {
     static var preview: RiskAssessmentViewModel {
         let viewModel = RiskAssessmentViewModel(context: PersistenceController.preview.container.viewContext)
-        viewModel.riskScore = 0.5
-        viewModel.riskReason = "Moderate risk. Be mindful of your triggers."
-        viewModel.lastAssessmentDate = Date()
+        viewModel.setupPreviewData()
         return viewModel
+    }
+
+    func setupPreviewData() {
+        let context = PersistenceController.preview.container.viewContext
+        let assessment1 = RiskAssessmentEntity(context: context)
+        assessment1.id = UUID()
+        assessment1.date = Date().addingTimeInterval(-86400)
+        assessment1.score = 25
+        assessment1.reason = "Low stress, no strong triggers"
+
+        let assessment2 = RiskAssessmentEntity(context: context)
+        assessment2.id = UUID()
+        assessment2.date = Date()
+        assessment2.score = 65
+        assessment2.reason = "Moderate stress, work pressure, lack of sleep"
+
+        do {
+            try context.save()
+            // Re-fetch to update the view model's state for the preview
+            Task { await self.loadLatestAssessment() }
+        } catch {
+            print("Failed to set up preview data: \(error)")
+        }
     }
 }
 #endif
