@@ -14,7 +14,7 @@ final class JournalViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     private let pageSize = 20
     private var currentPage = 0
-    private var hasMorePages = true
+    var hasMorePages = true
 
     init(context: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
         self.context = context
@@ -84,7 +84,7 @@ final class JournalViewModel: ObservableObject {
         }
     }
 
-    private func loadMore() async {
+    func loadMore() async {
         guard hasMorePages, !isLoading else { return }
         await loadEntries()
     }
@@ -102,7 +102,7 @@ final class JournalViewModel: ObservableObject {
         }
 
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
-        request.sortDescriptors = [NSSortDescriptor(key: "updatedAt", ascending: false)]
+        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
         request.fetchOffset = currentPage * pageSize
         request.fetchLimit = pageSize
 

@@ -16,7 +16,7 @@ struct MainTabView: View {
     init() {
         let context = PersistenceController.shared.container.viewContext
         let journalVM = JournalViewModel(context: context)
-        let riskVM = RiskAssessmentViewModel(viewContext: context)
+        let riskVM = RiskAssessmentViewModel(context: context)
         let settingsVM = SettingsViewModel()
         
         _journalViewModel = StateObject(wrappedValue: journalVM)

@@ -32,7 +32,7 @@ struct SplashScreenView: View {
                 
                 // Animated logo
                 VStack(spacing: 20) {
-                    Image(systemName: "anchor.circle.fill")
+                    Image(systemName: "shield.lefthalf.filled")
                         .font(.system(size: 120, weight: .light))
                         .foregroundColor(.white)
                         .scaleEffect(isAnimating ? 1.0 : 0.5)

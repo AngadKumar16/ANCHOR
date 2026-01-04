@@ -81,7 +81,7 @@ struct EntryListView: View {
                 }
             }
             .refreshable {
-                await viewModel.loadMore()
+                await viewModel.refresh()
             }
         }
     }
@@ -157,10 +157,9 @@ struct EntryListView: View {
                     Button {
                         // Toggle lock status
                         Task {
-                            try? await viewModel.updateEntry(
-                                entry,
-                                isLocked: !entry.isLocked
-                            )
+                            var updatedEntry = entry
+                            updatedEntry.isLocked.toggle()
+                            await viewModel.updateEntry(updatedEntry)
                         }
                     } label: {
                         Label(
@@ -172,11 +171,11 @@ struct EntryListView: View {
                 }
             }
             
-            if viewModel.canLoadMore() {
+            if viewModel.hasMorePages {
                 ProgressView()
                     .frame(maxWidth: .infinity, alignment: .center)
                     .onAppear {
-                        if viewModel.canLoadMore() {
+                        if viewModel.hasMorePages {
                             Task {
                                 await viewModel.loadMore()
                             }
@@ -190,13 +189,13 @@ struct EntryListView: View {
     private func applyFilters() async {
         // In a real app, you would update the view model's filter state
         // and trigger a new fetch with the updated filters
-        await viewModel.loadMore()
+        await viewModel.refresh()
     }
     
     private func applySort() async {
         // In a real app, you would update the view model's sort order
         // and trigger a re-sort of the data
-        await viewModel.loadMore()
+        await viewModel.refresh()
     }
 }
 

@@ -21,7 +21,7 @@ class OnboardingData {
         OnboardingItem(
             title: "Welcome to ANCHOR",
             description: "Your personal mental health companion to help you stay grounded and find your anchor in life's storms.",
-            imageName: "anchor.circle.fill",
+            imageName: "shield.lefthalf.filled",
             showsActionButton: false,
             backgroundColor: .blue
         ),

@@ -30,7 +30,7 @@ final class EntryDetailViewModel: ObservableObject {
         
         Task {
             do {
-                try await journalViewModel.updateEntry(updatedEntry, isLocked: updatedEntry.isLocked)
+                try await journalViewModel.updateEntry(updatedEntry)
                 self.entry = updatedEntry
             } catch {
                 self.error = error
