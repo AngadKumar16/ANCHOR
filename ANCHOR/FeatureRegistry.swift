@@ -14,8 +14,8 @@ func __registerFeaturesForLinking() {
     
     // Initialize view models
     let journalVM = JournalViewModel(context: context)
-    let riskVM = RiskAssessmentViewModel(viewContext: context)
-    let userProfileVM = UserProfileViewModel(viewContext: context)
+    let riskVM = RiskAssessmentViewModel(context: context)
+    let userProfileVM = UserProfileViewModel(context: context)
     
     // Register views with required parameters
     _ = AIAnalysisServiceView()

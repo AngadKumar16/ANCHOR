@@ -392,7 +392,7 @@ struct RiskAssessmentHistoryView_Previews: PreviewProvider {
         return NavigationView {
             RiskAssessmentHistoryView()
                 .environment(\.managedObjectContext, context)
-                .environmentObject(RiskAssessmentViewModel(viewContext: context))
+                .environmentObject(RiskAssessmentViewModel(context: context))
         }
     }
 }

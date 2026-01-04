@@ -232,7 +232,7 @@ struct DashboardView: View {
         .sheet(isPresented: $showingRiskAssessment) {
             NavigationView {
                 RiskAssessmentView()
-                    .environmentObject(RiskAssessmentViewModel(viewContext: PersistenceController.shared.container.viewContext))
+                    .environmentObject(RiskAssessmentViewModel(context: PersistenceController.shared.container.viewContext))
                     .navigationBarItems(trailing: Button("Done") {
                         showingRiskAssessment = false
                     })
@@ -240,6 +240,7 @@ struct DashboardView: View {
         }
     }
 }
+
 
 // MARK: - Quick Action Button
 private struct QuickActionButton: View {
