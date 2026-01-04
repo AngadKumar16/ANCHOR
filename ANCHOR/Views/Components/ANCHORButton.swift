@@ -139,38 +139,44 @@ struct ANCHORButton: View {
         ANCHORButton(
             title: "Primary Button",
             style: .primary,
-            size: .large
+            size: .large,
+            isFullWidth: false
         ) {}
         
         ANCHORButton(
             title: "Secondary Button",
             style: .secondary,
-            size: .medium
+            size: .medium,
+            isFullWidth: false
         ) {}
         
         ANCHORButton(
             title: "Outline Button",
             style: .outline,
-            size: .medium
+            size: .medium,
+            isFullWidth: false
         ) {}
         
         ANCHORButton(
             title: "Ghost Button",
             style: .ghost,
-            size: .small
+            size: .small,
+            isFullWidth: false
         ) {}
         
         ANCHORButton(
             title: "Danger Button",
             style: .danger,
-            size: .medium
+            size: .medium,
+            isFullWidth: false
         ) {}
         
         ANCHORButton(
             title: "Loading Button",
             style: .primary,
             size: .large,
-            isLoading: true
+            isLoading: true,
+            isFullWidth: false
         ) {}
     }
     .padding()

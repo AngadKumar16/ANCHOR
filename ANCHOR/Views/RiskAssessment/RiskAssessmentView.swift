@@ -304,7 +304,7 @@ struct RiskAssessmentView: View {
 }
 
 #Preview {
-    let viewModel = RiskAssessmentViewModel(viewContext: PersistenceController.preview.container.viewContext)
+    let viewModel = RiskAssessmentViewModel(context: PersistenceController.preview.container.viewContext)
     
     // Add sample data for preview
     let context = PersistenceController.preview.container.viewContext
@@ -323,7 +323,7 @@ struct RiskAssessmentView: View {
     
     try? context.save()
     
-    return RiskAssessmentView()
+    RiskAssessmentView()
         .environmentObject(viewModel)
         .environment(\.managedObjectContext, context)
 }
